@@ -13,8 +13,15 @@ class TestModels(TestCase):
             email='test@gmail.com', home_address='1234 pine',
             phone='414-123-456-7890', gender=1, ID=12345, USER=self.Test_User1
         )
+        self.Test_Group2 = Group.create(ID=1234, CATEGORY='Mushroom', NAME='Group3', DESCRIPTION='',
+                                        USER_ADMIN=self.Test_User1.ID)
+        self.Test_Group = models.GROUP(ID=8342, CATEGORY='Mushrooms', NAME='Bob''s'' Group', DESCRIPTION='',
+                                       USER_ADMIN=self.Test_User1.ID)
+        self.Test_User1_Group = models.USER_GROUP(USER_ID=self.Test_User1.ID, GROUP_ID=self.Test_Group.ID,
+                                                  JOINED_DATE=date.today())
+        self.Test_Species = models.SPECIES(ID=7357, NAME='strawbery', CATEGORY='Plant', DESCRIPTION='', SCOPE='berry', IMAGE= '')
 
-    #   created users fields should not be none/empty
+    #   created users fields should not be null/empty
     def test_user(self):
         self.assertIsNotNone(self.Test_user1.ID)
         self.assertIsNotNone(self.Test_user1.USERNAME)
@@ -37,7 +44,7 @@ class TestModels(TestCase):
                         BADGE=models.BADGE.GOLD,
                         CREATED_SINCE=date.today())
 
-    #   test user profile model has an existing User its connected to
+    #   test user profile model has an existing User it's connected to
     #   test user profile model shares unique ID with its connected USER
     #   test user model fields that should be strings are indeed instances of STRINGS
     #   test user's model field GENDER is a valid instance of the gender enum
@@ -90,8 +97,39 @@ class TestModels(TestCase):
         self.assertEqual(models.STATUS.PENDING.value, 1)
         self.assertEqual(models.STATUS.REJECT.value, 2)
 
+    #   test user group model's User ID corresponds to an existing members User's ID
+    #   test user group model's Group ID corresponds to an existing GROUP ID
+    #   test validation of creation date is entered
     def test_user_group(self):
+        self.assertEqual(self.Test_User1_Group.USER_ID, self.Test_User1.ID)
+        self.assertEqual(self.Test_User1_Group.ID, self.Test_Group.ID)
+        self.assertIsNotNone(models.USER_GROUP.JOINED_DATE)
+
+    #   test that Group ID is unique
+    #   test that USER_ADMIN field is a valid ID associated to the Group admins ID
+    def test_group(self):
+        self.assertEqual(self.Test_Group.USER_ADMIN, self.Test_User1.ID)
+        with self.assertRaises(AssertionError):
+            Group.create(ID=1234, CATEGORY='Fishing', NAME='Group5', DESCRIPTION='', USER_ADMIN=self.Test_User1.ID)
+
+    def test_user_marker(self):
         pass
+    #  **** REMINDER TO BE COMPLETED LATER**** (species portion of model)
+    #   test marker model's OWNER_USER field is the associated  ID of the User creating the marker
+    #   test marker model's CREATED_AT, IS_PRIVATE field is not empty/null
+    #   test marker model's IS_PRIVATE field is a boolean value
+    #   test marker model's ID field is unique
+
+    def test_marker(self):
+        Test_Marker = models.Marker(ID=0000, TITLE='Lion''s mane', LATITUDE=43.07866235729638,
+                                     LONGITUDE=-87.881974725981,
+                                     CREATED_AT=date.today(), IS_PRIVATE=False, SPECIES= , OWNER_USER=self.Test_User1.ID)
+        self.assertEqual(Test_Marker.OWNER_USER, self.Test_User1.ID)
+        self.assertIsNotNone(Test_Marker.MARKER.CREATED_AT)
+        self.assertIsNotNone(Test_Marker.MARKER.IS_PRIVATE)
+        self.assertIsInstance(Test_Marker.MARKER.IS_PRIVATE, bool)
+        with self.assertRaises(AssertionError):
+            Marker.create(ID=0000, TITLE='Lion''s mane', LATITUDE= 43.07866235729638, LONGITUDE= -87.881974725981, CREATED_AT=date.today() ,IS_PRIVATE= False ,SPECIES= ,OWNER_USER=self.Test_User1.ID)
 
     def test_like_count(self):
         pass
@@ -102,11 +140,7 @@ class TestModels(TestCase):
     def test_friend(self):
         pass
 
-    def test_marker(self):
-        pass
-
     def test_species(self):
         pass
 
-    def test_user_marker(self):
-        pass
+
