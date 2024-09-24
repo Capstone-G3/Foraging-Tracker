@@ -1,5 +1,6 @@
 from folium import (Icon, Marker, Map, Figure)
 from folium.plugins import MiniMap
+from nicegui import ui
 
 fig_attr = Figure()
 map_attr = Map(

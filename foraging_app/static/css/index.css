@@ -1,0 +1,31 @@
+.mapContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.appbar {
+    height: 60px;
+    background-color: #6FC081;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.groupedPageLinks {
+    display: flex;
+}
+
+.mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .desktop .groupedPageLinks {
+        display: none;
+    }
+
+    .mobile {
+        display: flex;
+    }
+}
