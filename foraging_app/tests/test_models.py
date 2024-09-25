@@ -8,6 +8,9 @@ class TestModels(TestCase):
         self.Test_User1 = User.create(ID=1234, USER_NAME='BobsFindings', PASSWORD=12345, RATING=0,
                                       BADGE=models.BADGE.BRONZE,
                                       CREATED_SINCE=date.today())
+        self.Test_User2 = User.create(ID=4353, USER_NAME='AliceFindings', PASSWORD=23445, RATING=0,
+                                      BADGE=models.BADGE.BRONZE,
+                                      CREATED_SINCE=date.today())
         self.Test_User1_Profile = User_Profile.create(
             first_name='Bob', last_name='Smith',
             email='test@gmail.com', home_address='1234 pine',
@@ -131,16 +134,40 @@ class TestModels(TestCase):
         with self.assertRaises(AssertionError):
             Marker.create(ID=0000, TITLE='Lion''s mane', LATITUDE= 43.07866235729638, LONGITUDE= -87.881974725981, CREATED_AT=date.today() ,IS_PRIVATE= False ,SPECIES= ,OWNER_USER=self.Test_User1.ID)
 
+    #   test like counter is asociated to its corresponding marker and marker owner (ID)
     def test_like_count(self):
-        pass
-
+        Test_Marker = models.MARKER(ID=0000, TITLE='Lion''s mane', LATITUDE=43.07866235729638,
+                                    LONGITUDE=-87.881974725981,
+                                    CREATED_AT=date.today(), IS_PRIVATE=False, SPECIES='', OWNER_USER=self.Test_User1.ID)
+        Test_like_Marker = models.LIKE_COUNT(MARKER_ID=Test_Marker.ID,USER_ID=Test_Marker.OWNER_USER)
+        self.assertEqual(Test_like_Marker.MARKER_ID, Test_Marker.ID)
+        self.assertEqual(Test_like_Marker.USER_ID, Test_Marker.OWNER_USER)
+    #   test friend request has a valid sending user as well as recieving user
+    #   test status of request is not empty/null
+    #   test request date of request is not empty/null
     def test_friend_request(self):
-        pass
-
+        # friend1 = models.FRIEND(USER_A=self.Test_User1, USER_B=self.Test_User2, SAVED_DATE=date.today())
+        friend_request1 = models.FRIEND_REQUEST(UID_SENDER=self.Test_User1, UID_RECIEVER=self.Test_User2, STATUS=models.STATUS.PENDING, REQUEST_DATE=date.today())
+        self.assertEqual(friend_request1.UID_SENDER, self.Test_User1)
+        self.assertEqual(friend_request1.UID_RECIEVER, self.Test_User2)
+        self.assertIsNotNone(friend_request1.STATUS)
+        self.assertIsNotNone(friend_request1.REQUEST_DATE)
+    #   test friend model field user_a and user_b correspond to user and the user that was added as a friend
     def test_friend(self):
-        pass
+        friend1 = models.FRIEND(USER_A=self.Test_User1, USER_B=self.Test_User2, SAVED_DATE=date.today())
+        self.assertEqual(friend1.USER_A, self.Test_User1)
+        self.assertEqual(friend1.USER_B, self.Test_User2)
+        self.assertIsNotNone(friend1.SAVED_DATE)
 
+    #   test species model fields are not null/empty
+    #   test species model fields that require a STRING type are instances of str
     def test_species(self):
-        pass
+        self.assertIsNotNone(models.SPECIES.ID)
+        self.assertIsInstance(models.SPECIES.ID,str)
+        self.assertIsNotNone(models.SPECIES.IMAGE)
+        self.assertIsInstance(models.SPECIES.CATEGORY, str)
+        self.assertIsInstance(models.SPECIES.SCOPE, str)
+
+
 
 
