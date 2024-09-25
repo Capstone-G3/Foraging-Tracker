@@ -1,5 +1,7 @@
-from django.test import TestCase, RequestFactory
-#from .Models import User
+from django.test import TestCase, RequestFactory, Client
+from django.urls import reverse
+from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 
 class Login(TestCase):
     def setUp(self):
@@ -106,3 +108,144 @@ class Login(TestCase):
           })
           self.assertRedirects(response, reverse('home'))
     '''
+
+class LoginViewTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.login_url = reverse('login')
+        self.home_url = reverse('home')
+        self.username = 'testuser'
+        self.password = 'testpassword'
+        self.user = User.create(username=self.username, password=self.password)
+
+    def test_get_login_page(self):
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+
+    def test_post_valid_credentials(self):
+        response = self.client.post(self.login_url, {'username': 'jenni', 'password': 'jenni'})
+        self.assertRedirects(response, self.home_url)
+
+    def test_post_invalid_username(self):
+        response = self.client.post(self.login_url, {'username': 'wrong', 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_invalid_password(self):
+        response = self.client.post(self.login_url, {'username': self.username, 'password': 'wrong'})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_empty_username(self):
+        response = self.client.post(self.login_url, {'username': '', 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_empty_password(self):
+        response = self.client.post(self.login_url, {'username': self.username, 'password': ''})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_empty_credentials(self):
+        response = self.client.post(self.login_url, {'username': '', 'password': ''})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_nonexistent_user(self):
+        response = self.client.post(self.login_url, {'username': 'nonexistent', 'password': 'password'})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_inactive_user(self):
+        self.user.is_active = False
+        self.user.save()
+        response = self.client.post(self.login_url, {'username': self.username, 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_case_insensitive_username(self):
+        response = self.client.post(self.login_url, {'username': self.username.upper(), 'password': self.password})
+        self.assertRedirects(response, self.home_url)
+
+    def test_post_case_insensitive_password(self):
+        response = self.client.post(self.login_url, {'username': self.username, 'password': self.password.upper()})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_sql_injection_username(self):
+        response = self.client.post(self.login_url, {'username': "' OR 1=1 --", 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_sql_injection_password(self):
+        response = self.client.post(self.login_url, {'username': self.username, 'password': "' OR 1=1 --"})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_html_injection_username(self):
+        response = self.client.post(self.login_url, {'username': '<script>alert(1)</script>', 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_html_injection_password(self):
+        response = self.client.post(self.login_url, {'username': self.username, 'password': '<script>alert(1)</script>'})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_long_username(self):
+        long_username = 'a' * 256
+        response = self.client.post(self.login_url, {'username': long_username, 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_long_password(self):
+        long_password = 'a' * 256
+        response = self.client.post(self.login_url, {'username': self.username, 'password': long_password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_special_characters_username(self):
+        special_username = '!@#$%^&*()'
+        response = self.client.post(self.login_url, {'username': special_username, 'password': self.password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
+
+    def test_post_special_characters_password(self):
+        special_password = '!@#$%^&*()'
+        response = self.client.post(self.login_url, {'username': self.username, 'password': special_password})
+        self.assertRedirects(response, self.login_url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Username or Password Do Not Match, Try Again...")
