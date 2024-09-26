@@ -4,5 +4,7 @@
 *.json
 *vscode
 *__pycache__
+*pytest_cache
+*cache
 db.sqlite3
 *db.sqlite3
