@@ -181,7 +181,7 @@ class TestModels(TestCase):
 
     #   test species model fields are not null/empty
     #   test species model field type is an image
-    #   test species model fields that require a STRING type are instances of str
+    #   test species model fields that require a STRING type are instances of str.
     def test_species(self):
         self.assertIsNotNone(models.Species.id)
         self.assertIsInstance(models.Species.id, str)

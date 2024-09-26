@@ -4,7 +4,7 @@ from folium import (Marker, Map)
 
 
 class AcceptanceTest(TestCase):
-    # set up client, Map and associated Makers to test against in cases
+    # set up client, Map and associated Makers to test against in cases.
     def setUp(self):
         self.client = Client()
         self.map = Map(location=(0, 0), zoom_start=3)
