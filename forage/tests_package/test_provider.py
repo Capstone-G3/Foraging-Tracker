@@ -1,5 +1,5 @@
 from unittest import TestCase
-from forage.sitemap.providers import MapStyleProvider
+from forage.sitemap.providers import MapStyleProvider, providers_list
 from xyzservices.lib import Bunch, TileProvider
 
 class TestProvider(TestCase):
@@ -10,23 +10,27 @@ class TestProvider(TestCase):
     """ Test to ensure that all Providers remained Valid through life-cycle."""
     def test_style_map_valid_providers(self):
         """ For each of the provider in list, it is guaranteed to be either Bunch or TileProvider"""
-        for provider in self.provider.tile_providers:
+        for provider in providers_list:
             self.assertIsNotNone(provider)
             self.assertTrue(isinstance(provider, Bunch) | isinstance(provider, TileProvider))
         
     def test_look_up_on_source(self):
+        """
+            This unit will test the a simple look up off the Available List.
+        """
         tile_set = self.provider.source_lookup("OpenStreetMap")
         self.assertIsNotNone(tile_set)
         self.assertTrue(len(tile_set) != 0)
 
-    def test_look_source_control(self):
+    def test_look_up_success_on_finding_correct_type(self):
+        """
+            This unit will test all retrieved element from a look up is Tile Provider for easy access.
+        """
         all_tiles = self.provider.source_lookup("Stadia")
         self.assertIsNotNone(all_tiles)
         for tile in all_tiles:
-            print("\n")
             for name, prop in tile.items():
-                print(prop)
-                print(str(isinstance(prop, TileProvider)))
+                self.assertTrue(isinstance(prop, TileProvider))
 
     def test_look_up_on_option_OpenStreetMap(self):
         """
@@ -47,7 +51,6 @@ class TestProvider(TestCase):
         option_variation = "Mapniksssss"
         with self.assertRaises(KeyError, msg="Tile Option cannot be found.") as raiseException:
             look_up = self.provider.options_lookup(source, option_variation)
-
         self.assertEqual(str(raiseException.msg), "Tile Option cannot be found.")
 
 
