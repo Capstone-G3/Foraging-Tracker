@@ -3,6 +3,7 @@ from folium.plugins import MiniMap, LocateControl, MarkerCluster, TagFilterButto
 from folium.raster_layers import TileLayer
 from forage.sitemap.providers import MapStyleProvider
 
+#TODO : Secure class to represent the Content for Markers.
 class BaseMap:
     """
     Create a Default Map Object, an Interface Map for other various type of Maps.
@@ -68,7 +69,7 @@ class BaseMap:
     # Constant
     MAX_BOUND = {'LONGITUDE' : (-180,180), 'LATITUDE' : (-90,90)}
 
-    map_source_tiles = "CartoDB dark_matter"
+    map_source_tiles = "OpenStreetMap"
     center_zoom= 12
     zoom_control = False
     copy_on_jump = True
@@ -88,33 +89,41 @@ class BaseMap:
             )
         locate_control = LocateControl(auto_start=True, strings={"title" : "Failed to get location."}) #Getting position of user.
         self.__map__.add_child(locate_control)
-        self.__style__ = TileLayer(tiles=tile_source)
+        self.__styles__ = [TileLayer(tiles=tile_source)]
         self.__cluster__ = MarkerCluster() # Grouping Markers as Cluster
         self.__attribute__ = LayerControl(position="bottomleft")
         self.__map_size__ = 0
 
         
-    def add_marker(self,location, content=None):
+    def add_marker(self,location,content):
         """
         Add a single Ping Marker in the Map, then update the size of the Object.
         
         Parameter
         ---
-        :location: integer  tuple
+        :location: integer tuple
             An integer tuple represent a Marker, (latitude,longitude)
+            *parameter is not optional.
         
         :content: str
-            The Pseudo Content represent by String to be embedded inside Marker
+            The Pseudo Content represent by String to be embedded inside Marker.
+            *parameter  is not optional.
         
         """
+        if location is None:
+            raise ValueError("Location is empty")
+        if len(location) > 2 or len(location) < 2:
+            raise ValueError("Illegal Location Format")
+        if content is None or content == '':
+            raise ValueError("Content is empty")
+        
         element = Marker(location=location)
-        if content is not None:
-            content_frame = Popup(content)
-            element.add_child(content_frame)
+        content_frame = Popup(content, lazy=True)
+        element.add_child(content_frame)
         self.__cluster__.add_child(element)
         self.__map_size__ += 1
     
-    def add_markers(self, locations, contents=None):
+    def add_markers(self, locations, contents):
         """
         Add multiple Markers, utilized add_marker in iterations
         
@@ -128,26 +137,18 @@ class BaseMap:
             A Pseudo Map :
                 locations[0] -> contents[0]
         """
+        if contents is None:
+            raise ValueError("Illegal Content Format")
+        if len(locations) == 0 or len(contents) == 0:
+            raise ValueError("Locations or Contents is empty.")
+        if len(locations) != len(contents):
+            raise ValueError("Location and Content must contain even number of elements.")
+       
+
         for i in range(len(locations)):
-            try:
-                self.add_marker(location=locations[i], content=contents[i])
-            except Exception:
-                self.add_marker(location=locations[i])
+            self.add_marker(location=locations[i], content=contents[i])
+            
 
-
-    def set_style(self,choice, optional=None):
-        """ A built-in toggle for user to check for their favorite map instead?"""
-        # style_provider = MapStyleProvider()
-        # options = style_provider.source_lookup(choice)
-        # feature = FeatureGroup(collapsed=True, position="top left", show=False, overlay=True)
-        # for option in options:
-        #     for key,value in option.items():
-        #         layer = TileLayer(TileProvider=value, name=key, min_zoom=self.min_zoom)
-        #         layer.add_to(feature)
-        # feature.add_to(self.__figure__)
-        # TODO
-        pass
-    
     def compile_figure(self):
         """
         Figure will be returned for rendering Map in HTML.
@@ -159,8 +160,8 @@ class BaseMap:
         
         :return: Figure Class.
         """ 
-        TileLayer(TileProvider="OpenStreetMap").add_to(self.__map__)
-        self.__map__.add_child(self.__style__)
+        for style in self.__styles__:
+            self.__map__.add_child(style)
         self.__map__.add_child(self.__cluster__)
         self.__figure__.add_child(self.__map__)
         self.__map__.add_child(self.__attribute__)
@@ -172,13 +173,17 @@ class BaseMap:
 class DesktopMap(BaseMap):
     """
     Desktop Map will contain Mini Map, allowed to be disabled through Layer Control.
-
-    Additional Requirement is needed for Desktop Map.
+    TODO : Additional Requirement is needed for Desktop Map.
+    TODO : Mini Map styling
     
-    """  
+    
+    """ 
+    _available = [TileLayer("CartoDB dark_matter")] # TODO, add more styles to Layer Control.
+
     def __init__(self):
         super().__init__()
         self.__mini__ = MiniMap().add_to(self.__map__)
-    
+        self.__styles__.extend(self._available)
+        
     def compile_figure(self):
-        return super().compile_figure()
+        return super().compile_figure() 
