@@ -5,6 +5,8 @@ import tempfile
 import imghdr
 import os
 
+from foraging_app.models import User
+
 
 class TestModels(TestCase):
     def setup(self):
