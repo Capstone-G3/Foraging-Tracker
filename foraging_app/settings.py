@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -118,7 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-#STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 AUTH_USER_MODEL = 'foraging_app.User'
 
@@ -129,7 +130,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'foraging.tracker@gmail.com'
-EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
+# Set Environment Variable : GMAIL_HOST_PASS = "..." #Check Discord for Key.
+EMAIL_HOST_PASSWORD = os.getenv("GMAIL_HOST_PASS")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
