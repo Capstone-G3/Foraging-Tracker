@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from foraging_app.views.home import Home_View
+from foraging_app.views.logout import Logout_View
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Home_View.as_view())
+    path('', Home_View.as_view()),
+    path('log-out/', Logout_View.as_view(), name="logout")
 ]
