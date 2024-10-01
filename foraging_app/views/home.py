@@ -1,10 +1,10 @@
 from django.views import View
 from django.shortcuts import render
-import sitemap
+from forage.sitemap import DesktopMap, BaseMap
 
 class Home_View(View):
     def __init__(self):
-        self.figure = sitemap.getDefaultMap()
+        self.figure = DesktopMap().compile_figure()
 
     def get(self,request):
-        return render(request, "index.html", {"map" : self.figure})
+        return render(request, "index.html", {"map" : self.figure.render()})
