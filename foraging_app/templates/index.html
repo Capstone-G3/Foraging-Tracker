@@ -9,7 +9,7 @@
 <body>
     <div class="mapContainer">
         <div class="appbar desktop">
-            <div class="logo">Foraging Tracker</div> <!--TODO: Add in logo img-->
+            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div> <!--TODO: Add in logo img-->
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
                 <div class="addLink">+</div>
@@ -17,12 +17,12 @@
             </div>
             <div class="userLink">
                 <div>username</div>
-                {% comment %} <div>{{Username}}</div> {% endcomment %}
-                {% comment %} <img> {% endcomment %}
+                {% comment %} <div>{{Username}}</div> should be Log In if not logged in, underline? and cursor on hover {% endcomment %}
+                <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
             </div>
         </div>
         {{map | safe}}
-        <div class="appbar mobile">
+        <div class="appbar bottomBar mobile">
             <div class="mapLink">MAP</div>
             <div class="addLink">+</div>
             <div class="feedLink">FEED</div>

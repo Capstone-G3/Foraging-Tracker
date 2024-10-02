@@ -1,3 +1,4 @@
+/* TODO: Eventually move header to shared file and make heights/colors variables */
 .mapContainer {
     display: flex;
     flex-direction: column;
@@ -5,7 +6,8 @@
 }
 
 .appbar {
-    height: 60px;
+    padding: 0px 10px;
+    min-height: 54px;
     background-color: #6FC081;
     display: flex;
     justify-content: space-between;
@@ -13,7 +15,63 @@
 }
 
 .groupedPageLinks {
+    flex: 1;
+    justify-content: center;
+    height: 100%;
     display: flex;
+    align-items: inherit;
+}
+
+.mapLink, .feedLink {
+    width: 100px;
+    height: 100%;
+    display: flex;
+    align-items: inherit;
+    color: white;
+    justify-content: center;
+}
+
+.mapLink:hover, .feedLink:hover {
+    background-color: #88cb97;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.mapLink {
+    background-color: #3C9E51;
+    border-radius: 10px;
+}
+
+.addLink {
+    color: white;
+    font-size: x-large;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    margin: 0px 8px 0px 8px;
+    /* background-color: #51AC64; */
+    border-radius: 20px;
+    align-items: inherit;
+}
+
+.addLink:hover {
+    background-color: #88cb97;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.userLink {
+    display: flex;
+    gap: 6px;
+    color: white;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.userLink:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .mobile {
@@ -23,6 +81,11 @@
 @media only screen and (max-width: 640px) {
     .desktop .groupedPageLinks {
         display: none;
+    }
+
+    .bottomBar {
+        justify-content: center;
+        gap: 10px;
     }
 
     .mobile {
