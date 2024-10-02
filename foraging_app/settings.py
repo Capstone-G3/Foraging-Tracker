@@ -71,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foraging_app.wsgi.application'
+ASGI_APPLICATION = 'foraging_app.asgi.application'
 
 
 # Database
