@@ -1,0 +1,1 @@
+from forage.sitemap.base import *
