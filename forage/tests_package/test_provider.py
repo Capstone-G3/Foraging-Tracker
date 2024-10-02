@@ -44,7 +44,7 @@ class TestProvider(TestCase):
         self.assertIsNotNone(look_up) # Look should be successful.
         self.assertTrue(isinstance(look_up, TileProvider)) # The type we look for is TileProvider for Map.
         self.assertEqual("https://tile.openstreetmap.org/{z}/{x}/{y}.png", look_up.url) # The correct link to host Tile.
-        self.assertEqual(source_option, look_up.name) # The map should match, this is obvious from dictionary search.
+        self.assertEqual(source_option, look_up.username) # The map should match, this is obvious from dictionary search.
 
     def test_look_up_on_option_fail(self):
         source = "OpenStreetMap"
