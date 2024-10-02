@@ -91,4 +91,8 @@
     .mobile {
         display: flex;
     }
+
+    .leaflet-control-attribution {
+        display: none;
+    }
 }
