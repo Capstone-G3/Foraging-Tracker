@@ -44,7 +44,7 @@ class Login(TestCase):
     def test_CanLogin(self):
         user = CanLogin(self.user_profile.email, self.user.password)
         full_name = f"{self.user_profile.first_name} {self.user_profile.last_name}"
-        self.assertEqual(full_name, user.name)
+        self.assertEqual(full_name, user.username)
 
     def test_CanLogin_WrongPassword(self):
         user = CanLogin(self.user_profile.email, 'wrongpassword')
