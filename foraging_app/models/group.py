@@ -8,7 +8,7 @@ class Group(Model):
     name = CharField(max_length=120, unique=True, null=False)
     category = CharField(max_length=120, null=False)
     description = CharField(max_length=512)
-    user_admin = ForeignKey(user.User, on_delete=CASCADE, null=False)
+    user_admin = ForeignKey('foraging_app.user', on_delete=CASCADE, null=False)
 
 
     def save(self, **kwargs):
@@ -20,5 +20,5 @@ class Group(Model):
     def __str__(self) -> str:
         return self.name
 
-    def getAdmin(self) -> user.User:
+    def getAdmin(self): # -> user.User: circular issue
         return self.user_admin

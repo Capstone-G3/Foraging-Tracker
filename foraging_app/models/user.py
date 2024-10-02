@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.db.models import (Model, AutoField, CharField, IntegerField, DateField, ImageField)
 
 from foraging_app.models import group
-from foraging_app.models.user_group import User_Group
+
 
 
 class User(Model):
@@ -44,11 +44,13 @@ class User(Model):
         return validate_password(password)
 
     def getGroups(self):
+        from foraging_app.models.group import Group #doesn't cause circular import
+        from foraging_app.models.user_group import User_Group
         targetID = self.id
         groupIDs = User_Group.objects.filter(user_id=targetID).values_list('group_id', flat=True)
         groups = []
         for x in groupIDs:
-            groups.append(group.Group.objects.get(id=x))
+            groups.append(Group.objects.get(id=x))
         return groups
 
     def getName(self):
