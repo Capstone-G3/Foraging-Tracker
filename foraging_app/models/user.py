@@ -47,7 +47,7 @@ class User(AbstractUser):
         return self.username
     
     def getGroups(self):
-        from foraging_app.models.group import Group, User_Group
+        from foraging_app.models.group import Group, User_Group # Possible change later for Refactor, bad design.
         targetID = self.id
         groupIDs = User_Group.objects.filter(user_id=targetID).values_list('group_id', flat=True)
         groups = []

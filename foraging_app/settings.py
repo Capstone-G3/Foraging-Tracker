@@ -123,20 +123,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+#by having the following var created a warning "STATICFILES_DIRS setting does not exist."
+#STATICFILES_DIRS = [BASE_DIR / "static"]
 
-AUTH_USER_MODEL = "foraging_app.User"
-
-#SMTP Configuration
+AUTH_USER_MODEL = 'foraging_app.User'
+#SMTP Configuration     **sometimes the email will go to junk folder
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'foraging.tracker@gmail.com'
-# Set Environment Variable : GMAIL_HOST_PASS = "..." #Check Discord for Key.
-EMAIL_HOST_PASSWORD = os.getenv("GMAIL_HOST_PASS")
-
+EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
