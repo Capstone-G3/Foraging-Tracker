@@ -7,4 +7,4 @@ class Home_View(View):
         self.figure = DesktopMap().compile_figure()
 
     def get(self,request):
-        return render(request, "index.html", {"map" : self.figure.render(), "username" : "Log In"})
+        return render(request, "index.html", {"map" : self.figure , "username" : "Log In"})
