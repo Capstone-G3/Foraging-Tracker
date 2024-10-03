@@ -3,7 +3,7 @@ from django.urls import reverse
 from foraging_app.models.user import User, User_Profile
 from django.contrib.auth.hashers import make_password
 from django.contrib.messages import get_messages
-# from foraging_app.views.login import Login_View
+# from foraging_app.views.login import Login_View # Missing
 from django.contrib.messages.storage.fallback import FallbackStorage
 
 
