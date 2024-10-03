@@ -1,194 +1,209 @@
+from django.db import IntegrityError
 from django.test import TestCase
-from foraging_app import models
 from datetime import date
 import tempfile
-import imghdr
 import os
+
+from foraging_app.models.species import Species
+from foraging_app.models.user import User
+from foraging_app.models.user_profile import User_Profile
+from foraging_app.models.marker import Marker
+from foraging_app.models.user_marker import User_Marker
+# from foraging_app.models.friend import Friend
+# from foraging_app.models.friend_request import Friend_Request
+# from foraging_app.models.like_count import Like_Count
+from foraging_app.models.group import Group
+from foraging_app.models.user_group import User_Group
 
 
 class TestModels(TestCase):
     def setup(self):
-        self.test_user1 = User.create(ID=1234, user_name='BobsFindings', password=12345, rating=0,
-                                      badge=models.Badge.bronze,
-                                      created_since=date.today())
-        self.test_user2 = User.create(ID=4353, user_name='AliceFindings', password=23445, rating=0,
-                                      badge=models.Badge.Bronze,
-                                      created_since=date.today())
-        self.test_user1_profile = User_Profile.create(
-            first_name='Bob', last_name='Smith',
-            email='test@gmail.com', home_address='1234 pine',
-            phone='414-123-456-7890', gender=1, id=12345, user=self.test_user1
-        )
-        self.test_group2 = Group.create(id=1234, category='Mushroom', name='Group3', description='',
-                                        user_admin=self.test_user1.ID)
-        self.test_group = models.Group(id=8342, category='Mushrooms', name='Bob''s'' Group', description='',
-                                       user_admin=self.test_user1.ID)
-        self.test_user1_group = models.User_Group(user_id=self.test_user1.ID, group_id=self.test_group.ID,
-                                                  joined_date=date.today())
-        self.test_species = models.Species(id=7357, name='strawbery', category='Plant', description='', scope='berry',
-                                           image='')
+        pass
 
     #   created users fields should not be null/empty
     def test_user(self):
-        self.assertIsNotNone(self.test_user1.id)
-        self.assertIsNotNone(self.test_user1.username)
-        self.assertIsNotNone(self.test_user1.password)
-        self.assertIsNotNone(self.test_user1.rating)
-        self.assertIsNotNone(self.test_user1.badge)
-        self.assertIsNotNone(self.test_user1.created_since)
+        test_user1 = User.objects.create(username='BobsFindings', password=12345, rating=0,
+                                         created_since=date.today())
+        self.assertIsNotNone(test_user1.id)
+        self.assertIsNotNone(test_user1.username)
+        self.assertIsNotNone(test_user1.password)
+        self.assertIsNotNone(test_user1.rating)
+        self.assertIsNotNone(test_user1.badge)
+        self.assertIsNotNone(test_user1.created_since)
+        self.assertEqual(test_user1.created_since, date.today())
 
     # user model's ID should be a unique field
     def test_unique_user_ID(self):
-        with self.assertRaises(AssertionError):
-            User.create(id=5256, user_name='BobsFindings', password=458657, rating=1,
-                        badge=models.BADGE.GOLD,
-                        created_since=date.today())
-
-    # user model's Username should be a unique field
-    def test_unique_user_name(self):
-        with self.assertRaises(AssertionError):
-            User.create(id=1234, user_name='AliceForages', password=23457, rating=1,
-                        badge=models.Badge.gold,
-                        created_since=date.today())
+        User.objects.create(id=5256, username='Alice', password='<PASSWORD>', rating=0, created_since=date.today())
+        with self.assertRaises(IntegrityError):
+            User.objects.create(id=5256, username='BobsFindings', password=458657, rating=1,
+                                created_since=date.today())
 
     #   test user profile model has an existing User it's connected to
     #   test user profile model shares unique ID with its connected USER
     #   test user model fields that should be strings are indeed instances of STRINGS
     #   test user's model field GENDER is a valid instance of the gender enum
     def test_user_profile(self):
-        self.assertEqual(self.test_user1_profile.user, self.test_user1)
-        self.assertEqual(self.test_user1_profile.id, self.test_user1.ID)
-        self.assertIsInstance(self.test_user1.first_name, str)
-        self.assertIsInstance(self.test_user1_profile.last_name, str)
-        self.assertIsInstance(self.test_user1_profile.email, str)
-        self.assertIsInstance(self.test_user1_profile.phone, str)
-        self.assertIn(self.test_user1_profile.gender, models.Gender)
+        user1 = User.objects.create(id=5256, username='BobsFindings', password='123', rating=0,
+                                    created_since=date.today())
+        user1_profile = User_Profile(
+            first_name='Bob', last_name='Smith',
+            email='test@gmail.com', home_address='1234 pine',
+            phone='414-123-456-7890', user_id=user1
+        )
+        user1_profile.gender = 'Male'
+        user1_profile.save()
+        self.assertEqual(user1_profile.user_id, user1)
+        self.assertIsInstance(user1_profile.first_name, str)
+        self.assertIsInstance(user1_profile.last_name, str)
+        self.assertIsInstance(user1_profile.email, str)
+        self.assertIsInstance(user1_profile.phone, str)
+        self.assertEqual(user1_profile.gender, 'Male')
 
     # test badges are valid options {DIA,PLAT,GOLD,SILVER,BRONZE}
     # test corresponding badge values are in valid range
     #   test default badge set to Bronze
 
     def test_bade_enum(self):
-        expected_badges = models.Badge.diamond, models.Badge.platimnum, models.Badge.GOLD, models.Badge.silver, models.Badge.bronze
-        self.assertEqual(expected_badges, models.BADGE)
+        expected_badges = [("Diamond", 100000), ("Platinum", 10000), ("Gold", 1000), ("Silver", 100), ("Bronze", 0)]
+        self.assertEqual(expected_badges, User.badge)
 
-        self.assertGreaterEqual(models.Badge.diamond.value, 100, 000)
+        bronze_badge = User.badge.pop()
+        self.assertGreaterEqual(bronze_badge, ("Bronze", 0))
+        self.assertLessEqual(bronze_badge, ("Bronze", 99))
 
-        self.assertGreaterEqual(models.Badge.platimnum.value, 10, 000)
-        self.assertLessEqual(models.Badge.platimnum.value, 99, 999)
+        silver_badge = User.badge.pop()
+        self.assertGreaterEqual(silver_badge, ('Silver', 100))
+        self.assertLessEqual(silver_badge, ('Silver', 999))
 
-        self.assertGreaterEqual(models.Badge.gold.value, 1, 000)
-        self.assertLessEqual(models.Badge.gold.value, 9, 999)
+        gold_badge = User.badge.pop()
+        self.assertGreaterEqual(gold_badge, ('Gold', 1000))
+        self.assertLessEqual(gold_badge, ('Gold', 9999))
 
-        self.assertGreaterEqual(models.Badge.silver.value, 100)
-        self.assertLessEqual(models.Badge.silver.value, 999)
+        platinum_badge = User.badge.pop()
+        self.assertGreaterEqual(platinum_badge, ('Platinum', 10000))
+        self.assertLessEqual(platinum_badge, ('Platinum', 99999))
 
-        self.assertGreaterEqual(models.Badge.bronze.value, 99)
-        self.assertLessEqual(models.Badge.bronze.value, 0)
+        diamond_badge = User.badge.pop()
+        self.assertGreaterEqual(diamond_badge, ('Diamond', 100000))
 
     # gender should be one fo the following corresponding values(MALE,FEMALE, OTHER) with its associated numerical
     # values(1, 2, 9)
     def test_gender_enum(self):
-        expected_genders = {1, 2, 9}
-        self.assertContains(expected_genders, models.Gender)
-        self.assertEqual(models.Gender.male.value, 1)
-        self.assertEqual(models.Gender.female.value, 2)
-        self.assertEqual(models.Gender.other.value, 9)
+        expected_genders = [("Male", 2), ("Female", 1), ("Other", 9)]
+        self.assertEqual(expected_genders, User_Profile.gender)
 
     # status should be one fo the following corresponding values(ACCEPT, PENDING, REJECT) with its associated numerical
     # values(0, 1, 2)
-    def test_status_enum(self):
-        expected_status = {0, 1, 2}
-        self.assertContains(expected_status, models.Status)
-        self.assertEqual(models.Status.accept.value, 0)
-        self.assertEqual(models.Status.pending.value, 1)
-        self.assertEqual(models.Status.reject.value, 2)
+    # def test_status_enum(self):
+    #     expected_status = [('Accept', 0), ('Pending', 1), ('reject', 2)]
+    #     self.assertEqual(expected_status, Friend_Request.status)
 
     #   test user group model's User ID corresponds to an existing members User's ID
     #   test user group model's Group ID corresponds to an existing GROUP ID
-    #   test validation of creation date is entered
     def test_user_group(self):
-        self.assertEqual(self.test_user1_group.USER_ID, self.test_user1.id)
-        self.assertEqual(self.test_user1_group.ID, self.test_group.id)
-        self.assertIsNotNone(models.User_Group.joined_date)
+        user1 = User.objects.create(id=5256, username='Bob', password='123', rating=0,
+                                    created_since=date.today())
+        test_group = Group.objects.create(id=8342, category='Mushrooms', name='BobGroup', description='',
+                                          user_admin=user1)
+        user1_group = User_Group.objects.create(user_id=user1, group_id=test_group)
+        self.assertEqual(user1_group.user_id, user1)
+        self.assertEqual(user1_group.group_id, test_group)
 
     #   test that Group ID is unique
     #   test that USER_ADMIN field is a valid ID associated to the Group admins ID
     def test_group(self):
-        self.assertEqual(self.test_group.user_admin, self.test_user1.ID)
-        with self.assertRaises(AssertionError):
-            Group.create(id=1234, category='Fishing', name='Group5', description='', user_admin=self.test_user1.id)
+        user1 = User.objects.create(id=5256, username='Bob', password='123', rating=0,
+                                    created_since=date.today())
+        test_group = Group.objects.create(id=8342, category='Mushrooms', name='BobGroup', description='',
+                                          user_admin=user1)
+        self.assertEqual(test_group.user_admin, user1)
+        with self.assertRaises(IntegrityError):
+            Group.objects.create(id=1234, category='Fishing', name='BobGroup', description='', user_admin=user1)
 
     #   test user marker has associated marker id and user id
     #   test user marker saved date is not empty/none
     def test_user_marker(self):
-        test_marker = models.Marker(id=0000, title='Lion''s mane', latitude=43.07866235729638,
-                                    longitude=-87.881974725981,
-                                    created_at=date.today(), is_private=False, species='',
-                                    owner_admin=self.test_user1.id)
-        user_marker1 = models.User_Marker(user_id=self.test_user1.id, marker_id=test_marker.id, saved_date=date.today())
-        self.assertEqual(user_marker1.user_id, test_marker.id)
-        self.assertEqual(user_marker1.marker_id, test_marker.id)
-        self.assertIsNotNone(user_marker.saved_date)
+        user1 = User.objects.create(id=5256, username='Bob', password='123', rating=0,
+                                    created_since=date.today())
+        test_marker = Marker.objects.create(id=0000, title='Lion''s mane', latitude=43.07866235729638,
+                                            longitude=-87.881974725981,
+                                            created_at=date.today(), is_private=False, species='',
+                                            owner_admin=user1)
+        user_marker1 = User_Marker.objects.create(user_id=user1, marker_id=test_marker, saved_date=date.today())
+        self.assertEqual(user_marker1.user_id, user1)
+        self.assertEqual(user_marker1.marker_id, test_marker)
+        self.assertIsNotNone(user_marker1.saved_date)
 
-    #  **** REMINDER TO BE COMPLETED LATER**** (species portion of model)
     #   test marker model's OWNER_USER field is the associated  ID of the User creating the marker
     #   test marker model's CREATED_AT, IS_PRIVATE field is not empty/null
     #   test marker model's IS_PRIVATE field is a boolean value
     #   test marker model's ID field is unique
 
     def test_marker(self):
-        test_marker = models.Marker(id=0000, title='Lion''s mane', latitude=43.07866235729638,
-                                    longitude=-87.881974725981,
-                                    created_at=date.today(), is_private=False, species='',
-                                    owner_admin=self.test_user1.id)
-        self.assertEqual(test_marker.owner_user, self.test_user1.id)
+        test_user1 = User.objects.create(id=1111, username='Bob', password='123', rating=0,
+                                         created_since=date.today())
+        test_marker = Marker.objects.create(id=0000, title='Lion''s mane', latitude=43.07866235729638,
+                                            longitude=-87.881974725981,
+                                            created_at=date.today(), is_private=False, species='',
+                                            owner_admin=test_user1)
+        self.assertEqual(test_marker.owner_user, test_user1)
         self.assertIsNotNone(test_marker.marker.created_at)
         self.assertIsNotNone(test_marker.marker.is_private)
         self.assertIsInstance(test_marker.marker.is_private, bool)
         with self.assertRaises(AssertionError):
-            Marker.create(id=0000, title='Lion''s mane', latitude=43.07866235729638, longitude=-87.881974725981,
-                          created_at=date.today(), is_private=False, species='', owner_user=self.test_user1.id)
+            Marker.objects.create(id=0000, title='Lion''s mane', latitude=43.07866235729638, longitude=-87.881974725981,
+                                  created_at=date.today(), is_private=False, species='', owner_user=test_user1)
 
+    #   **********UN-COMMENT  WHEN LIKE COUNT IS IMPLEMENTED**********
     #   test like counter is associated to its corresponding marker and marker owner (ID)
-    def test_like_count(self):
-        test_marker = models.MARKER(id=0000, tle='Lion''s mane', latitude=43.07866235729638,
-                                    longitude=-87.881974725981,
-                                    created_at=date.today(), is_private=False, species='',
-                                    owner_user=self.test_user1.id)
-        test_like_marker = models.like_count(marker_id=test_marker.ID, user_id=test_marker.owner_user)
-        self.assertEqual(test_like_marker.marker_id, test_marker.id)
-        self.assertEqual(test_like_marker.user_id, test_marker.owner_user)
 
+    # def test_like_count(self):
+    #     test_user1 = User.objects.create(id=1111, username='Bob', password='123', rating=0,
+    #                                      created_since=date.today())
+    #     test_marker = Marker.objects(id=0000, tle='Lion''s mane', latitude=43.07866235729638,
+    #                                  longitude=-87.881974725981,
+    #                                  created_at=date.today(), is_private=False, species='',
+    #                                  owner_user=test_user1)
+    #     # test_like_marker = models.like_count(marker_id=test_marker.ID, user_id=test_marker.owner_user)
+    #     self.assertEqual(test_like_marker.marker_id, test_marker)
+    #     self.assertEqual(test_like_marker.user_id, test_marker.owner_user)
+
+    #   **********UN-COMMENT  WHEN FRIEND REQUEST IS IMPLEMENTED**********
     #   test friend request has a valid sending user as well as receiving user
     #   test status of request is not empty/null
     #   test request date of request is not empty/null
-    def test_friend_request(self):
-        # friend1 = models.FRIEND(USER_A=self.Test_User1, USER_B=self.Test_User2, SAVED_DATE=date.today())
-        friend_request1 = models.Friend_Request(uid_sender=self.test_user1, uid_reciever=self.test_user2,
-                                                STATUS=models.Status.pending, REQUEST_DATE=date.today())
-        self.assertEqual(friend_request1.uid_sender, self.test_user1)
-        self.assertEqual(friend_request1.uid_reciever, self.test_user2)
-        self.assertIsNotNone(friend_request1.status)
-        self.assertIsNotNone(friend_request1.request_date)
+    # def test_friend_request(self):
+    #     test_user1 = User.objects.create(id=2345, username='Bob', password='123', rating=0,
+    #                                      created_since=date.today())
+    #     test_user2 = User.objects.create(id=5265, username='Alice', password='000', rating=0,
+    #                                      created_since=date.today())
+    #     friend_request1 = Friend_Request.objects.create(uid_sender=test_user1, uid_reciever=test_user2,
+    #                                                     status='Accept', request_date=date.today())
+    #     self.assertEqual(friend_request1.uid_sender, test_user1)
+    #     self.assertEqual(friend_request1.uid_reciever, test_user2)
+    #     self.assertIsNotNone(friend_request1.status)
+    #     self.assertIsNotNone(friend_request1.request_date)
 
+    #   **********UN-COMMENT  WHEN FRIEND IS IMPLEMENTED**********
     #   test friend model field user_a and user_b correspond to user and the user that was added as a friend
-    def test_friend(self):
-        friend1 = models.Friend(user_a=self.test_user1, user_b=self.test_user2, saved_date=date.today())
-        self.assertEqual(friend1.user_a, self.test_user1)
-        self.assertEqual(friend1.user_b, self.test_user2)
-        self.assertIsNotNone(friend1.saved_date)
+    # def test_friend(self):
+    #     test_user1 = User.objects.create(id=1111, username='Bob', password='123', rating=0,
+    #                                      created_since=date.today())
+    #     test_user2 = User.objects.create(id=2314, username='Alice', password='000', rating=0,
+    #                                      created_since=date.today())
+    #     friend1 = Friend.objects.create(user_a=test_user1, user_b=test_user2, saved_date=date.today())
+    #
+    #     self.assertEqual(friend1.user_a, test_user1)
+    #     self.assertEqual(friend1.user_b, test_user2)
+    #     self.assertIsNotNone(friend1.saved_date)
 
     #   test species model fields are not null/empty
     #   test species model field type is an image
     #   test species model fields that require a STRING type are instances of str.
+
     def test_species(self):
-        self.assertIsNotNone(models.Species.id)
-        self.assertIsInstance(models.Species.id, str)
-        self.assertIsNotNone(models.Species.image)
-        self.assertIsInstance(models.Species.category, str)
-        self.assertIsInstance(models.Species.scope, str)
-        testImagePath = tempfile.NamedTemporaryFile(suffix=".jpg").name
+        testImagePath = tempfile.NamedTemporaryFile(suffix=".png").name
         # 1x1 black pixel image
         with open(testImagePath, 'wb') as f:
             f.write(b'\x89PNG\r\n\x1a\n'
@@ -202,7 +217,11 @@ class TestModels(TestCase):
                     b'\x01\x00\x00\x00\x01'
                     b'\x00\x00\x00\x00'
                     b'\x00\x00\x00\x00')
-        models.Species.Image = testImagePath
-        imageType = imghdr.what(models.Species.Image)
-        self.assertIsNotNone(imageType)
+        species1 = Species.objects.create(id=123, name='Species 1', category='fruit'
+                                          , scope='testscope', description='Found berry', image=testImagePath)
+        self.assertIsNotNone(species1.id)
+        self.assertIsNotNone(species1.name)
+        self.assertIsNotNone(species1.image)
+        self.assertIsInstance(species1.category, str)
+        self.assertIsInstance(species1.scope, str)
         os.remove(testImagePath)
