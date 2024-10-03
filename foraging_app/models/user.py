@@ -19,16 +19,15 @@ class User(AbstractUser):
     rating = IntegerField(default=0)
     profile_image = ImageField(upload_to='static/images', height_field=None, width_field=None, max_length=100, null=False)
     created_since = DateField(auto_now=True, null=False)
-    # user_manager = User_Manager()
 
     def __str__(self):
         return self.username
     
-    # def email_user(self, subject, message, **extra):
-    #     """
-    #         Send Email from the application to the User's given email.
-    #     """
-    #     send_mail(subject,message,EMAIL_HOST_USER,[self.email], **extra)
+    def email_user(self, subject, message, **extra):
+        """
+            Send Email from the application to the User's given email.
+        """
+        send_mail(subject,message,EMAIL_HOST_USER,[self.email], **extra)
 
     def save(self, **kwargs):
         super().save(**kwargs)
