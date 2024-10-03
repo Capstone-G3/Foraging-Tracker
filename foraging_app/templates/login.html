@@ -29,7 +29,7 @@
 
         <button type="submit" class="btn">Login</button>
 
-        <div class="register-link"><p>Don't have an account? <a href='#'>Register</a></p></div>
+        <div class="register-link"><p>Don't have an account? <a href="{% url 'register' %}">Register</a></p></div>
         {% if messages %}
             {% for message in messages %}
                 {{message}}

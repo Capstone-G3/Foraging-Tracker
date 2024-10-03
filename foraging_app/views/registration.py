@@ -21,6 +21,7 @@ class Register_View(View):
             profile.user_id = user
             profile.save()
 
-            return redirect('login')  # Redirect to a login page or another page after successful registration
-
+            return redirect('login')  # Redirect to a login page after successful registration
+        else:
+            print(user_form.errors, profile_form.errors) #debugging
         return render(request, 'users/register.html', {'user_form': user_form, 'profile_form': profile_form})
