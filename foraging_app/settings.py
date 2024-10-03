@@ -81,6 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST':{
+            'NAME' : BASE_DIR / 'test_db.sqlite3'
+        }
     }
 }
 
@@ -122,7 +125,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-AUTH_USER_MODEL = 'foraging_app.User'
+AUTH_USER_MODEL = "foraging_app.User"
 
 #SMTP Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
