@@ -1,9 +1,7 @@
 from django.db.models import (Model, AutoField, CharField, ImageField)
 
-from foraging_app.models.marker import Marker
-
-
 class Species(Model):
+
     id = AutoField(primary_key=True)
     name = CharField(max_length=120, unique=True, null=False)
     category = CharField(max_length=120, null=False)
@@ -21,6 +19,8 @@ class Species(Model):
         return self.name
 
     def getMarkers(self):
+        from foraging_app.models.marker import Marker
+        
         targetID = self.id
         markerIDs = Marker.objects.filter(species=targetID).values_list('id', flat=True)
         markers = []

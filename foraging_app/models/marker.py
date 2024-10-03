@@ -2,17 +2,15 @@ from django.db.models import (Model, AutoField, CharField, IntegerField, DateFie
                               ForeignKey, CASCADE, SET_NULL)
 
 from foraging_app.models.user import User
-from foraging_app.models.species import Species
-
 
 class Marker(Model):
     id = AutoField(primary_key=True)
-    title = CharField(max_length=120, null=False)
-    latitude = IntegerField(null=False)
-    longitude = IntegerField(null=False)
+    title = CharField(null=False,max_length=120)
+    latitude = IntegerField(null=False,default=0)
+    longitude = IntegerField(null=False, default=0)
     is_private = BooleanField(default=False)
     owner = ForeignKey(User, on_delete=CASCADE, null=False)
-    species = ForeignKey(Species, on_delete=SET_NULL)
+    species = ForeignKey("foraging_app.Species", on_delete=SET_NULL, null=True)
 
     def save(self,**kwargs):
         super().save(**kwargs)
@@ -24,6 +22,7 @@ class Marker(Model):
         return User.objects.get(id=self.owner)
 
     def getSpecies(self):
+        from foraging_app.models.species import Species
         return Species.objects.get(id=self.species)
 
     def setPrivate(self, private: bool):
@@ -32,3 +31,31 @@ class Marker(Model):
 
     def __str__(self):
         return self.title
+    
+class Like_Marker(Model):
+
+    user_id = ForeignKey(User, on_delete=CASCADE)
+    marker_id = ForeignKey(Marker, on_delete=CASCADE)
+    saved_date = DateField(auto_now=True)
+
+    def getLikes(self, targetMarker):
+        target_id = targetMarker.id
+        user_ids = Like_Marker.objects.filter(marker_id=target_id).values_list('user_id', flat=True)
+        users = []
+        for x in user_ids:
+            users.append(User.objects.get(id=x))
+        return users
+    
+class User_Marker(Model):
+
+    user_id = ForeignKey(User, on_delete=CASCADE)
+    marker_id = ForeignKey(Marker, on_delete=CASCADE)
+    saved_date = DateField(auto_now=True)
+
+    def getMarkers(self, targetUser):
+        target_id = targetUser.id
+        marker_ids = User_Marker.objects.filter(user_id=target_id).values_list('marker_id', flat=True)
+        markers = []
+        for x in marker_ids:
+            markers.append(Marker.objects.get(id=x))
+        return markers

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foraging_app.wsgi.application'
+ASGI_APPLICATION = 'foraging_app.asgi.application'
 
 
 # Database
@@ -79,6 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST':{
+            'NAME' : BASE_DIR / 'test_db.sqlite3'
+        }
     }
 }
 
@@ -118,8 +123,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+#by having the following var created a warning "STATICFILES_DIRS setting does not exist."
+#STATICFILES_DIRS = [BASE_DIR / "static"]
 
+AUTH_USER_MODEL = 'foraging_app.User'
+#SMTP Configuration     **sometimes the email will go to junk folder
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'foraging.tracker@gmail.com'
+EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
