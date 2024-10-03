@@ -59,8 +59,3 @@ class TestProvider(TestCase):
         with self.assertRaises(KeyError, msg="Invalid Tile Source") as raiseException:
             look_up = self.provider.source_lookup(source)
         self.assertEqual(raiseException.msg, "Invalid Tile Source")
-        
-
-
-    
-
