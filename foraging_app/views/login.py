@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
 from foraging_app.forms import CustomPasswordResetForm
-from foraging_app.models.user_profile import User_Profile
+from foraging_app.models.user import User_Profile
 
 class Login_View(View):
 
