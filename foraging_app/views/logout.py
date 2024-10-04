@@ -6,8 +6,6 @@ from django.contrib import messages
 
 
 class Logout_View(View):
-    def get(self, request):
-        return render(request, "logout.html")
     def post(self, request):
         logout(request)
         messages.success(request, "You have been logged out.")
