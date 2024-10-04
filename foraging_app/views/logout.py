@@ -8,5 +8,4 @@ from django.contrib import messages
 class Logout_View(View):
     def post(self, request):
         logout(request)
-        messages.success(request, "You have been logged out.")
         return redirect('home')
