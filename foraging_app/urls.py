@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
+from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
 from django.core.mail import send_mail
 
@@ -34,5 +35,8 @@ urlpatterns = [
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html',),name='password_reset_complete'),
     path('register/', Register_View.as_view(), name = 'register'),
     path('about_us/', About_Us_View.as_view(), name='about_us'),
+
+    #Logout url
+    path('logout/', Logout_View.as_view(), name="logout"),
 
 ]

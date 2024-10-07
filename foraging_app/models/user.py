@@ -61,9 +61,9 @@ class User_Profile(Model):
     OTHER=9
 
     GENDER = (
-        (2, "Male"),
-        (1, "Female"),
-        (9, "Other")
+        (MALE, "Male"),
+        (FEMALE, "Female"),
+        (OTHER, "Other")
     )
     
     id = AutoField(primary_key=True)
