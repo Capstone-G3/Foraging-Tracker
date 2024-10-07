@@ -16,9 +16,10 @@
                 <div class="feedLink">FEED</div>
             </div>
             <div class="userLink">
-                <div>{{username}}</div>
+                <a href="{% url 'login' %}" style="color: white;">Log In</a>
                 <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
             </div>
+            
         </div>
         {{map.render | safe}}
         <div class="appbar bottomBar mobile">

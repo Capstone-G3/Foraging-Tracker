@@ -8,3 +8,7 @@ class Home_View(View):
 
     def get(self,request):
         return render(request, "index.html", {"map" : self.figure , "username" : "Log In"})
+
+class About_Us_View(View):
+    def get(self, request):
+        return render(request, "about_us.html", {})
