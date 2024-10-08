@@ -7,7 +7,13 @@ class Home_View(View):
         self.figure = DesktopMap().compile_figure()
 
     def get(self,request):
-        return render(request, "index.html", {"map" : self.figure , "username" : "Log In"})
+        if request.user.is_authenticated:
+            username = request.user
+            userLink = "user"
+        else:
+            username = "Log In"
+            userLink = "login"
+        return render(request, "index.html", {"map": self.figure, "username": username, "userLink": userLink})
 
 class About_Us_View(View):
     def get(self, request):
