@@ -8,7 +8,7 @@ class Home_View(View):
 
     def get(self,request):
         if request.user.is_authenticated:
-            username = request.user
+            username = request.user.getName()
             userLink = "user"
         else:
             username = "Log In"

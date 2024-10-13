@@ -9,7 +9,7 @@
 <body>
     <div class="mapContainer">
         <div class="appbar desktop">
-            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div> <!--TODO: Add in logo img-->
+            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div>
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
                 <div class="addLink">+</div>
@@ -18,8 +18,7 @@
             <div class="userLink">
                 <a href="{% url userLink %}" style="color: white;">{{username}}</a>
                 <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
-            </div>
-            
+            </div>            
         </div>
         {{map.render | safe}}
         <div class="appbar bottomBar mobile">

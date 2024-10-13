@@ -1,0 +1,156 @@
+.profileInfo {
+    background-color: #3c9e51;
+    color: white;
+    padding: 10px
+}
+
+.topContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.topLeftContainer {
+    display: flex;
+    padding-right: 10px;
+    gap: 8px;
+}
+
+.userInfo {
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-size: 24px;
+}
+
+.userAssociations {
+    display: flex;
+    gap: 10px;
+}
+
+.userFeed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    height: 400px; 
+    /* TODO: Set height required for scrolling, figure out other way. */
+}
+
+.tempPostTemplate {
+    min-height: 400px;
+    min-width: 400px;
+    background-color: silver;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+
+
+
+
+
+/* TODO: GET RID O ALL DIS SHIT L8R */
+body {
+    margin: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.mapContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.appbar {
+    padding: 0px 10px;
+    min-height: 54px;
+    background-color: #6FC081;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.groupedPageLinks {
+    flex: 1;
+    justify-content: center;
+    height: 100%;
+    display: flex;
+    align-items: inherit;
+}
+
+.mapLink, .feedLink {
+    width: 100px;
+    height: 100%;
+    display: flex;
+    align-items: inherit;
+    color: white;
+    justify-content: center;
+}
+
+.mapLink:hover, .feedLink:hover {
+    background-color: #88cb97;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.addLink {
+    color: white;
+    font-size: x-large;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    margin: 0px 8px 0px 8px;
+    /* background-color: #51AC64; */
+    border-radius: 20px;
+    align-items: inherit;
+}
+
+.addLink:hover {
+    background-color: #88cb97;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.userLink {
+    display: flex;
+    gap: 6px;
+    color: white;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.userLink:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .desktop .groupedPageLinks {
+        display: none;
+    }
+
+    .bottomBar {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .mobile {
+        display: flex;
+    }
+
+    .leaflet-control-attribution {
+        display: none;
+    }
+}
