@@ -68,7 +68,7 @@ class ProfilePageTest(TestCase):
     def test_profile_manage_friends(self):
         user2 = User.objects.create_user(username='user2', email='user2@gmail.com', password='0000', )
         user3 = User.objects.create_user(username='user3', email='user3@gmail.com', password='1111', )
-        #TODO test will run after friend/friendship implementation
+        #TO DO*************** test will run after friend/friendship implementation
         friendship = Friend.objects.create(user_a=self.user, user_br=user2, friend_since=datetime.now())
         friend_request = Friend_Request.objects.create(uid_sender=user3, uiweweweweed_receiver=self.user, status=1,
                                                        request_date=datetime.now())
@@ -76,8 +76,8 @@ class ProfilePageTest(TestCase):
         self.client.post(reverse('profile', args=self.user_profile.id))
         response = self.client.post(reverse('friends'))
         self.assertEqual(response.status_code, 200)
-        # TODO figure out if the view for managing friends would be a single view that handles accepting and
-        #  rejecting request
+        # TO DO*************** figure out if the view for managing friends would be a single view that handles
+        # accepting and rejecting request
         self.client.post(reverse('manage_friend_request', args=user3), {'friend_request': 'accept'})
         self.assertEqual(friend_request.status, 1)
 
@@ -120,15 +120,26 @@ class ProfilePageTest(TestCase):
 
     #   test user can view groups from their profile
     def test_view_groups(self):
+        self.client.post(reverse('profile', args=self.user_profile.id))
         response = self.client.post(reverse('profile', args=self.user.id))
         self.assertContains(response, self.group1.id)
 
-    #   test user can reach their settings to edit their account settings
+    #   test user can reach edit their account
     def test_adjust_profile_settings(self):
-        response = self.client.post(reverse('profile', args=self.user.id))
-        self.assertContains(response, 'settings')
-        response = self.client.post(reverse('settings', args=self.user.id))
-        self.assertRedirects(response, reverse('settings', args=self.user.id), status_code=302, )
+        self.client.post(reverse('profile', args=self.user_profile.id))
+        self.client.post(reverse('edit_account', args=self.user.id),
+                         {'email': 'newtest@gmail.com', 'password': '32454'})
+        self.assertEqual(self.user.email, 'newtest@gmail.com')
+        self.assertEqual(self.user.password, '32454')
+
+    #   test user can delete their account
+    def test_delete_profile(self):
+        self.client.post(reverse('profile', args=self.user_profile.id))
+        response = self.client.post(reverse('delete_account', args=self.user.id))
+        self.assertRedirects(response, reverse('home'))
+
+        user = User.objects.get(self.user.id)
+        self.assertIsNone(user)
 
     #   test user can view other's posts from their profiles
     def test_can_view_others_posts_on_their_profiles(self):
@@ -145,7 +156,7 @@ class ProfilePageTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertContains(response, 'Lion''s mane')
 
-    #test user can view their badge levvel on their profile
+    #   test user can view their badge levvel on their profile
     def test_can_view_badge_level(self):
         response = self.client.post(reverse('profile', args=self.user.id))
         self.assertContains(response, 'Bronze')
