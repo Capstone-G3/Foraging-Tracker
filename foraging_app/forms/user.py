@@ -1,5 +1,5 @@
 from django import forms
-from .models.user import User, User_Profile
+from foraging_app.models.user import User, User_Profile
 from django.contrib.auth.password_validation import validate_password
 import re
 from django.contrib.auth.forms import PasswordResetForm

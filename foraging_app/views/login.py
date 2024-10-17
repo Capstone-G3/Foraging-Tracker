@@ -6,17 +6,19 @@ from django.contrib import messages
 class Login_View(View):
 
     def get(self, request):
-        return render(request, "login.html", {})
+        if request.user is not None and request.user.is_authenticated:
+            return redirect('/')
+        return render(request, "login.html")
 
     def post(self, request):
         # take what is posted from form and assigning to username and password
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.success(request, ("Username or Password Do Not Match, Try Again..."))
+            messages.error(request, ("Username or Password Do Not Match, Try Again..."))
             return redirect('login')

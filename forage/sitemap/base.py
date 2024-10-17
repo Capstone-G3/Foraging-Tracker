@@ -1,7 +1,16 @@
-from folium import Icon, Marker, Map, Figure, CircleMarker, Popup, LayerControl, FeatureGroup
+from folium import Icon, Marker, Map, Figure, LayerControl, FeatureGroup
 from folium.plugins import MiniMap, LocateControl, MarkerCluster, TagFilterButton
 from folium.raster_layers import TileLayer
+from typing import Union
 from forage.sitemap.providers import MapStyleProvider
+
+from foraging_app.forms.marker import MarkerCreateForm
+
+from branca.element import MacroElement, Element, Html
+from jinja2 import Template
+
+
+from forage.sitemap.content import MarkerContent
 
 #TODO : Secure class to represent the Content for Markers.
 class BaseMap:
@@ -92,10 +101,11 @@ class BaseMap:
         self.__styles__ = [TileLayer(tiles=tile_source)]
         self.__cluster__ = MarkerCluster() # Grouping Markers as Cluster
         self.__attribute__ = LayerControl(position="bottomleft")
+        self.__toggle_pin__ = ToggleMarker()
         self.__map_size__ = 0
 
         
-    def add_marker(self,location,content):
+    def add_marker(self,location, **contents):
         """
         Add a single Ping Marker in the Map, then update the size of the Object.
         
@@ -105,21 +115,28 @@ class BaseMap:
             An integer tuple represent a Marker, (latitude,longitude)
             *parameter is not optional.
         
-        :content: str
-            The Pseudo Content represent by String to be embedded inside Marker.
-            *parameter  is not optional.
-        
+        :**content: kwargs
+            A dictionary defined with elements as,
+                image_url : Representation of Image Location
+                species_name : The String of Species Name (in Short)
+                species_full_name : The complete name of Species
+                category : The String represent the category of Species
+                description : The String description of marker. 
         """
         if location is None:
             raise ValueError("Location is empty")
-        if len(location) > 2 or len(location) < 2:
+        if len(location) != 2:
             raise ValueError("Illegal Location Format")
-        if content is None or content == '':
+        latitude, longitude = location
+        if not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
+            raise ValueError("Invalid Latitude or Longitude")
+        if not contents:
             raise ValueError("Content is empty")
         
         element = Marker(location=location)
-        content_frame = Popup(content, lazy=True)
-        element.add_child(content_frame)
+        content_frame = MarkerContent()
+   
+        element.add_child(content_frame.getPopup(contents['contents']))
         self.__cluster__.add_child(element)
         self.__map_size__ += 1
     
@@ -132,21 +149,19 @@ class BaseMap:
         :locations: list of tuples
             The list of tuples as location (latitude,longitude)
         
-        :contents: list of String
-            The list of Strings to add contents to each marker
-            A Pseudo Map :
-                locations[0] -> contents[0]
+        :contents: list of Dictionaries
+            A list of dictionaries
         """
-        if contents is None:
+        if contents is None or len(contents) == 0:
             raise ValueError("Illegal Content Format")
-        if len(locations) == 0 or len(contents) == 0:
+        if len(locations) == 0:
             raise ValueError("Locations or Contents is empty.")
         if len(locations) != len(contents):
             raise ValueError("Location and Content must contain even number of elements.")
        
 
         for i in range(len(locations)):
-            self.add_marker(location=locations[i], content=contents[i])
+            self.add_marker(location=locations[i], **contents[i])
             
 
     def compile_figure(self):
@@ -165,6 +180,7 @@ class BaseMap:
         self.__map__.add_child(self.__cluster__)
         self.__figure__.add_child(self.__map__)
         self.__map__.add_child(self.__attribute__)
+        self.__map__.add_child(self.__toggle_pin__)
         return self.__figure__
     
     def __len__(self):
@@ -176,7 +192,6 @@ class DesktopMap(BaseMap):
     TODO : Additional Requirement is needed for Desktop Map.
     TODO : Mini Map styling
     
-    
     """ 
     _available = [TileLayer("CartoDB dark_matter")] # TODO, add more styles to Layer Control.
 
@@ -187,3 +202,63 @@ class DesktopMap(BaseMap):
         
     def compile_figure(self):
         return super().compile_figure() 
+
+
+
+class ToggleMarker(MacroElement):
+    """
+        Toggle Marker Pin, once click a marker will appear, double click to disappear.
+            Addition feature added : 
+                Click on marker for Popup.
+        
+    """
+    _template = Template(
+        """
+            {% macro script(this, kwargs) %}
+                var currentMarker = null;  
+
+                function toggleMarker(e) {
+                    if (currentMarker) {
+                        {{ this._parent.get_name() }}.removeLayer(currentMarker);
+                        currentMarker = null;  
+                    } else {
+                        
+                        var greenIcon = new L.Icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        });
+
+                        currentMarker = L.marker(e.latlng, {icon : greenIcon}).addTo({{ this._parent.get_name() }});
+                        var lat = e.latlng.lat;
+                        var lng = e.latlng.lng;
+
+                        currentMarker.dragging.enable();
+
+                        currentMarker.on('click', function() {
+                            currentMarker.bindPopup({{ this.popup }}).openPopup();
+                        });
+
+                        currentMarker.on('dblclick', function() {
+                            {{ this._parent.get_name() }}.removeLayer(currentMarker);
+                            currentMarker = null;
+                        });
+                    }
+                };
+                {{ this._parent.get_name() }}.on('click', toggleMarker);
+            {% endmacro %}
+        """
+    ) 
+
+    def __init__(self, popup: Union[Html, str, None] = None):
+        super().__init__()
+        self._name = "ToggleMarker"
+        
+        if isinstance(popup, Element):
+            popup = popup.render()
+        
+        # TODO : Create marker right on marker
+        self.popup = '"<strong>Latitude</strong> : " + lat + "<br> <strong>Longitude</strong>: " + lng'

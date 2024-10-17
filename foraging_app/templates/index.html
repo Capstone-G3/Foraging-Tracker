@@ -16,10 +16,15 @@
             <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div>
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
-                <div class="addLink">+</div>
+                <div class="addLink">
+                    <a href="{% url 'create_marker' %}">
+                        +
+                    </a>
+                </div>
                 <div class="feedLink">FEED</div>
             </div>
             <div class="userLink">
+                <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
                 <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">{{ username }}</a>
                 <div class="dropdown" style="z-index: 500 !important;">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -44,6 +49,16 @@
             <div class="feedLink">FEED</div>
         </div>
     </div>
+    <!-- TODO : A popup for errors that redirect back home. -->
+    <div class="popup">
+        {%if messages%}
+            {%for message in messages%}
+                <!-- RED for 'message-error' and GREEN for 'message-success' -->
+                <span class="message-{{message.tags}}">{{message}}</span>
+            {%endfor%}
+        {%endif%}
+    </div>
+  
     <!-- Add Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
