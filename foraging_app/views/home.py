@@ -41,7 +41,6 @@ class Home_View(View):
         self.getAllMarkers()
         for marker in self.list_contents:
             home_map.add_marker(location=marker['location'],contents=marker['contents'])
-        
         return render(
             request,
             "index.html",
@@ -49,7 +48,6 @@ class Home_View(View):
                     "map" : home_map.compile_figure(),
                 }
             )
-
 
 class About_Us_View(View):
     def get(self, request):
