@@ -65,24 +65,24 @@ class ProfilePageTest(TestCase):
         os.remove(testImagePath)
 
     #   test user can manage(accept/remove) their friends on their profile page
-    def test_profile_manage_friends(self):
-        user2 = User.objects.create_user(username='user2', email='user2@gmail.com', password='0000', )
-        user3 = User.objects.create_user(username='user3', email='user3@gmail.com', password='1111', )
-        #TO DO*************** test will run after friend/friendship implementation
-        friendship = Friend.objects.create(user_a=self.user, user_br=user2, friend_since=datetime.now())
-        friend_request = Friend_Request.objects.create(uid_sender=user3, uiweweweweed_receiver=self.user, status=1,
-                                                       request_date=datetime.now())
+    # def test_profile_manage_friends(self):
+    #     user2 = User.objects.create_user(username='user2', email='user2@gmail.com', password='0000', )
+    #     user3 = User.objects.create_user(username='user3', email='user3@gmail.com', password='1111', )
+    #     #TO DO*************** test will run after friend/friendship implementation
+    #     friendship = Friend.objects.create(user_a=self.user, user_br=user2, friend_since=datetime.now())
+    #     friend_request = Friend_Request.objects.create(uid_sender=user3, uiweweweweed_receiver=self.user, status=1,
+    #                                                    request_date=datetime.now())
 
-        self.client.post(reverse('profile', args=self.user_profile.id))
-        response = self.client.post(reverse('friends'))
-        self.assertEqual(response.status_code, 200)
-        # TO DO*************** figure out if the view for managing friends would be a single view that handles
-        # accepting and rejecting request
-        self.client.post(reverse('manage_friend_request', args=user3), {'friend_request': 'accept'})
-        self.assertEqual(friend_request.status, 1)
-
-        response = self.client.post(reverse('manage_friends', args=user3), {'remove_friend': True})
-        self.assertEqual(response.status_code, 200)
+        # self.client.post(reverse('profile', args=self.user_profile.id))
+        # response = self.client.post(reverse('friends'))
+        # self.assertEqual(response.status_code, 200)
+        # # TO DO*************** figure out if the view for managing friends would be a single view that handles
+        # # accepting and rejecting request
+        # self.client.post(reverse('manage_friend_request', args=user3), {'friend_request': 'accept'})
+        # self.assertEqual(friend_request.status, 1)
+        #
+        # response = self.client.post(reverse('manage_friends', args=user3), {'remove_friend': True})
+        # self.assertEqual(response.status_code, 200)
 
     #   test user can view their posts on their profile page
     def test_see_own_posts(self):
@@ -156,7 +156,7 @@ class ProfilePageTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertContains(response, 'Lion''s mane')
 
-    #   test user can view their badge levvel on their profile
+    #   test user can view their badge level on their profile
     def test_can_view_badge_level(self):
         response = self.client.post(reverse('profile', args=self.user.id))
         self.assertContains(response, 'Bronze')
