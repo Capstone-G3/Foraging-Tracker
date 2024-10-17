@@ -1,0 +1,101 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* All this jazz makes it so the feed is scrollable separate from the rest of the page */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.profileInfo {
+    background-color: #3c9e51;
+    color: white;
+    padding: 10px
+}
+
+.topContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.topLeftContainer {
+    display: flex;
+    padding-right: 10px;
+    gap: 8px;
+}
+
+.userInfo {
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    line-height: normal;
+}
+
+.username {
+    font-size: 24px;
+}
+
+.userAssociations {
+    display: flex;
+    gap: 10px;
+}
+
+.userFeed {
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    display: flex;
+}
+
+.tempPostTemplate {
+    min-height: 400px;
+    min-width: 400px;
+    background-color: silver;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.desktop {
+    display: flex;
+}
+
+.mobile {
+    display: none;
+}
+
+
+@media only screen and (max-width: 640px) {
+
+    .topLeftContainer {
+        padding-bottom: 4px;
+    }
+
+    .profilePhoto {
+        width: 50px;
+        height: 50px;
+    }
+
+    .userInfo {        
+        font-size: 12px;
+        justify-content: center;
+    }
+
+    .username {
+        font-size: 20px;
+    }
+
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: flex;
+    }
+}

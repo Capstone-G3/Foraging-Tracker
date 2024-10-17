@@ -21,6 +21,7 @@ from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
+from foraging_app.views.user import User_View
 from foraging_app.views.marker import Marker_Create_View, Marker_Edit_View, Marker_Home_View, Marker_Delete_View, Marker_Details_View
 from foraging_app.views.edit_profile import EditProfileView
 from foraging_app.views.delete_account import DeleteUserView
@@ -40,6 +41,7 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),name='password_reset_confirm'),
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html',),name='password_reset_complete'),
     path('register/', Register_View.as_view(), name = 'register'),
+    path('user/', User_View.as_view(), name = 'user'),
     path('about_us/', About_Us_View.as_view(), name='about_us'),
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
