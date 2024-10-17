@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Marker</title>
+</head>
+<body>
+
+    <form method="post", enctype="multipart/form-data">
+        {%csrf_token%}
+        {{form}}
+        <input type="submit" value="Edit">
+    </form>
+
+    <form method="post", action="{% url 'delete_marker' marker_id=marker.id%}">
+        {%csrf_token%}
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>
