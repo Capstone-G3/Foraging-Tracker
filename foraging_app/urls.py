@@ -20,7 +20,9 @@ from django.urls import path
 from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
 from foraging_app.views.registration import Register_View
-from django.core.mail import send_mail
+from foraging_app.views.categories import CategoriesView, CategoryDetailView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,5 +36,10 @@ urlpatterns = [
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html',),name='password_reset_complete'),
     path('register/', Register_View.as_view(), name = 'register'),
     path('about_us/', About_Us_View.as_view(), name='about_us'),
+    path('categories/', CategoriesView.as_view(), name='categories'),
+    path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="{%  static  'css/index.css'  %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
 </head>
 <body>
     <div class="mapContainer">
         <div class="appbar desktop">
-            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div> <!--TODO: Add in logo img-->
+            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div>
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
                 <div class="addLink">+</div>
@@ -17,16 +20,32 @@
             </div>
             <div class="userLink">
                 <a href="{% url 'login' %}" style="color: white;">Log In</a>
-                <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
+                            transparent; border: transparent;">
+                        <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
+                    </button>
+                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
+                        <ul>
+                            <li> <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                            <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            
         </div>
-        {{map.render | safe}}
+        {{ map.render | safe }}
         <div class="appbar bottomBar mobile">
             <div class="mapLink">MAP</div>
             <div class="addLink">+</div>
             <div class="feedLink">FEED</div>
         </div>
     </div>
+    <!-- Add Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
