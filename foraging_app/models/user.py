@@ -14,10 +14,11 @@ class User(AbstractUser):
         ("Silver", 100),
         ("Bronze", 10)
     )
+    is_active=True
 
     id = AutoField(primary_key=True, editable=False)
     rating = IntegerField(default=0)
-    profile_image = ImageField(upload_to='static/images', height_field=None, width_field=None, max_length=100, null=False)
+    profile_image = ImageField(upload_to='user_profile', null=False)
     created_since = DateField(auto_now=True, null=False)
 
     def __str__(self):
@@ -44,16 +45,7 @@ class User(AbstractUser):
 
     def getName(self):
         return self.username
-    
-    def getGroups(self):
-        from foraging_app.models.group import Group, User_Group # Possible change later for Refactor, bad design.
-        targetID = self.id
-        groupIDs = User_Group.objects.filter(user_id=targetID).values_list('group_id', flat=True)
-        groups = []
-        for x in groupIDs:
-            groups.append(Group.objects.get(id=x))
-        return groups
-    
+        
 
 class User_Profile(Model):
     MALE=2
@@ -69,6 +61,8 @@ class User_Profile(Model):
     id = AutoField(primary_key=True)
     home_address = CharField(max_length=254, null=False)
     phone = CharField(max_length=15, default=None)
+    bio = CharField(max_length=500, blank=True)
+    age = IntegerField(blank=True, null=True)
     gender= IntegerField(choices=GENDER,default=MALE)
     user_id= ForeignKey(User, on_delete=CASCADE)
 
