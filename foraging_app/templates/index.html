@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    
+
 </head>
 <body>
     <div class="mapContainer">
@@ -19,10 +20,10 @@
                 <div class="feedLink">FEED</div>
             </div>
             <div class="userLink">
-                <a href="{% url 'login' %}" style="color: white;">Log In</a>
+                <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">{{ username }}</a>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:
                             transparent; border: transparent;">
                         <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
                     </button>
@@ -30,7 +31,7 @@
                         <ul>
                             <li> <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                     </div>
                 </div>
