@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ category }} Species</title>
+    <link rel="stylesheet" href="{% static 'css/category_detail.css' %}">
+</head>
+<body>
+    <h1>Species in {{ category }}</h1>
+    <div class="species-list">
+        {% for species in species_list %}
+            <div class="species-item">
+                <img src="{{ species.image.url }}" alt="{{ species.name }}">
+                <div class="species-title">{{ species.name }}</div>
+                <div class="more-options" onclick="showModal('{{ species.name }}', '{{ species.description|escapejs }}')">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
+    
+    <script>
+        function showModal(title, description) {
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDescription').textContent = description;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
+
+

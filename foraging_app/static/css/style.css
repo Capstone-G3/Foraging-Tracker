@@ -20,7 +20,9 @@ body {
     background-repeat: no-repeat;
 }
 
-
+.message{
+    color: red;
+}
 .wrapper {
     width: 420px;
     background: transparent;

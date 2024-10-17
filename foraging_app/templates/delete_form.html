@@ -1,0 +1,11 @@
+{% if user.is_authenticated %}
+    <script type="text/javascript">
+        function confirmation(){
+                return confirm("Confirm account deletion");
+        }
+    </script>
+    <form id="deleteAccForm" action="{% url 'delete' %}" method="POST" onsubmit="return confirmation();">
+        {% csrf_token %}
+        <input type="submit" value="delete-account">
+    </form>
+{% endif %}

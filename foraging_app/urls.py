@@ -22,6 +22,12 @@ from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
 from foraging_app.views.user import User_View
+from foraging_app.views.marker import Marker_Create_View, Marker_Edit_View, Marker_Home_View, Marker_Delete_View, Marker_Details_View
+from foraging_app.views.edit_profile import EditProfileView
+from foraging_app.views.delete_account import DeleteUserView
+from foraging_app.views.categories import CategoriesView, CategoryDetailView
+from django.conf import settings
+from django.conf.urls.static import static
 from django.core.mail import send_mail
 
 urlpatterns = [
@@ -37,8 +43,24 @@ urlpatterns = [
     path('register/', Register_View.as_view(), name = 'register'),
     path('user/', User_View.as_view(), name = 'user'),
     path('about_us/', About_Us_View.as_view(), name='about_us'),
+    path('categories/', CategoriesView.as_view(), name='categories'),
+    path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
 
     #Logout url
     path('logout/', Logout_View.as_view(), name="logout"),
-
+    # Marker urls
+    path('markers/', Marker_Home_View.as_view(), name='home_marker'),
+    # TODO : Add dynamic marker for onsite form.
+    path('marker/create', Marker_Create_View.as_view(), name="create_marker"),
+    path('marker/<int:marker_id>', Marker_Details_View.as_view(), name='info_marker'),
+    path('marker/<int:marker_id>/edit', Marker_Edit_View.as_view(), name='edit_marker'),
+    path('marker/<int:marker_id>/edit/delete', Marker_Delete_View.as_view(), name='delete_marker'),
+    #edit profile url
+    path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
+    #delete acc view
+    path('delete/', DeleteUserView.as_view(), name='delete'),
 ]
+
+# Remove for Production
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

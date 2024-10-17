@@ -1,33 +1,30 @@
 from django.db.models import (Model, AutoField, CharField, IntegerField, DateField, ImageField, BooleanField,
-                              ForeignKey, CASCADE, SET_NULL)
+                              ForeignKey, CASCADE, SET_NULL, DateTimeField)
 
 from foraging_app.models.user import User
 
 class Marker(Model):
+    PRIVATE_CHOICE = {
+        True : "Private",
+        False : "Public"
+    }
+
     id = AutoField(primary_key=True)
-    title = CharField(null=False,max_length=120)
+    title = CharField(null=False,max_length=120, verbose_name="name")
     latitude = IntegerField(null=False,default=0)
     longitude = IntegerField(null=False, default=0)
-    is_private = BooleanField(default=False)
-    owner = ForeignKey(User, on_delete=CASCADE, null=False)
-    species = ForeignKey("foraging_app.Species", on_delete=SET_NULL, null=True)
+    is_private = BooleanField(default=False, choices=PRIVATE_CHOICE, verbose_name='mode')
+    image = ImageField(upload_to='marker_images', null=True)
+    description = CharField(max_length=150, blank=True, default='')
+    owner = ForeignKey(User, on_delete=CASCADE, null=False, blank=False)
+    species = ForeignKey("foraging_app.Species", on_delete=SET_NULL, blank=True, null=True)
+    created_date = DateTimeField(auto_now=True)
 
     def save(self,**kwargs):
         super().save(**kwargs)
 
     def delete(self, **kwargs):
         super().delete(**kwargs)
-
-    def getOwner(self):
-        return User.objects.get(id=self.owner)
-
-    def getSpecies(self):
-        from foraging_app.models.species import Species
-        return Species.objects.get(id=self.species)
-
-    def setPrivate(self, private: bool):
-        self.is_private = private
-        self.save()
 
     def __str__(self):
         return self.title
@@ -38,13 +35,14 @@ class Like_Marker(Model):
     marker_id = ForeignKey(Marker, on_delete=CASCADE)
     saved_date = DateField(auto_now=True)
 
-    def getLikes(self, targetMarker):
-        target_id = targetMarker.id
-        user_ids = Like_Marker.objects.filter(marker_id=target_id).values_list('user_id', flat=True)
-        users = []
-        for x in user_ids:
-            users.append(User.objects.get(id=x))
-        return users
+    # Move this to Views. (Complete)
+    # def getLikes(self, targetMarker):
+    #     target_id = targetMarker.id
+    #     user_ids = Like_Marker.objects.filter(marker_id=target_id).values_list('user_id', flat=True)
+    #     users = []
+    #     for x in user_ids:
+    #         users.append(User.objects.get(id=x))
+    #     return users
     
 class User_Marker(Model):
 
@@ -52,10 +50,11 @@ class User_Marker(Model):
     marker_id = ForeignKey(Marker, on_delete=CASCADE)
     saved_date = DateField(auto_now=True)
 
-    def getMarkers(self, targetUser):
-        target_id = targetUser.id
-        marker_ids = User_Marker.objects.filter(user_id=target_id).values_list('marker_id', flat=True)
-        markers = []
-        for x in marker_ids:
-            markers.append(Marker.objects.get(id=x))
-        return markers
+    # Move this to Views.
+    # def getMarkers(self, targetUser):
+    #     target_id = targetUser.id
+    #     marker_ids = User_Marker.objects.filter(user_id=target_id).values_list('marker_id', flat=True)
+    #     markers = []
+    #     for x in marker_ids:
+    #         markers.append(Marker.objects.get(id=x))
+    #     return markers

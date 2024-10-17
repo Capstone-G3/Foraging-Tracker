@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marker Home</title>
+</head>
+<body>
+    {%if marker_list%}
+        {%for marker in marker_list%}
+            <p><a href="{% url 'info_marker' marker_id=marker.id%}">{{marker}}</a></p>
+        {%endfor%}
+    {%endif%}
+    <a href="{% url 'create_marker'%}"><button>Create</button></a>
+</body>
+</html>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_user_agents',
     'foraging_app',
     'forage'
     ]
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'foraging_app.urls'
@@ -123,8 +125,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-#by having the following var created a warning "STATICFILES_DIRS setting does not exist."
-#STATICFILES_DIRS = [BASE_DIR / "static"]
+#by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
+STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
+
+# Media images. Change when production.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'foraging_app','static','media')
+MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'foraging_app.User'
 #SMTP Configuration     **sometimes the email will go to junk folder
@@ -139,3 +145,6 @@ EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
