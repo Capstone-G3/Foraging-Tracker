@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
+from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
 from foraging_app.views.categories import CategoriesView, CategoryDetailView
 from django.conf import settings
@@ -38,6 +39,9 @@ urlpatterns = [
     path('about_us/', About_Us_View.as_view(), name='about_us'),
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
+
+    #Logout url
+    path('logout/', Logout_View.as_view(), name="logout"),
 
 ]
 
