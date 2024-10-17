@@ -1,0 +1,30 @@
+{% if user.is_authenticated %}
+    <form action="{% url 'edit_profile' %}" , method='POST'>
+        {% csrf_token %}
+        <label for="username">username:</label>
+        <input type='text' id="username" , name="username" value="{{ user.username }}">
+        <br>
+        
+        <label for="email">email:</label>
+        <input type='text' id="email" , name="email" value="{{ user.email }}">
+        <br>
+        
+        <label for="first_name">first name:</label>
+        <input type='text' id="first_name" , name="first_name" value="{{ user.first_name }}">
+        <br>
+        
+        <label for="last_name">last name:</label>
+        <input type='text' id="last_name" , name="last_name" value="{{ user.last_name }}">
+        <br>
+        
+        <label for="bio">bio</label>
+        <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+        <br>
+        
+        <label for="profile_image">profile image</label>
+        <input type="file" id="profile_image" name="profile_image">
+        <br>
+    
+        <button type="submit"> save changes</button>
+    </form>
+{% endif %}

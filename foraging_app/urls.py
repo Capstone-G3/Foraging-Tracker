@@ -21,9 +21,12 @@ from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
+from foraging_app.views.edit_profile import EditProfileView
+from foraging_app.views.delete_account import DeleteUserView
 from foraging_app.views.categories import CategoriesView, CategoryDetailView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.core.mail import send_mail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,6 +45,12 @@ urlpatterns = [
 
     #Logout url
     path('logout/', Logout_View.as_view(), name="logout"),
+
+    #edit profile url
+    path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
+
+    #delete acc view
+    path('delete/', DeleteUserView.as_view(), name='delete'),
 
 ]
 
