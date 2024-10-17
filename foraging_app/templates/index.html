@@ -21,13 +21,13 @@
             </div>
             <div class="userLink">
                 <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">{{ username }}</a>
-                <div class="dropdown">
+                <div class="dropdown" style="z-index: 500 !important;">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:
                             transparent; border: transparent;">
                         <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
                     </button>
-                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton" style="width:100px; transform: translateX(-15%);">
                         <ul>
                             <li> <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
