@@ -22,6 +22,8 @@ from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
 from django.core.mail import send_mail
+from foraging_app.views.edit_profile import EditProfileView
+from foraging_app.views.delete_account import DeleteUserView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,5 +40,11 @@ urlpatterns = [
 
     #Logout url
     path('logout/', Logout_View.as_view(), name="logout"),
+
+    #edit profile url
+    path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
+
+    #delete acc view
+    path('delete/', DeleteUserView.as_view(), name='delete'),
 
 ]
