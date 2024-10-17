@@ -6,6 +6,6 @@ from django.contrib import messages
 
 
 class Logout_View(View):
-    def post(self, request):
+    def get(self, request):
         logout(request)
         return redirect('home')
