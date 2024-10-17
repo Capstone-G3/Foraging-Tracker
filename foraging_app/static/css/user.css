@@ -1,3 +1,19 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* All this jazz makes it so the feed is scrollable separate from the rest of the page */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
 .profileInfo {
     background-color: #3c9e51;
     color: white;
@@ -19,6 +35,7 @@
     gap: 4px;
     display: flex;
     flex-direction: column;
+    line-height: normal;
 }
 
 .username {
@@ -31,12 +48,10 @@
 }
 
 .userFeed {
-    display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    height: 400px; 
-    /* TODO: Set height required for scrolling, figure out other way. */
+    display: flex;
 }
 
 .tempPostTemplate {
@@ -47,110 +62,40 @@
     margin: 10px;
 }
 
-
-
-
-
-
-/* TODO: GET RID O ALL DIS SHIT L8R */
-body {
-    margin: 0px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.428571429;
-    color: #333333;
-    background-color: #ffffff;
-}
-
-.mapContainer {
+.desktop {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.appbar {
-    padding: 0px 10px;
-    min-height: 54px;
-    background-color: #6FC081;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.groupedPageLinks {
-    flex: 1;
-    justify-content: center;
-    height: 100%;
-    display: flex;
-    align-items: inherit;
-}
-
-.mapLink, .feedLink {
-    width: 100px;
-    height: 100%;
-    display: flex;
-    align-items: inherit;
-    color: white;
-    justify-content: center;
-}
-
-.mapLink:hover, .feedLink:hover {
-    background-color: #88cb97;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.addLink {
-    color: white;
-    font-size: x-large;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    margin: 0px 8px 0px 8px;
-    /* background-color: #51AC64; */
-    border-radius: 20px;
-    align-items: inherit;
-}
-
-.addLink:hover {
-    background-color: #88cb97;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.userLink {
-    display: flex;
-    gap: 6px;
-    color: white;
-    flex: 1;
-    justify-content: flex-end;
-}
-
-.userLink:hover {
-    cursor: pointer;
-    text-decoration: underline;
 }
 
 .mobile {
     display: none;
 }
 
+
 @media only screen and (max-width: 640px) {
-    .desktop .groupedPageLinks {
-        display: none;
+
+    .topLeftContainer {
+        padding-bottom: 4px;
     }
 
-    .bottomBar {
+    .profilePhoto {
+        width: 50px;
+        height: 50px;
+    }
+
+    .userInfo {        
+        font-size: 12px;
         justify-content: center;
-        gap: 10px;
+    }
+
+    .username {
+        font-size: 20px;
+    }
+
+    .desktop {
+        display: none;
     }
 
     .mobile {
         display: flex;
-    }
-
-    .leaflet-control-attribution {
-        display: none;
     }
 }
