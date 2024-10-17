@@ -50,6 +50,7 @@ class Home_View(View):
                 }
             )
 
+
 class About_Us_View(View):
     def get(self, request):
         return render(request, "about_us.html")

@@ -7,7 +7,9 @@ class Species(Model):
     category = CharField(max_length=120, null=False)
     scope = CharField(max_length=120, null=False)
     description = CharField(max_length=512)
-    image = ImageField(upload_to=None, height_field=None, width_field=None, max_length=100, null=False)
+    image = ImageField(upload_to='species_images/', null=False)
+    #image = ImageField(upload_to=None, height_field=None, width_field=None, max_length=100, null=False)
+
 
     def save(self, **kwargs):
         super().save(**kwargs)

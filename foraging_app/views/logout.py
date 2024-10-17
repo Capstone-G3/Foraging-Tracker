@@ -10,6 +10,6 @@ class Logout_View(LoginRequiredMixin ,View):
     login_url = '/login/'
     redirect_field_name = 'login'
     
-    def post(self, request):
+    def get(self, request):
         logout(request)
         return redirect('home')
