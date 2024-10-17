@@ -12,11 +12,21 @@
             <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div> <!--TODO: Add in logo img-->
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
-                <div class="addLink">+</div>
+                <div class="addLink">
+                    <a href="{% url 'create_marker' %}">
+                        +
+                    </a>
+                </div>
                 <div class="feedLink">FEED</div>
             </div>
             <div class="userLink">
-                <a href="{% url 'login' %}" style="color: white;">Log In</a>
+                <a href="{% url 'login' %}" style="color: white;">
+                    {%if request.user.is_authenticated%}
+                        @{{request.user.username}}
+                    {%else%}
+                        Log In
+                    {%endif%}
+                </a>
                 <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
             </div>
             
@@ -27,6 +37,15 @@
             <div class="addLink">+</div>
             <div class="feedLink">FEED</div>
         </div>
+    </div>
+    <!-- TODO : A popup for errors that redirect back home. -->
+    <div class="popup">
+        {%if messages%}
+            {%for message in messages%}
+                <!-- RED for 'message-error' and GREEN for 'message-success' -->
+                <span class="message-{{message.tags}}">{{message}}</span>
+            {%endfor%}
+        {%endif%}
     </div>
 </body>
 </html>
