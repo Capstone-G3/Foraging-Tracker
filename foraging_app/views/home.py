@@ -34,6 +34,7 @@ class Home_View(View):
 
     # Complete.
     def get(self,request):
+        username = request.user.username if request.user.is_authenticated else 'Log In'
         device  = request.user_agent
         home_map = DesktopMap()
         if (device.is_mobile or device.is_tablet) and device.is_touch_capable:
@@ -41,13 +42,15 @@ class Home_View(View):
         self.getAllMarkers()
         for marker in self.list_contents:
             home_map.add_marker(location=marker['location'],contents=marker['contents'])
+
         return render(
             request,
             "index.html",
-                {
-                    "map" : home_map.compile_figure(),
-                }
-            )
+            {
+                "map" : home_map.compile_figure(),
+                'username' : username
+            }
+        )
 
 class About_Us_View(View):
     def get(self, request):
