@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from foraging_app.views.group_view import Group_View
+from foraging_app.views.group_view import Group_View, Create_Group_View
 from foraging_app.views.home import Home_View, About_Us_View
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
@@ -48,6 +48,7 @@ urlpatterns = [
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
     path('group/', Group_View.as_view(), name='group'),
+    path('create_group/', Create_Group_View.as_view(), name='create_group'),
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
 

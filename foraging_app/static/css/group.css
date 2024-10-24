@@ -1,71 +1,3 @@
-.appbar {
-    padding: 0px 10px;
-    min-height: 54px;
-    background-color: #6FC081;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.groupedPageLinks {
-    flex: 1;
-    justify-content: center;
-    height: 100%;
-    display: flex;
-    align-items: inherit;
-}
-
-.mapLink, .feedLink {
-    width: 100px;
-    height: 100%;
-    display: flex;
-    align-items: inherit;
-    color: white;
-    justify-content: center;
-}
-
-.mapLink:hover, .feedLink:hover {
-    background-color: #88cb97;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.mapLink {
-    background-color: #3C9E51;
-    border-radius: 10px;
-}
-
-.addLink {
-    color: white;
-    font-size: x-large;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    margin: 0px 8px 0px 8px;
-    /* background-color: #51AC64; */
-    border-radius: 20px;
-    align-items: inherit;
-}
-
-.addLink:hover {
-    background-color: #88cb97;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.userLink {
-    display: flex;
-    gap: 6px;
-    color: white;
-    flex: 1;
-    justify-content: flex-end;
-}
-
-.userLink:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 
 .mobile {
@@ -90,29 +22,41 @@
 .groupCategory{
     font-size: large;
     text-align: left;
-    position: relative;
+    position: absolute;
     right: 300px;
-    top: 50px;
+    top: 70px;
 }
 
 .groupDescription{
     font-size: x-large;
-    text-align: center;
+    text-align: left;
+    max-width: 1000px;
+}
+
+.mainContainer{
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
 }
 
 .members{
-    background-color: lightgray;
-    display: flex;
-    width: 100%;
+
+    background-color: darkgrey;
+    display: inline-block;
+    width: 25%;
     height: 100%;
-    text-align: center;
-    align-content: center;
+    text-align: left;
+    padding: 20px;
+
 }
 
+.posts{
+    background-color: lightgrey;
+    display: inline-block;
+    width: 75%;
+    height: 100%;
+    padding: 20px;
 
-.userCard{
-    background-color: darkgrey;
-    text-align: center;
-    width: 100px;
-    height: 100px;
 }

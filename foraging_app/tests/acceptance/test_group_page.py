@@ -153,7 +153,7 @@ class GroupPageTest(TestCase):
         admin = False
         public = True
         group = self.handleSetup(admin, public)
-        response = self.client.get(reverse('to_home', args=[group.id]))
+        response = self.client.get(reverse('home', args=[group.id]))
         self.assertRedirects(response, self.home_url)
 
     def test_group_to_your_profile(self):
