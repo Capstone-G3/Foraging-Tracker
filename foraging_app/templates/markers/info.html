@@ -15,7 +15,15 @@
     {%endfor%}
     <p>Total Likes : {{total_likes}}</p>
     
-    <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
-
+    {%if request.user%}
+        {%if request.user.id == owner.id%}
+            <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
+            
+            <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
+                {%csrf_token%}
+                <input type="submit" value="Delete">
+            </form>
+        {%endif%}
+    {%endif%}
 </body>
 </html>
