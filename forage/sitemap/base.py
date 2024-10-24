@@ -78,28 +78,28 @@ class BaseMap:
     # Constant
     MAX_BOUND = {'LONGITUDE' : (-180,180), 'LATITUDE' : (-90,90)}
 
-    map_source_tiles = "OpenStreetMap"
     center_zoom= 12
     zoom_control = False
     copy_on_jump = True
     max_bounds = True
-    min_zoom = 2.5
+    min_zoom = 3
 
-    def __init__(self, tile_source=map_source_tiles):
+    def __init__(self):
         self.__figure__= Figure()
         self.__map__ = Map(
-            zoom_start=self.center_zoom,
+            zoom_start=2.5,
             world_copy_jump=self.copy_on_jump,
             max_bounds=self.max_bounds,
             min_lon=self.MAX_BOUND['LONGITUDE'][0],
             max_lon=self.MAX_BOUND['LONGITUDE'][1],
             zoom_control=self.zoom_control,
-            tiles=None
-            )
-        locate_control = LocateControl(auto_start=True, strings={"title" : "Failed to get location."}) #Getting position of user.
+            attributionControl=False,
+            tiles=TileLayer(tiles="OpenStreetMap", show=True, name="Light Mode", min_zoom=self.min_zoom)
+        )
+        locate_control = LocateControl(auto_start=True,locateOptions={"maxZoom":8},strings={"title" : "Retrieve current location."}) #Getting position of user.
         self.__map__.add_child(locate_control)
-        self.__styles__ = [TileLayer(tiles=tile_source)]
-        self.__cluster__ = MarkerCluster() # Grouping Markers as Cluster
+        self.__styles__ = []
+        self.__cluster__ = MarkerCluster(control=False, overlay=False) # Grouping Markers as Cluster
         self.__attribute__ = LayerControl(position="bottomleft")
         self.__toggle_pin__ = ToggleMarker()
         self.__map_size__ = 0
@@ -135,7 +135,7 @@ class BaseMap:
         
         element = Marker(location=location)
         content_frame = MarkerContent()
-   
+
         element.add_child(content_frame.getPopup(contents['contents']))
         self.__cluster__.add_child(element)
         self.__map_size__ += 1
@@ -178,6 +178,7 @@ class BaseMap:
         for style in self.__styles__:
             self.__map__.add_child(style)
         self.__map__.add_child(self.__cluster__)
+
         self.__figure__.add_child(self.__map__)
         self.__map__.add_child(self.__attribute__)
         self.__map__.add_child(self.__toggle_pin__)
@@ -193,9 +194,16 @@ class DesktopMap(BaseMap):
     TODO : Mini Map styling
     
     """ 
-    _available = [TileLayer("CartoDB dark_matter")] # TODO, add more styles to Layer Control.
+    _available = [
+        TileLayer("CartoDB dark_matter", name="Dark Mode", show=False, min_zoom=BaseMap.min_zoom)
+    ] 
 
     def __init__(self):
+        provider = MapStyleProvider()
+        for style in provider.get_all_options():
+             for key,value in style.items():
+                self._available.append(TileLayer(value ,show=False, min_zoom=self.min_zoom))
+
         super().__init__()
         self.__mini__ = MiniMap().add_to(self.__map__)
         self.__styles__.extend(self._available)
@@ -223,6 +231,7 @@ class ToggleMarker(MacroElement):
                         currentMarker = null;  
                     } else {
                         
+                        // Reference to green icon image.
                         var greenIcon = new L.Icon({
                             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -235,6 +244,8 @@ class ToggleMarker(MacroElement):
                         currentMarker = L.marker(e.latlng, {icon : greenIcon}).addTo({{ this._parent.get_name() }});
                         var lat = e.latlng.lat;
                         var lng = e.latlng.lng;
+
+                        // TODO : Create button posting to url 'create_marker'
 
                         currentMarker.dragging.enable();
 
