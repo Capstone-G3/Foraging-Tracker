@@ -24,4 +24,4 @@ class EditProfileView(LoginRequiredMixin, View):
             user.profile_image = request.FILES['profile_image']
         user.save()
         profile.save()
-        return redirect('profile')
+        return redirect('/')
