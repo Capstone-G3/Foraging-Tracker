@@ -8,35 +8,95 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
+    <style>
+        .userLink a {
+            color: black; /* Set text color to black */
+            font-weight: bold; /* Make text bold */
+        }
+        .dropdown-menu.custom-dropdown-width {
+            width: auto !important;
+            height: auto;
+            transform: translateX(-60%);
+        }
+        .username-text {
+            color: white !important; /* Set the username text color to white */
+            font-weight: bold; /* Optional: make the text bold */
+            text-align: center;
+            margin-left: 10px;
+            padding: 13px;
+        }
+        .dropdown-menu.custom-dropdown-width .dropdown-header {
+            font-weight: bold; /* Make the header bold */
+            background-color: #004d00; /* Dark green background for the header */
+            color: white; /* Set text color to white */
+            padding: 10px; /* Add some padding */
+            display: flex;
+            align-items: center;
+            font-size: small;
+        }
+        .dropdown-header img {
+            margin-right: 10px; /* Add some space between the logo and the text */
+        }
+        .profile-image {
+            width: 40px;  /* Set desired width */
+            height: 40px; /* Set desired height */
+            object-fit: cover; /* Ensures the image covers the entire area without distortion */
+            border-radius: 50%; /* Makes the image round */
+        }
+    </style>
 </head>
 <body>
     <div class="mapContainer">
         <div class="appbar desktop">
-            <div style="flex: 1;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></div>
+            <div style="flex: 1;">
+                <img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo">
+            </div>
             <div class="groupedPageLinks">
                 <div class="mapLink">MAP</div>
                 <div class="addLink">
-                    <a href="{% url 'create_marker' %}">
-                        +
-                    </a>
+                    <a href="{% url 'create_marker' %}">+</a>
                 </div>
                 <div class="feedLink">FEED</div>
             </div>
-            <div class="userLink">
-                <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
-                <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">{{ username }}</a>
-                <div class="dropdown" style="z-index: 500 !important;">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:
+            <div class="userLink ml-auto">
+                <span class="username-text">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" style="color: white !important;">{{ username }}</a>
+                    {% else %}
+                        {{ username }}
+                    {% endif %}
+                </span>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
-                        <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                        {% endif %}
                     </button>
-                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton" style="width:100px; transform: translateX(-15%);">
+                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-header">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                            {% else %}
+                                <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                            {% endif %}
+                            User Menu
+                        </div>
                         <ul>
-                            <li> <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                                
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -49,16 +109,15 @@
             <div class="feedLink">FEED</div>
         </div>
     </div>
-    <!-- TODO : A popup for errors that redirect back home. -->
-    <div class="popup">
-        {%if messages%}
-            {%for message in messages%}
-                <!-- RED for 'message-error' and GREEN for 'message-success' -->
-                <span class="message-{{message.tags}}">{{message}}</span>
-            {%endfor%}
-        {%endif%}
-    </div>
   
+    <div class="popup">
+        {% if messages %}
+            {% for message in messages %}
+                <span class="message-{{ message.tags }}">{{ message }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <!-- Add Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
