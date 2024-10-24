@@ -1,13 +1,18 @@
-from django.db.models import Model, AutoField, CharField, ForeignKey, CASCADE, SET_NULL
+from django.db.models import Model, AutoField, CharField, ForeignKey, CASCADE, SET_NULL, BooleanField
 
 from foraging_app.models.user import User
 from foraging_app.models.marker import Marker
 
 class Group(Model):
+    PRIVATE_CHOICE = {
+        True: "Private",
+        False: "Public"
+    }
 
     id = AutoField(primary_key=True)
     name = CharField(max_length=120, unique=True, null=False)
-    category = CharField(max_length=120, null=False)
+    # category = CharField(max_length=120, null=False)
+    isPrivate = BooleanField(default=False, choices=PRIVATE_CHOICE, null=False)
     description = CharField(max_length=512)
     user_admin = ForeignKey(User, on_delete=CASCADE, null=False)
 

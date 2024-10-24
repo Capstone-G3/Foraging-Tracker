@@ -1,0 +1,62 @@
+
+
+.mobile {
+    display: none;
+}
+
+.groupDetails {
+    background-color: #3C9E51;
+    color: white;
+    display: flex;
+    width: 100%;
+    height: 200px;
+}
+
+.groupTitle{
+    font-size: xxx-large;
+    padding: 0px 10px;
+    text-align: left;
+
+}
+
+.groupCategory{
+    font-size: large;
+    text-align: left;
+    position: absolute;
+    right: 300px;
+    top: 70px;
+}
+
+.groupDescription{
+    font-size: x-large;
+    text-align: left;
+    max-width: 1000px;
+}
+
+.mainContainer{
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.members{
+
+    background-color: darkgrey;
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+    text-align: left;
+    padding: 20px;
+
+}
+
+.posts{
+    background-color: lightgrey;
+    display: inline-block;
+    width: 75%;
+    height: 100%;
+    padding: 20px;
+
+}
