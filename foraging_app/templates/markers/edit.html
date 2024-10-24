@@ -12,10 +12,5 @@
         {{form}}
         <input type="submit" value="Edit">
     </form>
-
-    <form method="post", action="{% url 'delete_marker' marker_id=marker.id%}">
-        {%csrf_token%}
-        <input type="submit" value="Delete">
-    </form>
 </body>
 </html>
