@@ -5,10 +5,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type='text/css' href="{% static 'css/index.css' %}">
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .userLink a {
+            color: black; /* Set text color to black */
+            font-weight: bold; /* Make text bold */
+        }
+        .dropdown-menu.custom-dropdown-width {
+            width: auto !important;
+            height: auto;
+            transform: translateX(-60%);
+        }
+        
+        .dropdown-header {
+            font-weight: bold; /* Make the header bold */
+            background-color: #004d00; /* Dark green background for the header */
+            color: white; /* Set text color to white */
+            padding: 10px; /* Add some padding */
+            display: flex;
+            align-items: center;
+            font-size: 60px;
+        }
+        
+        .dropdown-header img {
+            margin-right: 10px; /* Add some space between the logo and the text */
+        }
 
+        .leaflet-popup-content-wrapper{
+           width: 200px;
+        }
+
+        .leaflet-popup-content{
+            margin: 0px;
+        }
+        
+        .leaflet-popup-content .image-container img{
+            margin: 0px;
+            width:200px;
+        }
+
+    </style>
 </head>
 <body>
     <div class="mapContainer">
@@ -23,20 +61,28 @@
                 </div>
                 <div class="feedLink">FEED</div>
             </div>
-            <div class="userLink">
-                <div><img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"></div>
-                <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">{{ username }}</a>
-                <div class="dropdown" style="z-index: 500 !important;">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:
+            <div class="userLink ml-auto">
+                <a href="{% url 'login' %}" style="color: white; font-weight: bold; margin: 5px;">
+                        {{ username }}
+                </a>
+                <div class="dropdown">
+                    
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
                         <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
                     </button>
-                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton" style="width:100px; transform: translateX(-15%);">
+                    <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-header">
+                            <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"> User Menu
+                        </div>
                         <ul>
-                            <li> <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                            <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            
+                            {%if request.user.is_authenticated%}
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            {%endif%}
                         </ul>
                     </div>
                 </div>
