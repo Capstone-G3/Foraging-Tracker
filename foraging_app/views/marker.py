@@ -2,6 +2,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.urls import reverse
 
 from foraging_app.forms import MarkerCreateForm, MarkerEditForm
 from foraging_app.models import Species, Marker,Like_Marker, User
@@ -87,7 +88,8 @@ class Marker_Edit_View(LoginRequiredMixin, View):
         if form.is_valid():
             form.save(commit=True)
             messages.success(request,"Marker edited successfully.")
-            status = 200
+            url = reverse('info_marker', kwargs={'marker_id': marker_id})
+            return redirect(url) # 301
         else:
             messages.error(request,"Edit marker failed.")
         return render(
@@ -132,7 +134,7 @@ class Marker_Details_View(LoginRequiredMixin, View):
         
         data = {
             'title' : query.title,
-            'owner' : "@" + str(query.owner.username),
+            'owner_name' : "@" + str(query.owner.username),
             'latitude' : query.latitude,
             'longitutde' : query.longitude,
             'description' : query.description,
@@ -143,6 +145,7 @@ class Marker_Details_View(LoginRequiredMixin, View):
 
         return render(request,'markers/info.html',{
             'marker' : data.items(),
+            'owner' : query.owner,
             'users_like': users[0:3],
             'total_likes' : len(users),
             'url_resolve' : marker_id
