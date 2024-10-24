@@ -25,10 +25,16 @@
             color: black !important; /* Set text color to black */
             font-weight: bold; /* Make text bold */
         }
+        .dropdown button img{
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
         .dropdown-menu.custom-dropdown-width {
-            width: auto !important;
+            width: 200px !important;
             height: auto;
-            transform: translateX(-5%);
+            transform: translateX(60%);
         }
         .dropdown-header {
             font-weight: bold; /* Make the header bold */
@@ -40,6 +46,16 @@
         }
         .dropdown-header img {
             margin-right: 10px; /* Add some space between the logo and the text */
+        }
+        .username-text {
+            color: white !important; /* Set the username text color to white */
+            font-weight: bold; /* Optional: make the text bold */
+        }
+        .profile-image {
+            width: 40px;  /* Set desired width */
+            height: 40px; /* Set desired height */
+            object-fit: cover; /* Ensures the image covers the entire area without distortion */
+            border-radius: 50%; /* Makes the image round */
         }
     </style>
 </head>
@@ -63,22 +79,42 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'categories' %}">Categories</a>
                 </li>
+                
             </ul>
             <div class="userLink ml-auto">
                 <div class="dropdown">
+                    <span class="username-text">{{ user.username }}</span>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
-                        <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                        {% endif %}
                     </button>
                     <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-header">
-                            <img src="/static/css/images/user_logo.png" width="20" height="20" alt="User Logo"> User Menu
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                            {% else %}
+                                <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                            {% endif %}
+                            User Menu
                         </div>
                         <ul>
+                            {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                            {% endif %}
+                            {% if not user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                            {% endif %}
                             <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
+                        {% endif %}
+                            
                         </ul>
                     </div>
                 </div>

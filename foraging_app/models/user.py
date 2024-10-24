@@ -18,7 +18,7 @@ class User(AbstractUser):
 
     id = AutoField(primary_key=True, editable=False)
     rating = IntegerField(default=0)
-    profile_image = ImageField(upload_to='user_profile', null=False)
+    profile_image = ImageField(upload_to='user_profile/', null=False)
     created_since = DateField(auto_now=True, null=False)
 
     def __str__(self):

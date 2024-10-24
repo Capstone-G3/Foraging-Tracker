@@ -20,6 +20,7 @@
 }
 
 
+
 /* Ensure dropdown items are styled correctly */
 .dropdown-item {
     color: black !important;
@@ -34,3 +35,6 @@
 .dropdown-item:hover {
     background-color: #f1f1f1 !important;
 }
+
+
+
