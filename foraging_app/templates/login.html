@@ -32,7 +32,7 @@
         <div class="register-link"><p>Don't have an account? <a href="{% url 'register' %}">Register</a></p></div>
         {% if messages %}
             {% for message in messages %}
-                <p class="message-{{message.tags}}">{{message}}</p>
+                <div class="message">{{message}}</div>
             {% endfor %}
         {% endif %}
     </form>
