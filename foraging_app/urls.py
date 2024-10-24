@@ -54,7 +54,7 @@ urlpatterns = [
     path('marker/create', Marker_Create_View.as_view(), name="create_marker"),
     path('marker/<int:marker_id>', Marker_Details_View.as_view(), name='info_marker'),
     path('marker/<int:marker_id>/edit', Marker_Edit_View.as_view(), name='edit_marker'),
-    path('marker/<int:marker_id>/edit/delete', Marker_Delete_View.as_view(), name='delete_marker'),
+    path('marker/<int:marker_id>/delete', Marker_Delete_View.as_view(), name='delete_marker'),
     #edit profile url
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
     #delete acc view
