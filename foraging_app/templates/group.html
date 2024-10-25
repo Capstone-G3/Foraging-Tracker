@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group</title>
+    <link rel="stylesheet" href="{%  static  'css/group.css'  %}">
+</head>
+
+<body>
+
+    <div class="groupDetails">
+        <div class="groupTitle">{% if thisGroup == None %}
+            Does Not Exist
+            {% else %}
+            {{ thisGroup }}
+        {% endif %}</div>
+        <div class="groupCategory">
+            {% if thisGroup == None %}
+                Error
+            {% else %}
+                {% if thisGroup.isPrivate == True %}
+                    Private
+                {% else %}
+                    Public
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="groupDescription">{% if thisGroup == None %}
+            Sorry but it looks like the group you're looking for does not exist.
+            {% else %}
+            {{ thisGroup.description }}
+        {% endif %}</div>
+    </div>
+
+    <div class = "mainContainer">
+        <div class="members">
+            {% if thisGroup == None %}
+                No users in an empty group
+            {% else %}
+                <ul>
+                {% for x in members %}
+{#                    TODO: replace with proper user page url#}
+                    <li><a href="{% url 'home' %}">{{ x.username }}</a></li>
+                {%  endfor %}
+                </ul>
+
+            {% endif %}
+        </div>
+        <div class = "posts"></div>
+    </div>
+
+
+</body>
+</html>
+
+{%  endblock %}
