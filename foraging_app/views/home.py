@@ -19,7 +19,7 @@ class Home_View(View):
             contents = {
                 'location' : (marker.latitude, marker.longitude),
                 'contents' : {
-                    'image_url' : marker.image.url,
+                    'image_url' : marker.image.url if marker.image and marker.image.name else '',
                     'species_name' : marker.title.split(' ')[0],
                     'species_full_name' : marker.title,
                     'latitude' : str(marker.latitude),
@@ -55,3 +55,7 @@ class Home_View(View):
 class About_Us_View(View):
     def get(self, request):
         return render(request, "about_us.html")
+
+class NavBar_View(View):
+    def get(self, request):
+        return render(request, 'base.html')

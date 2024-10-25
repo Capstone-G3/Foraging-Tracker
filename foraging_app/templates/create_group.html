@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create_Group</title>
+</head>
+<body>
+<h1>Create a New Group!</h1>
+<form method="post" action="{% url 'create_group' %}">
+{#    <label for="Name">Group name:</label>#}
+{#    <input type="text" id="Name" name="Group name" required><br><br>#}
+{##}
+{#    <input type="radio" id="Public" name="Category" value="Public" required>#}
+{#    <label for="Public">Public</label>#}
+{#    <input type="radio" id="Private" name="Category" value="Private" required>#}
+{#    <label for="Private">Private</label><br><br>#}
+{##}
+{##}
+{#    <label for="Description">Description of Group:</label>#}
+{#    <input type="text" id="Description" name="Description of Group" required><br><br>#}
+    {%csrf_token%}
+    {{ form }}
+
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

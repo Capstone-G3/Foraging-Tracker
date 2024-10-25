@@ -2,6 +2,7 @@ from django.db.models import (AutoField, IntegerField, DateField, CharField, Ima
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from foraging_app.settings import EMAIL_HOST_USER
+import datetime
 
 class User(AbstractUser):
     """
@@ -18,7 +19,7 @@ class User(AbstractUser):
 
     id = AutoField(primary_key=True, editable=False)
     rating = IntegerField(default=0)
-    profile_image = ImageField(upload_to='user_profile', null=False)
+    profile_image = ImageField(upload_to='user_profile/', null=False)
     created_since = DateField(auto_now=True, null=False)
 
     def __str__(self):
@@ -45,7 +46,16 @@ class User(AbstractUser):
 
     def getName(self):
         return self.username
-        
+
+    def getGroups(self):
+        from foraging_app.models.group import Group, User_Group # Possible change later for Refactor, bad design.
+        targetID = self.id
+        groupIDs = User_Group.objects.filter(user_id=targetID).values_list('group_id', flat=True)
+        groups = []
+        for x in groupIDs:
+            groups.append(Group.objects.get(id=x))
+        return groups
+
 
 class User_Profile(Model):
     MALE=2
@@ -63,6 +73,7 @@ class User_Profile(Model):
     phone = CharField(max_length=15, default=None)
     bio = CharField(max_length=500, blank=True)
     age = IntegerField(blank=True, null=True)
+    birthday = DateField(auto_now=False, null=False, default=datetime.datetime(1000,1,1))
     gender= IntegerField(choices=GENDER,default=MALE)
     user_id= ForeignKey(User, on_delete=CASCADE)
 
