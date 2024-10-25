@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from foraging_app.views.home import Home_View, About_Us_View
+from foraging_app.views.home import Home_View, About_Us_View, Feed_View
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
@@ -55,6 +55,7 @@ urlpatterns = [
     path('marker/<int:marker_id>', Marker_Details_View.as_view(), name='info_marker'),
     path('marker/<int:marker_id>/edit', Marker_Edit_View.as_view(), name='edit_marker'),
     path('marker/<int:marker_id>/edit/delete', Marker_Delete_View.as_view(), name='delete_marker'),
+    path('feed/', Feed_View.as_view(), name='feed'),
     #edit profile url
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
     #delete acc view

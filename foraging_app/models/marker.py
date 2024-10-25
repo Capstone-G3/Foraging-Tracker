@@ -14,7 +14,7 @@ class Marker(Model):
     latitude = IntegerField(null=False,default=0)
     longitude = IntegerField(null=False, default=0)
     is_private = BooleanField(default=False, choices=PRIVATE_CHOICE, verbose_name='mode')
-    image = ImageField(upload_to='marker_images', null=True)
+    image = ImageField(upload_to='marker_images/', null=True)
     description = CharField(max_length=150, blank=True, default='')
     owner = ForeignKey(User, on_delete=CASCADE, null=False, blank=False)
     species = ForeignKey("foraging_app.Species", on_delete=SET_NULL, blank=True, null=True)
