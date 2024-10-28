@@ -2,6 +2,7 @@ from django.views import View
 from django.shortcuts import render
 from foraging_app.models.user import User
 from foraging_app.models.user import User_Profile
+from foraging_app.models.marker import Marker
 
 class User_View(View):
 
@@ -28,4 +29,10 @@ class User_View(View):
             profilePhoto = "/static/css/images/user_logo.png"
         else:
             profilePhoto = user.profile_image.url
-        return render(request, "user.html", {"userModel": user, "userProfile": userProfile, "profilePhoto": profilePhoto, "isPersonalAccount": isPersonalAccount})
+
+        try:
+            markers = Marker.objects.filter(owner=userId)
+        except User_Profile.DoesNotExist:
+            markers = None
+
+        return render(request, "user.html", {"userModel": user, "userProfile": userProfile, "profilePhoto": profilePhoto, "markers": markers, "isPersonalAccount": isPersonalAccount})

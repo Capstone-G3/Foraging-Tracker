@@ -56,12 +56,11 @@
                         
                     </div>
                 </div>
-                {% comment %} Temporary mock of how user feed may look. {% endcomment %}
+                {% comment %} TODO: allow marker deletion/edit for personal account {% endcomment %}
                 <div class="userFeed">
-                    <div class="tempPostTemplate"></div>
-                    <div class="tempPostTemplate"></div>
-                    <div class="tempPostTemplate"></div>
-                    <div class="tempPostTemplate"></div>
+                    {% for marker in markers %}                    
+                        <div class="tempPostTemplate"></div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
