@@ -9,8 +9,8 @@ class User_View(View):
         #TODO: When adding in ability to view other users, check if user exists, pass in empty models if not.
         profile = User_Profile.objects.get(pk=request.user.id)
         #TODO: Originally I was going to check if this is null, but it seems the property doesn't exist currently, change this when it is added.
-        if hasattr(profile, 'profile_image'):
-            profilePhoto = profile.profile_image
-        else:
+        if (not request.user.profile_image):
             profilePhoto = "/static/css/images/user_logo.png"
+        else:
+            profilePhoto = request.user.profile_image
         return render(request, "user.html", {"user": request.user, "userProfile": profile, "profilePhoto": profilePhoto})
