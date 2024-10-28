@@ -5,12 +5,27 @@ from foraging_app.models.user import User_Profile
 
 class User_View(View):
 
-    def get(self, request):
-        #TODO: When adding in ability to view other users, check if user exists, pass in empty models if not.
-        profile = User_Profile.objects.get(pk=request.user.id)
-        #TODO: Originally I was going to check if this is null, but it seems the property doesn't exist currently, change this when it is added.
-        if (not request.user.profile_image):
+    def get(self, request, userId = None):
+        isPersonalAccount = False
+        user = None
+        if (userId == None):
+            userId = request.user.id
+            user = request.user
+            isPersonalAccount = True
+        else:
+            try:
+                user = User.objects.get(id=userId)
+            except User.DoesNotExist:
+                user = None
+            isPersonalAccount = False
+        
+        try:
+            userProfile = User_Profile.objects.get(user_id=userId)
+        except User_Profile.DoesNotExist:
+            userProfile = None
+
+        if (user == None or not user.profile_image):
             profilePhoto = "/static/css/images/user_logo.png"
         else:
-            profilePhoto = request.user.profile_image.url
-        return render(request, "user.html", {"user": request.user, "userProfile": profile, "profilePhoto": profilePhoto})
+            profilePhoto = user.profile_image.url
+        return render(request, "user.html", {"userModel": user, "userProfile": userProfile, "profilePhoto": profilePhoto, "isPersonalAccount": isPersonalAccount})

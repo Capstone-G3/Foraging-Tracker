@@ -21,8 +21,14 @@
                                     <img src={{profilePhoto}} width="50" height="50" alt="User Icon">
                                 </div>
                                 <div class="userInfo">
-                                    <div class="username">{{user}}</div>
-                                    <div>{{user.first_name}} {{user.last_name}}</div>
+                                    <div class="username">
+                                        {% if userModel != None %}                                            
+                                            {{userModel}}
+                                        {% else %}
+                                            Nonexistent User
+                                        {% endif %}
+                                    </div>
+                                    <div>{{userModel.first_name}} {{userModel.last_name}}</div>
                                     <div class="desktop">
                                         {{userProfile.bio}}
                                     </div>
@@ -42,9 +48,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <a href="{% url 'edit_profile' %}"><img src="/static/css/images/settings_logo.png" width="20" height="20" alt="User Icon"></a>
-                        </div>
+                        {% if isPersonalAccount %}                                            
+                            <div>
+                                <a href="{% url 'edit_profile' %}"><img src="/static/css/images/settings_logo.png" width="20" height="20" alt="User Icon"></a>
+                            </div>
+                        {% endif %}
+                        
                     </div>
                 </div>
                 {% comment %} Temporary mock of how user feed may look. {% endcomment %}
