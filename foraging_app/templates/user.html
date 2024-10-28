@@ -8,50 +8,52 @@
         <link rel="stylesheet" href="{%  static  'css/user.css'  %}">
     </head>
     <body>
-        <div class="pageContainer">        
-            <div class="profileInfo">
-                <div class="topContainer">
-                    <div>
-                        <div class="topLeftContainer">
-                            <div class="profilePhoto desktop">
-                                <img src={{profilePhoto}} width="100" height="100" alt="User Icon">
-                            </div>
-                            <div class="profilePhoto mobile">
-                                <img src={{profilePhoto}} width="50" height="50" alt="User Icon">
-                            </div>
-                            <div class="userInfo">
-                                <div class="username">{{user}}</div>
-                                <div>{{user.first_name}} {{user.last_name}}</div>
-                                <div class="desktop">
-                                    {{profile.bio}}
+        <div>
+            <div class="pageContainer">        
+                <div class="profileInfo">
+                    <div class="topContainer">
+                        <div>
+                            <div class="topLeftContainer">
+                                <div class="profilePhoto desktop">
+                                    <img class="rounded-circle" src={{profilePhoto}} width="100" height="100" alt="User Icon">
                                 </div>
-                                <div class="desktop userAssociations">
+                                <div class="profilePhoto mobile">
+                                    <img src={{profilePhoto}} width="50" height="50" alt="User Icon">
+                                </div>
+                                <div class="userInfo">
+                                    <div class="username">{{user}}</div>
+                                    <div>{{user.first_name}} {{user.last_name}}</div>
+                                    <div class="desktop">
+                                        {{userProfile.bio}}
+                                    </div>
+                                    <div class="desktop userAssociations">
+                                        <div>Friends: 0</div>
+                                        <div>Groups: 0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mobile userInfo">
+                                <div>
+                                    {{userProfile.bio}}
+                                </div>
+                                <div class="userAssociations">
                                     <div>Friends: 0</div>
                                     <div>Groups: 0</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mobile userInfo">
-                            <div>
-                                {{profile.bio}}
-                            </div>
-                            <div class="userAssociations">
-                                <div>Friends: 0</div>
-                                <div>Groups: 0</div>
-                            </div>
+                        <div>
+                            <a href="{% url 'edit_profile' %}"><img src="/static/css/images/settings_logo.png" width="20" height="20" alt="User Icon"></a>
                         </div>
                     </div>
-                    <div>
-                        <a href="{% url 'edit_profile' %}"><img src="/static/css/images/settings_logo.png" width="20" height="20" alt="User Icon"></a>
-                    </div>
                 </div>
-            </div>
-            {% comment %} Temporary mock of how user feed may look. {% endcomment %}
-            <div class="userFeed">
-                <div class="tempPostTemplate"></div>
-                <div class="tempPostTemplate"></div>
-                <div class="tempPostTemplate"></div>
-                <div class="tempPostTemplate"></div>
+                {% comment %} Temporary mock of how user feed may look. {% endcomment %}
+                <div class="userFeed">
+                    <div class="tempPostTemplate"></div>
+                    <div class="tempPostTemplate"></div>
+                    <div class="tempPostTemplate"></div>
+                    <div class="tempPostTemplate"></div>
+                </div>
             </div>
         </div>
     </body>

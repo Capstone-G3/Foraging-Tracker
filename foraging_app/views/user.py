@@ -12,5 +12,5 @@ class User_View(View):
         if (not request.user.profile_image):
             profilePhoto = "/static/css/images/user_logo.png"
         else:
-            profilePhoto = request.user.profile_image
+            profilePhoto = request.user.profile_image.url
         return render(request, "user.html", {"user": request.user, "userProfile": profile, "profilePhoto": profilePhoto})
