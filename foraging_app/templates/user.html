@@ -57,11 +57,17 @@
                     </div>
                 </div>
                 {% comment %} TODO: allow marker deletion/edit for personal account {% endcomment %}
-                <div class="userFeed">
-                    {% for marker in markers %}                    
-                        <div class="tempPostTemplate"></div>
-                    {% endfor %}
-                </div>
+                {% if not markers %}
+                    <div class="emptyUserFeed">
+                        User does not have any markers to display.
+                    </div>
+                {% else %}
+                    <div class="userFeed">
+                        {% for marker in markers %}                    
+                            <div class="tempPostTemplate"></div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </body>
