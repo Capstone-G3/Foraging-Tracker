@@ -6,30 +6,30 @@ from foraging_app.models.marker import Marker
 
 class User_View(View):
 
-    def get(self, request, userId = None):
+    def get(self, request, userId):
         isPersonalAccount = False
-        user = None
-        if (userId == None):
-            userId = request.user.id
-            user = request.user
+        if userId == request.user.id:
             isPersonalAccount = True
-        else:
-            try:
-                user = User.objects.get(id=userId)
-            except User.DoesNotExist:
-                user = None
-            isPersonalAccount = False
+
+        # Attempt to get user object
+        try:
+            user = User.objects.get(id=userId)
+        except User.DoesNotExist:
+            user = None
         
+        # Attempt to get user profile object
         try:
             userProfile = User_Profile.objects.get(user_id=userId)
         except User_Profile.DoesNotExist:
             userProfile = None
 
+        # Attempt to get user profile image url
         if (user == None or not user.profile_image):
             profilePhoto = "/static/css/images/user_logo.png"
         else:
             profilePhoto = user.profile_image.url
 
+        # Attempt to get user marker objects
         try:
             markers = Marker.objects.filter(owner=userId)
         except User_Profile.DoesNotExist:
