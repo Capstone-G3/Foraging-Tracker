@@ -1,5 +1,5 @@
 from django.db.models import (Model, AutoField, CharField, IntegerField, DateField, ImageField, BooleanField,
-                              ForeignKey, CASCADE, SET_NULL, DateTimeField)
+                              ForeignKey, CASCADE, SET_NULL, DateTimeField, FloatField, TextField)
 
 from foraging_app.models.user import User
 
@@ -11,8 +11,8 @@ class Marker(Model):
 
     id = AutoField(primary_key=True)
     title = CharField(null=False,max_length=120, verbose_name="name")
-    latitude = IntegerField(null=False,default=0)
-    longitude = IntegerField(null=False, default=0)
+    latitude = FloatField(null=False,default=0.0) #changed this to a float because user should be able to enter more than one digit
+    longitude = FloatField(null=False, default=0.0)
     is_private = BooleanField(default=False, choices=PRIVATE_CHOICE, verbose_name='mode')
     image = ImageField(upload_to='marker_images/', null=True)
     description = CharField(max_length=150, blank=True, default='')
@@ -58,3 +58,12 @@ class User_Marker(Model):
     #     for x in marker_ids:
     #         markers.append(Marker.objects.get(id=x))
     #     return markers
+
+class Comment(Model):
+    marker = ForeignKey(Marker, related_name='comments', on_delete=CASCADE)
+    user = ForeignKey(User, on_delete=CASCADE)
+    text = TextField()
+    created_date = DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text

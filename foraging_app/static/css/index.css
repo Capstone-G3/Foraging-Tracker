@@ -5,12 +5,6 @@ body {
     padding: 0;
 }
 
-.mapContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .appbar {
     padding: 0px 10px;
     min-height: 54px;
