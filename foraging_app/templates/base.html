@@ -83,7 +83,7 @@
             </ul>
             <div class="userLink ml-auto">
                 <div class="dropdown">
-                    <span class="username-text">{{ user.username }}</span>
+                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
