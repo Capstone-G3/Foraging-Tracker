@@ -1,0 +1,22 @@
+.mobile {
+    display: none;
+}
+
+html{
+    background-color: #3C9E51;
+}
+
+.behind{
+    background-color: #3C9E51;
+    height: 100%;
+    width: 100%;
+}
+
+.mainContainer{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    background-color: darkgrey;
+    border-radius: 25px;
+    list-style: decimal inside none;
+}

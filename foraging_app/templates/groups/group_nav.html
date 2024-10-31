@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group_Nav</title>
+    <link rel="stylesheet" href="{%  static  'css/group_nav.css' %}">
+</head>
+<body>
+<div class="behind">
+<div class="mainContainer">
+<form action="{% url 'create_group' %}">
+    <input type="submit" value="Create a New Group Here!" />
+</form>
+
+
+<ol>
+    {% for x in allGroups %}
+        <li><a href="{% url 'group' x.id %}">{{ x.name }}</a></li>
+
+    {% endfor %}
+</ol>
+
+</div>
+</div>
+
+</body>
+</html>
+
+{% endblock %}
