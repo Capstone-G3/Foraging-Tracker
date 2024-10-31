@@ -141,7 +141,7 @@
                         {% else %}
                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                         {% endif %}
-                        <span class="owner-username"><a href="{% url 'user' %}">{{ marker.owner.username }}</a></span>
+                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
                         <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
                     </div>
                     <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
