@@ -1,17 +1,14 @@
-body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-}
-
 /* All this jazz makes it so the feed is scrollable separate from the rest of the page */
 .pageContainer {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 0;
+    top: 73px;
     right: 0;
     bottom: 0;
     left: 0;
+    position: absolute;
+    top: 73px;
 }
 
 .profileInfo {
@@ -45,6 +42,14 @@ body {
 .userAssociations {
     display: flex;
     gap: 10px;
+}
+
+.emptyUserFeed {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center
 }
 
 .userFeed {
