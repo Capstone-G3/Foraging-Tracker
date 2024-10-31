@@ -73,9 +73,6 @@ class Feed_View(View):
 
         species_list = Species.objects.all()
 
-        for marker in markers:
-            marker.user_has_liked = marker.like_marker_set.filter(user_id=request.user.id).exists()
-
         return render(request, 'feed.html', {
             'markers': markers,
             'species_filter': species_filter,
@@ -93,4 +90,3 @@ class AddCommentView(View):
             comment.user = request.user
             comment.save()
         return redirect('feed')
-
