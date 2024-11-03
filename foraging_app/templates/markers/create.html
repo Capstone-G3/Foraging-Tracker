@@ -8,13 +8,43 @@
 <body>
     <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data">
         {%csrf_token%}
-        {{form}}
+        {{marker_form}}
+            {%if species_form%}
+                <button id="display_button"></button>
+                <div id="species_form">
+                    {{species_form}}
+                </div>
+            {%endif%}
         <input type="submit" value="Create">
     </form>
+    {{map | safe}}
+
+
     {%if messages%}
         {%for message in messages%}
             <p class="message-{{message.tags}}">{{message}}</p>
         {%endfor%}
+    {%endif%}
+
+    {%if species_form%}
+        <script type="text/javascript">
+            const speciesContainer = document.getElementById('species_form');
+            const speciesForm = speciesContainer.innerHTML;
+            const displayButton = document.getElementById('display_button');
+            speciesContainer.innerHTML = '';
+            displayButton.innerHTML = "Show Species Form";
+            displayButton.addEventListener('click', hideshow, false);
+
+            function hideshow(){
+                if(displayButton.innerHTML === "Show Species Form"){
+                    displayButton.innerHTML = "Hide Species Form"
+                    speciesContainer.innerHTML = speciesForm;
+                }else{
+                    displayButton.innerHTML = "Show Species Form"
+                    speciesContainer.innerHTML = '';
+                }
+            }
+        </script>
     {%endif%}
 </body>
 </html>

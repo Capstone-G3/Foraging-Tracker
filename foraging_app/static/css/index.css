@@ -46,7 +46,7 @@ body {
 }
 
 .mapLink {
-    background-color: #3C9E51;
+    /*background-color: #3C9E51; to be changed based on what the user selects*/
     border-radius: 10px;
 }
 

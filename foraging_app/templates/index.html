@@ -6,23 +6,12 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" type='text/css' href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type='text/css' href="{% static 'css/marker.css' %}">
+    
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
    
 <style>
-
-    .leaflet-popup-content-wrapper{
-           width: 200px;
-        }
-
-    .leaflet-popup-content{
-        margin: 0px;
-    }
-
-    .leaflet-popup-content .image-container img{
-        margin: 0px;
-        width:200px;
-    }
     .userLink a {
         color: black; /* Set text color to black */
         font-weight: bold; /* Make text bold */
@@ -57,8 +46,6 @@
         object-fit: cover; /* Ensures the image covers the entire area without distortion */
         border-radius: 50%; /* Makes the image round */
     }
-
-
 </style>
 </head>
 <body>
@@ -83,8 +70,8 @@
                     {% endif %}
                 </span>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:
                             transparent; border: transparent;">
                         {% if user.profile_image %}
                             <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
@@ -104,7 +91,7 @@
                         <ul>
                             {% if user.is_authenticated %}
                                 <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
-                                
+
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
                             {% endif %}
@@ -125,7 +112,7 @@
             <div class="feedLink">FEED</div>
         </div>
     </div>
-  
+
     <div class="popup">
         {% if messages %}
             {% for message in messages %}

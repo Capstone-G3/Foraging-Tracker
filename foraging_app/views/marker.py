@@ -4,8 +4,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 
-from foraging_app.forms import MarkerCreateForm, MarkerEditForm
+from foraging_app.forms import MarkerCreateForm, MarkerEditForm, SpeciesCreateForm
 from foraging_app.models import Species, Marker,Like_Marker, User
+
+from forage.sitemap.base import InformationMap, PinMap
 
 class Marker_Home_View(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -33,18 +35,35 @@ class Marker_Create_View(LoginRequiredMixin, View):
     
     def getCreateForm(self):
         species = list(Species.objects.all())
-        return MarkerCreateForm(initial={'species' : species})
+        marker_form = MarkerCreateForm(prefix="marker")
+
+        if len(species) == 0:
+            marker_form.fields.pop('species')
+        else: 
+            marker_form.initial={'species':species}
+            
+        return {
+            'marker_form' : marker_form,
+            'species_form' : SpeciesCreateForm(prefix="species")
+        }
 
     def get(self,request):
-        form = self.getCreateForm()
-        return render(request, 'markers/create.html', {'form' : form })
+        data = self.getCreateForm()
+        data['map'] = PinMap().compile_figure().render()
+        return render(request, 'markers/create.html', data)
     
     def post(self,request):
-        form = MarkerCreateForm(request.POST, request.FILES)
+        marker_form = MarkerCreateForm(request.POST, request.FILES, prefix="marker")
+        species_form = SpeciesCreateForm(request.POST, prefix="species")
         status = 400
-        if form.is_valid():
-            data = form.cleaned_data
+
+        if marker_form.is_valid():
+            data = marker_form.cleaned_data
             # TODO : Resize Image before save -> Save space.
+            if species_form.is_valid():
+                species_cleaned = species_form.cleaned_data
+                species = Species.objects.create(**species_cleaned)
+                data['species'] = species 
             marker_create = Marker.objects.create(**data, owner=request.user)
             if marker_create is not None:
                 messages.success(request,"Marker created complete.")
@@ -54,9 +73,7 @@ class Marker_Create_View(LoginRequiredMixin, View):
         return render(
             request,
             'markers/create.html',
-            {
-                'form' : self.getCreateForm()
-            },
+            self.getCreateForm(),
             status=status
         )
     
@@ -123,15 +140,14 @@ class Marker_Details_View(LoginRequiredMixin, View):
         query = Marker.objects.get(id=marker_id)
         query_likes = Like_Marker.objects.filter(marker_id=marker_id)
         users = []
-        if not query_likes:
-            pass
-
+        
         for user_like in query_likes:
             user = User.objects.get(id=user_like.id)
-            if not user :
-                continue
-            users.append(user)
+            if user :
+                users.append(user)
         
+        figure = InformationMap()
+        figure.add_marker(location=(query.latitude,query.longitude))
         data = {
             'title' : query.title,
             'owner_name' : "@" + str(query.owner.username),
@@ -140,7 +156,7 @@ class Marker_Details_View(LoginRequiredMixin, View):
             'description' : query.description,
             'species' : query.species,
             'found' : query.created_date,
-            'image' : query.image.url
+            'image' : query.image.url,
         }
 
         return render(request,'markers/info.html',{
@@ -148,6 +164,7 @@ class Marker_Details_View(LoginRequiredMixin, View):
             'owner' : query.owner,
             'users_like': users[0:3],
             'total_likes' : len(users),
-            'url_resolve' : marker_id
+            'url_resolve' : marker_id,
+            'map' : figure.compile_figure()._repr_html_()
             }
         )
