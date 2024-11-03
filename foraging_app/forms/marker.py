@@ -6,8 +6,8 @@ class MarkerCreateForm(ModelForm):
     class Meta:
         model = Marker
         fields = [
-            'longitude',
             'latitude',
+            'longitude',
             'title',
             'is_private',
             'image',
