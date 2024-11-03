@@ -1,6 +1,7 @@
 from folium import Popup
 from bs4 import BeautifulSoup # Using DOM to detect HTML injection.
 from html import escape # Prevent XSS forbidden characters.
+from django.template import Template, Context
 
 class MarkerContent:
     """
@@ -10,46 +11,36 @@ class MarkerContent:
     def __init__(self):
         self.raw_html="""
         <div class='image-container'>
-            <img src='{image_url}',height=100, width=100>
-        </div>
-        <div class='title-container'>
-            <h3>{species_name}</h3>
-            <p >{species_full_name}</p>
+            <img src='{{marker.image.url}}'>
         </div>
         <div class='information-container'>
-            <span>
-                <p>Location : {latitude} , {longitude}</p>
-            </span>
-            <p>Category : {category}</p>
-            <p>Description : {description}</p>
+            <div>
+                <strong>{{marker.title}}</strong> 
+                {%if request.user.is_authenticated and request.user.id == owner.id%}
+          
+                <a href="{% url 'edit_marker' marker_id=marker.id%}">
+                    {%load static%}
+                    <img src="{% static 'img/edit-marker.svg' %}" alt="{{marker.title}}" width="20">
+                </a>
+                {%endif%}
+            </div>
+            <div>Owner : <a href="{% url 'user'%}">@{{owner.username}}</a></div>
+            <div>Location: {{marker.latitude}},{{marker.longitude}}</div>
+            {%if marker.species.category%}
+            <div>Category : {{marker.species.category}}</div>
+            {%endif%}
+            <div>Description : {{marker.description}}</div>
+            <div><a href="{%url 'info_marker' marker_id=marker.id%}"> View More...</a></div>
         </div>
-        <a href='{marker_ref}'>{marker_name}</a>
+
         """
-        self.width = 200 # Predefined.
-        self.height = 200 # Predefined.
-        self.content = {}
 
     def getPopup(self,contents):
         """
-            contents:
-                image_url : Representation of Image Location
-                species_name : The String of Species Name (in Short)
-                species_full_name : The complete name of Species
-                latitude : An integer represent the Latitude
-                longitude : An integer represent the Longitude
-                category : The String represent the category of Species
-                description : The String description of marker.
-                marker_ref : The URL refers to this marker
-                marker_name : The title of the Marker.
-            
-            :return : The Popup Element from Folium to represent a Marker.
+            Using Django Template to render inside popup.
         """
-        for key,value in contents.items():
-            html_escaped = escape(value)
-            if bool(BeautifulSoup(html_escaped, 'html.parser').find()):
-                raise ValueError("Code detected in input Content.")
-            else:
-                self.content[key] = html_escaped
-        parsed_html = self.raw_html.format(**self.content)
-        return Popup(html=parsed_html, parse_html=False, lazy=True)
+        template = Template(self.raw_html)
+        context = Context({**contents})
+        parsed_html = template.render(context)
+        return Popup(html=parsed_html, parse_html=False, lazy=True, offset=(-170,125))
         
