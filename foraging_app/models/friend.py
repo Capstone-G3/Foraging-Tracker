@@ -15,7 +15,7 @@ class Friend(Model):
 
     def add_friend(self, account):
         """
-        Adds a friend, if relationship doesn't exist yet
+        Adds a friend, if relationship doesn't exist yet // core functionality
         """
         if account not in self.friends.all():
             self.friends.add(account)
@@ -81,5 +81,3 @@ class Friend_Request(Model):
         """
         self.status = 2  # update F.R. status to 2 (aka rejected)
         self.save()
-
-    # DO WE WANT TO ADD A CANCEL FEATURE FOR FRIEND REQUEST'S SENT?
