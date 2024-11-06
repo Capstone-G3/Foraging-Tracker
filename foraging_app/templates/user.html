@@ -12,8 +12,8 @@
         <link rel="stylesheet" href="{%  static  'css/user.css'  %}">
         <style>
             .wrapper {
+                height: 100%;
                 display: flex;
-                height: auto;
                 background-size: cover;
                 background-position: center;
                 position:relative;
@@ -76,12 +76,7 @@
                     </div>
                 </div>
                 {% comment %} TODO: allow marker deletion/edit for personal account {% endcomment %}
-                {% if not markers %}
-                    <div class="emptyUserFeed">
-                        User does not have any markers to display.
-                    </div>
-                {% else %}
-                <div style="overflow-y: auto;">
+                <div style="overflow-y: auto; height: 100%">
                     <div class="wrapper">
                         <nav class="nav flex-column" style="position: fixed;">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -106,13 +101,20 @@
                                     <div class="dropdown-divider"></div>
                                     <button type="submit" class="btn btn-primary">Apply Filters</button>
                                     <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
-                                </form>
-                
+                                </form>                
                             </div>
-                
-                
+                            {%if isPersonalAccount%}                         
+                                <a class="nav-link" href="{% url 'create_marker' %}">Create New Marker</a> 
+                            {%endif%}               
                         </nav>
-                        <div class="container">
+                        {% if not markers %}
+                            <div class="emptyUserFeedContainer">
+                                <div class="emptyUserFeed">
+                                    No markers to display.
+                                </div>
+                            </div>
+                        {% else %}
+                        <div class="container" style="min-width: 100%;">
                             {% for marker in markers %}
                                 <div class="image-container">
                                     <div class="owner-info">
@@ -200,9 +202,9 @@
                                     }
                                 }
                             </script>
-                        </div>
-                    </div>
-                {% endif %}
+                        </div>                        
+                    {% endif %}
+                </div>
             </div>
         </div>
     </body>
