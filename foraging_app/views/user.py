@@ -36,4 +36,10 @@ class User_View(View):
         except User_Profile.DoesNotExist:
             markers = None
 
-        return render(request, "user.html", {'form': CommentForm(), "userModel": user, "userProfile": userProfile, "profilePhoto": profilePhoto, "markers": markers, "isPersonalAccount": isPersonalAccount})
+        return render(request, "user.html", {
+            "form": CommentForm(), 
+            "userModel": user, 
+            "userProfile": userProfile, 
+            "profilePhoto": profilePhoto, 
+            "markers": markers, 
+            "isPersonalAccount": isPersonalAccount})
