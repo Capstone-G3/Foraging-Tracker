@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block content %}
     <head>
         <meta charset="UTF-8">
         <title>User Profile</title>
+        <link rel="stylesheet" href="{% static 'css/feed.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="{%  static  'css/user.css'  %}">
+        <style>
+            .wrapper {
+                display: flex;
+                height: auto;
+                background-size: cover;
+                background-position: center;
+                position:relative;
+                background-repeat: no-repeat;
+                {% if user.profile_image %}
+                    background-image: url('{{ user.profile_image.url }}');
+                {% else %}
+                    background-image: url('{% static "img/Default_Background.jpg" %}')
+                {% endif %}
+            }            
+        </style>
     </head>
     <body>
         <div>
@@ -62,11 +80,133 @@
                         User does not have any markers to display.
                     </div>
                 {% else %}
-                    <div class="userFeed">
-                        {% for marker in markers %}                    
-                            <div class="tempPostTemplate"></div>
-                        {% endfor %}
+                <div style="overflow-y: auto;">
+                    <div class="wrapper">
+                        <nav class="nav flex-column">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter Content
+                            </a>
+                        <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: auto !important;
+                            min-width: 200px; /* Ensure a minimum width */
+                            background-color: black !important;
+                            color: floralwhite;">
+                                Species
+                                <div class="dropdown-divider"></div>
+                                <form method="get" class="filter-form">
+                                    {% for species in species_list %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="species" value="{{ species.name }}" id="species{{ forloop.counter }}" {% if species.name in species_filter %}checked{% endif %}>
+                                            <label class="form-check-label" for="species{{ forloop.counter }}">
+                                                {{ species.name }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="dropdown-divider"></div>
+                                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                                </form>
+                
+                            </div>
+                
+                
+                        </nav>
+                        <div class="container">
+                            {% for marker in markers %}
+                                <div class="image-container">
+                                    <div class="owner-info">
+                                        {% if marker.owner.profile_image %}
+                                            <img src="{{ marker.owner.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                                        {% else %}
+                                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                                        {% endif %}
+                                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
+                                        <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
+                                    </div>
+                                    <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
+                                    <div class="marker-details">
+                                        <div class="marker-title">{{ marker.title }}</div>
+                                        <!--<div class="marker-latlng">{{ marker.latitude }}, {{ marker.longitude }}</div>-->
+                                        <div class="dropdown-divider"></div>
+                                        <div class="marker-description">{{ marker.description }}</div>
+                                        <!--<a href="{% url 'home' %}?marker_id={{ marker.id }}" class="btn btn-primary">View on Map</a>-->
+                                            <div class="action-container">
+                                            <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
+                                                Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
+                                            </button>
+                                            <div class="comment-toggle" onclick="toggleComments({{ marker.id }})">
+                                                <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
+                                                {{ marker.comments.count }}
+                                            </div>
+                                        </div>
+                                        <div id="comments-{{ marker.id }}" class="comments">
+                                            <div class="comments-container">
+                                                {% for comment in marker.comments.all %}
+                                                    <div class="comment">
+                                                        {% if comment.user.profile_image %}
+                                                            <img src="{{ comment.user.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                                                        {% else %}
+                                                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                                                        {% endif %}
+                                                        <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                                        <div class="created-date">{{ comment.created_date|date:"F d, Y" }}</div>
+                                                    </div>
+                                                    <div class="dropdown-divider"></div>
+                                                {% endfor %}
+                                            </div>
+                                            {% if user.is_authenticated %}
+                                                <form method="POST" action="{% url 'add_comment' marker.id %}">
+                                                    {% csrf_token %}
+                                                    {{ form.text|add_class:"small-textarea" }}
+                                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                                </form>
+                                            {% else %}
+                                                <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+                                            {% endif %}
+                                        </div>
+                
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <script>
+                                document.querySelectorAll('.like-button').forEach(button => {
+                                    button.addEventListener('click', function() {
+                                        const markerId = this.getAttribute('data-id');
+                                        fetch(`/like/${markerId}/`, {
+                                            method: 'POST',
+                                            headers: {
+                                                'X-CSRFToken': '{{ csrf_token }}',
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({})
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.liked) {
+                                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                                            } else {
+                                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                                            }
+                                        });
+                                    });
+                                </div>
+                            });
+                            function clearSearch() {
+                                window.location.href = "{% url 'feed' %}";
+                            }
+                            function toggleComments(markerId) {
+                                const commentsDiv = document.getElementById(`comments-${markerId}`);
+                                console.log(commentsDiv)
+                                if (commentsDiv.style.display === "none") {
+                                    commentsDiv.style.display = "block";
+                                } else {
+                                    commentsDiv.style.display = "none";
+                                }
+                            }
+            
+                        </script>
                     </div>
+                </div>
                 {% endif %}
             </div>
         </div>
