@@ -156,7 +156,7 @@
                                                 {% endfor %}
                                             </div>
                                             {% if user.is_authenticated %}
-                                                <form method="POST" action="{% url 'add_comment' marker.id %}">
+                                                <form method="POST" action="{% url 'add_comment' marker.id userModel.id %}">
                                                     {% csrf_token %}
                                                     {{ form.text|add_class:"small-textarea" }}
                                                     <button type="submit" class="btn btn-primary">Add Comment</button>

@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from foraging_app.models.user import User
 from foraging_app.models.user import User_Profile
 from foraging_app.forms import CommentForm
@@ -43,3 +43,14 @@ class User_View(View):
             "profilePhoto": profilePhoto, 
             "markers": markers, 
             "isPersonalAccount": isPersonalAccount})
+    
+class AddCommentUserView(View):
+    def post(self, request, marker_id, user_id):
+        marker = Marker.objects.get(id=marker_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.marker = marker
+            comment.user = request.user
+            comment.save()
+        return redirect('user', userId=user_id)
