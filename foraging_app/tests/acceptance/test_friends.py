@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from foraging_app.models import User
 from foraging_app.models.user import User_Profile
-from foraging_app.models import Friend
+from foraging_app.models.friend import Friend
 from foraging_app.models.friend import Friend_Request
 
 
