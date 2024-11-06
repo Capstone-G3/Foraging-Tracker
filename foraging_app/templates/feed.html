@@ -32,7 +32,6 @@
         <nav class="nav flex-column" style="position: fixed;">
             <a class="nav-link">
                 <div class="search-container">
-
                     <form method="GET" action="{% url 'feed' %}">
                         <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q|default_if_none:'' }}">
                         <button type="submit">Search</button>

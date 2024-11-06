@@ -130,18 +130,17 @@
     padding-top: 5px;
     flex-shrink: 0;
 }
-.nav-link {
+.nav .nav-link {
     display: inline-block;
     padding: 10px 20px;
     margin-bottom: 10px;
     color: floralwhite;
     background-color: black;
-
     border: 1px solid transparent;
     text-align: center;
     text-decoration: none;
 }
-.nav-link:hover {
+.nav .nav-link:hover {
     background-color: black;
     opacity: 85%;
     color: #fff;
