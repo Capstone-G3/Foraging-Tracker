@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from foraging_app.views import SingleMarkerView
 from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View
 from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView
 from foraging_app.views.login import Login_View
