@@ -1,0 +1,71 @@
+.creationContainer {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 54px;
+    background-image: url('../img/map_background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.createMarker {
+    background-color: #3c9e51;
+    border-radius: 10px;
+    font-size-adjust: none;
+    color: white;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+}
+
+.dataContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    background-color: #6FC081;
+    border-radius: 0 0 10px 10px;
+    font-weight: 500;
+}
+
+.data {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+input[type="submit"], input::file-selector-button {
+    border: none;
+    background-color: #3c9e51;
+    color: white;
+    height: 35px;
+    font-weight: 500;
+    align-self: center;
+    border-radius: 5px;
+}
+
+input[type="submit"] {    
+    filter: drop-shadow(#207933 4px 4px 1px);
+    width: 300px;
+}
+
+input[type="submit"]:hover, input::file-selector-button:hover {
+    background-color: #88cb97;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+input[type="number"], input[type="text"], select {
+    border-radius: 10px;
+    border: none;
+    height: 26px;
+}

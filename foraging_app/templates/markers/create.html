@@ -1,20 +1,32 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{%  static  'css/create.css'  %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Marker</title>
 </head>
 <body>
-    <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data">
-        {%csrf_token%}
-        {{form}}
-        <input type="submit" value="Create">
-    </form>
-    {%if messages%}
-        {%for message in messages%}
-            <p class="message-{{message.tags}}">{{message}}</p>
-        {%endfor%}
-    {%endif%}
+    <div class="creationContainer">
+        <div class="createMarker">
+            <div class="title">New Marker</div>
+            <div class="dataContainer">
+                <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data" class="data">
+                    {%csrf_token%}
+                    {{form}}
+                    <input type="submit" value="Create">
+                </form>
+                {%if messages%}
+                    {%for message in messages%}
+                        <p class="message-{{message.tags}}">{{message}}</p>
+                    {%endfor%}
+                {%endif%}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+{% endblock %}
