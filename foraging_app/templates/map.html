@@ -1,0 +1,7 @@
+{% extends 'index.html' %}
+{% block title %}Map{% endblock %}
+{% block content %}
+    <div class="map styling" style="display: flex; flex-direction: column; height: 100%;">
+        {{ map.render | safe }}
+    </div>
+{% endblock %}

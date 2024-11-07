@@ -1,0 +1,232 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block title %}Main Feed{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/feed.css' %}">
+    <style>
+        .wrapper {
+            display: flex;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            position:relative;
+            background-repeat: no-repeat;
+            {% if user.profile_image %}
+                background-image: url('{{ user.profile_image.url }}');
+            {% else %}
+                background-image: url('{% static "img/Default_Background.jpg" %}')
+            {% endif %}
+        }
+        .nav {
+            width: 200px;
+            height: auto;
+            background-color: transparent;
+            opacity: 90%;
+            padding-top: 5px;
+            flex-shrink: 0;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: floralwhite;
+            background-color: black;
+
+            border: 1px solid transparent;
+            text-align: center;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            background-color: black;
+            opacity: 85%;
+            color: #fff;
+        }
+        .container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+
+        .button-container button {
+            flex: 1;
+            padding: 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="nav flex-column">
+            <a class="nav-link">
+                <div class="search-container">
+
+                    <form method="GET" action="{% url 'feed' %}">
+                        <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q|default_if_none:'' }}">
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+                    </form>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'create_marker' %}">Create New Marker</a>
+        <!--
+            <a class="nav-link" href="#">Friends</a>
+            <a class="nav-link" href="#">Groups</a>
+            <a class="nav-link" href="#">Notifications</a>
+        -->
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Filter Content
+            </a>
+        <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: auto !important;
+            min-width: 200px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                Species
+                <div class="dropdown-divider"></div>
+                <form method="get" class="filter-form">
+                    {% for species in species_list %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="species" value="{{ species.name }}" id="species{{ forloop.counter }}" {% if species.name in species_filter %}checked{% endif %}>
+                            <label class="form-check-label" for="species{{ forloop.counter }}">
+                                {{ species.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                </form>
+
+            </div>
+
+
+        </nav>
+        <div class="container">
+            {% for marker in markers %}
+                <div class="image-container">
+                    <div class="owner-info">
+                        {% if marker.owner.profile_image %}
+                            <img src="{{ marker.owner.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
+                        <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
+                    </div>
+                    <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
+                    <div class="marker-details">
+                        <div class="marker-title">{{ marker.title }}</div>
+                        <!--<div class="marker-latlng">{{ marker.latitude }}, {{ marker.longitude }}</div>-->
+                        <div class="dropdown-divider"></div>
+                        <div class="marker-description">{{ marker.description }}</div>
+                        <!--<a href="{% url 'home' %}?marker_id={{ marker.id }}" class="btn btn-primary">View on Map</a>-->
+                            <div class="action-container">
+                            <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
+                                Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
+                            </button>
+                            <div class="comment-toggle" onclick="toggleComments({{ marker.id }})">
+                                <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
+                                {{ marker.comments.count }}
+                            </div>
+                        </div>
+                        <div id="comments-{{ marker.id }}" class="comments">
+                            <div class="comments-container">
+                                {% for comment in marker.comments.all %}
+                                    <div class="comment">
+                                        {% if comment.user.profile_image %}
+                                            <img src="{{ comment.user.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                                        {% else %}
+                                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                                        {% endif %}
+                                        <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                        <div class="created-date">{{ comment.created_date|date:"F d, Y" }}</div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                {% endfor %}
+                            </div>
+                            {% if user.is_authenticated %}
+                                <form method="POST" action="{% url 'add_comment' marker.id %}">
+                                    {% csrf_token %}
+                                    {{ form.text|add_class:"small-textarea" }}
+                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                </form>
+                            {% else %}
+                                <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+            <script>
+                document.querySelectorAll('.like-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const markerId = this.getAttribute('data-id');
+                        fetch(`/like/${markerId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.liked) {
+                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                            } else {
+                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                            }
+                        });
+                    });
+                });
+                function clearSearch() {
+                    window.location.href = "{% url 'feed' %}";
+                }
+                function toggleComments(markerId) {
+                    const commentsDiv = document.getElementById(`comments-${markerId}`);
+                    console.log(commentsDiv)
+                    if (commentsDiv.style.display === "none") {
+                        commentsDiv.style.display = "block";
+                    } else {
+                        commentsDiv.style.display = "none";
+                    }
+                }
+
+            </script>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

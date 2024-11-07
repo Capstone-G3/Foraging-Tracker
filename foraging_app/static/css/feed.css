@@ -1,0 +1,124 @@
+
+.image-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    margin-right: 15px;
+}
+
+.owner-username a {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.created-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-left: auto;
+}
+
+.marker-image {
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.marker-details {
+    color: #555;
+}
+
+.marker-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.marker-latlng, .marker-description {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+.filter-dropdown {
+    margin-bottom: 20px;
+}
+
+.filter-dropdown .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.action-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.comment-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    color: black;
+}
+
+.comment-toggle img {
+    margin-right: 5px;
+}
+
+.comments {
+    display: none; /* Hidden by default */
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.comments {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.comments-container {
+    margin-bottom: 10px;
+}
+
+.comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.created-date {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.9em;
+    color: #888;
+}
+.small-textarea {
+    height: 50px; /* Adjust the height as needed */
+    resize: none; /* Prevent resizing if desired */
+}
+

@@ -1,7 +1,8 @@
 from django.views import View
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from forage.sitemap import DesktopMap, BaseMap
-from foraging_app.models import Marker
+from foraging_app.forms import CommentForm
+from foraging_app.models import Marker, Species
 
 class Home_View(View):
     def __init__(self):
@@ -48,7 +49,36 @@ class NavBar_View(View):
     def get(self, request):
         return render(request, 'base.html')
 
+
 class Feed_View(View):
     def get(self, request):
+        species_filter = request.GET.getlist('species')
+        user_query = request.GET.get('q')
+
         markers = Marker.objects.filter(is_private=False).order_by('-created_date')
-        return render(request, 'feed.html', {'markers': markers})
+
+        if species_filter:
+            markers = markers.filter(species__name__in=species_filter)
+
+        if user_query:
+            markers = markers.filter(owner__username__icontains=user_query)
+
+        species_list = Species.objects.all()
+
+        return render(request, 'feed.html', {
+            'markers': markers,
+            'species_filter': species_filter,
+            'species_list': species_list,
+            'form': CommentForm()
+        })
+
+class AddCommentView(View):
+    def post(self, request, marker_id):
+        marker = Marker.objects.get(id=marker_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.marker = marker
+            comment.user = request.user
+            comment.save()
+        return redirect('feed')

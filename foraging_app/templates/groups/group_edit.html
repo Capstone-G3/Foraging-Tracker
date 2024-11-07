@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group_Edit</title>
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+</head>
+<body>
+<h1>Make any changes for {{ thisGroup.name }}</h1>
+
+<form id="profile_image_form" action="{% url 'group_edit' thisGroup.id %}" method="POST" enctype="multipart/form-data" class="form-styling">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ thisGroup.name }}">
+            </div>
+            <div class="mb-3">
+                <input type="radio" class="form-control" id="choice1" name="isPrivate" value="Public">
+                <label for="choice1" class="form-label">Public</label>
+
+                <input type="radio" class="form-control" id="choice2" name="isPrivate" value="Private">
+                <label for="choice2" class="form-label">Private</label>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control">{{ thisGroup.description }}</textarea>
+            </div>
+
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary rounded-pill">Save Changes</button>
+            </div>
+        </form>
+
+
+</body>
+</html>
+{% endblock %}

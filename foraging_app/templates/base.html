@@ -79,11 +79,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'categories' %}">Categories</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'group_nav' %}">Groups</a>
+                </li>
                 
             </ul>
             <div class="userLink ml-auto">
                 <div class="dropdown">
-                    <span class="username-text">{{ user.username }}</span>
+                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
@@ -111,6 +114,7 @@
                             {% endif %}
                             <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
+                            <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
                         {% if user.is_authenticated %}
                             <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
                         {% endif %}
