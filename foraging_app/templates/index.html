@@ -104,12 +104,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="appbar bottomBar mobile">
-            <div class="mapLink">MAP</div>
-            <div class="addLink">+</div>
-            <div class="feedLink">FEED</div>
-        </div>
     </div>
 
     <div class="popup">
@@ -125,5 +119,16 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <div class="appbar bottomBar mobile">
+        <div class="mapLink">
+            <a href="{% url 'home' %}" style="color:white !important; font-weight: bold">MAP</a></div>
+        <div class="addLink">
+            <a href="{% url 'create_marker' %}">+</a>
+        </div>
+        <div class="feedLink">
+            <a href="{% url 'feed' %}" style="color:white !important; font-weight: bold">FEED</a>
+        </div>
+    </div>
 </body>
 </html>

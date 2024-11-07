@@ -118,6 +118,10 @@ body {
 }
 
 @media only screen and (max-width: 640px) {
+    .map.styling {
+        height: calc(100% - 108px) !important;
+    }
+
     .desktop .groupedPageLinks {
         display: none;
     }
