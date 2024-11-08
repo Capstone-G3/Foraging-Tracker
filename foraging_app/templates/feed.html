@@ -49,6 +49,17 @@
             opacity: 85%;
             color: #fff;
         }
+        .navbar-nav{
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: floralwhite;
+            background-color: black;
+
+            border: 1px solid transparent;
+            text-align: center;
+            text-decoration: none;
+        }
         .container {
             flex: 1;
             padding: 20px;
@@ -168,11 +179,11 @@
             <a class="nav-link" href="#">Groups</a>
             <a class="nav-link" href="#">Notifications</a>
         -->
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFilter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Content
             </a>
         <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: auto !important;
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
             min-width: 200px; /* Ensure a minimum width */
             background-color: black !important;
             color: floralwhite;">
@@ -193,10 +204,35 @@
                 </form>
 
             </div>
+        <ul class="navbar-nav">
 
+            <!-- Second Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Make Connections!
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                          </div>
+                        <input type="text" name="u" placeholder="Search users..." value="{{ request.GET.u|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </li>
+        </ul>
 
         </nav>
         <div class="container">
+        {% if markers is not None %}
             {% for marker in markers %}
 
 
@@ -263,6 +299,22 @@
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+            {% for profile in profiles %}
+               <div class="image-container">
+                    <div class="owner-info">
+                        {% if profile.user_id.profile_image %}
+                            <img src="{{ profile.user_id.profile_image.url }}" alt="{{ profile.user_id }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <span class="owner-username"><a href="{% url 'user' profile.user_id.id %}">{{ profile.user_id }}</a></span>
+
+                    </div>
+               </div>
+                
+            {% endfor %}
+        {% endif %}
         <div id="modal" class="modal">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal()">&times;</span>

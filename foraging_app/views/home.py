@@ -3,6 +3,8 @@ from django.shortcuts import render, reverse, redirect, get_object_or_404
 from forage.sitemap import DesktopMap, BaseMap
 from foraging_app.forms import CommentForm
 from foraging_app.models import Marker, Species
+from foraging_app.models.user import User_Profile
+
 
 class Home_View(View):
     def __init__(self):
@@ -57,26 +59,37 @@ class Feed_View(View):
     def get(self, request):
         species_filter = request.GET.getlist('species')
         user_query = request.GET.get('q')
+        profile_query = request.GET.get('u')
+        print(profile_query)
+        if profile_query:
+            print("profile query")
+            profiles = User_Profile.objects.filter(user_id__username__icontains=profile_query)
+            print(profiles)
+            markers = None
 
-        markers = Marker.objects.filter(is_private=False).order_by('-created_date')
+        else:
+            markers = Marker.objects.filter(is_private=False).order_by('-created_date')
 
-        if species_filter:
-            markers = markers.filter(species__name__in=species_filter)
+            if species_filter:
+                markers = markers.filter(species__name__in=species_filter)
 
-        if user_query:
-            markers = markers.filter(owner__username__icontains=user_query)
-
+            if user_query:
+                markers = markers.filter(owner__username__icontains=user_query)
+            profiles = None
         species_list = Species.objects.all()
-
+        print(markers)
         return render(request, 'feed.html', {
             'markers': markers,
             'species_filter': species_filter,
             'species_list': species_list,
+            'profiles': profiles,
             'form': CommentForm()
         })
 
 class AddCommentView(View):
     def post(self, request, marker_id):
+        #current_url = request.build_absolute_uri()
+        #print(current_url)
         marker = Marker.objects.get(id=marker_id)
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -93,9 +106,6 @@ class SingleMarkerView(View):
         home_map = BaseMap()  # Instantiate BaseMap without center_location
         home_map.__map__.location = [marker.latitude, marker.longitude]  # Center map on the marker's coordinates
         home_map.__map__.zoom_start = 18
-        print(marker.latitude)
-        print(marker.longitude)
-        print(home_map.__map__.location)
         category = marker.species.category if marker.species else ''
         # Add the marker to the map
         home_map.add_marker(
@@ -113,8 +123,6 @@ class SingleMarkerView(View):
             }
 
         )
-        home_map.__map__.zoom_start = 18
-        print(home_map.__map__.zoom_start)
         return render(request, "single_marker_map.html", {
             "map": home_map.compile_figure(),
         })
