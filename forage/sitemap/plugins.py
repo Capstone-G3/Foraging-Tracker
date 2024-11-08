@@ -1,5 +1,6 @@
 from branca.element import MacroElement, Element, Html
 from jinja2 import Template
+from folium import Marker
 
 from folium.plugins import LocateControl
 
@@ -90,3 +91,51 @@ class ToggleMarker(MacroElement):
         self._name = "ToggleMarker"
         self._marker_spec = GREEN_MARKER_SPEC
 
+class UserLocate(LocateControl):
+    _template = Template("""
+        {% macro script(this, kwargs) %}
+                
+            var {{this.get_name()}} = L.control.locate(
+                {{this.options | tojson}},
+            );
+
+            {{this._parent.get_name()}}.off('locationerror');
+            {{this._parent.get_name()}}._handleGeolocationError = function(err){
+                message = err.code > 1 ? 'Timeout' : '{{this._error_message}}';
+                this.fire('locationerror', {message: message});
+            }
+                         
+            {{this.get_name()}}.addTo({{this._parent.get_name()}});
+            {% if this.auto_start %}
+                {{this.get_name()}}.start();
+            {% endif %}
+
+        {% endmacro %}
+        """)
+    
+    def __init__(self, error_message="Access Denied",auto_start=False, **kwargs):
+        super().__init__(auto_start= auto_start, kwargs= kwargs)
+        self._error_message = error_message
+        self._name = "UserLocate"
+    
+    def set_error_message(self,message):
+        self._error_message = message
+
+class ClickMarker(Marker):
+    _template = Template(
+    """
+        {% macro script(this,kwargs) %}
+            var {{ this.get_name() }} = L.marker(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.on('click', centerView);
+
+            function centerView(){
+                {{ this._parent.get_name() }}.setView({{ this.location | tojson }});
+            }
+        {% endmacro %}
+    """
+    )
+   
+    pass
