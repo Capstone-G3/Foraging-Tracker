@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View, Group_Delete_View, AddCommentGroupView
-from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView
+from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
@@ -76,6 +76,7 @@ urlpatterns = [
     path('like/<int:marker_id>/', LikeMarkerView.as_view(), name='like_marker'),
     path('add_comment_group/<int:marker_id>/<int:groupID>/', AddCommentGroupView.as_view(), name='add_comment_group'),
     path('add_comment/<int:marker_id>/', AddCommentView.as_view(), name='add_comment'),
+    path('map/marker/<int:marker_id>/', SingleMarkerView.as_view(), name='single_marker'),
 
 
 ]

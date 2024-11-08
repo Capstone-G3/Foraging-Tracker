@@ -96,7 +96,7 @@ class BaseMap:
             zoom_control=self.zoom_control,
             tiles=None
             )
-        locate_control = LocateControl(auto_start=True, strings={"title" : "Failed to get location."}) #Getting position of user.
+        locate_control = LocateControl(auto_start=False, strings={"title" : "Failed to get location."}) #Getting position of user.
         self.__map__.add_child(locate_control)
         self.__styles__ = [TileLayer(tiles=tile_source)]
         self.__cluster__ = MarkerCluster() # Grouping Markers as Cluster
