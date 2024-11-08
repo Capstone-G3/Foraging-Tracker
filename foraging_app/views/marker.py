@@ -67,7 +67,7 @@ class Marker_Create_View(LoginRequiredMixin, View):
             marker_create = Marker.objects.create(**data, owner=request.user)
             if marker_create is not None:
                 messages.success(request,"Marker created complete.")
-                return redirect('/', permanent=True)
+                return redirect('/', permanent=True) # 301
         else:
             messages.error(request, "Marker failed to create.")
         return render(

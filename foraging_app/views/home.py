@@ -34,7 +34,7 @@ class Home_View(View):
 
         return render(
             request,
-            "index.html",
+            "map.html",
             {
                 "map" : home_map.compile_figure(),
                 'username' : username
