@@ -12,14 +12,14 @@
 <body>
 <h1>Make any changes for {{ thisGroup.name }}</h1>
 
-<form id="profile_image_form" action="{% url 'group_edit' thisGroup.id %}" method="POST" enctype="multipart/form-data" class="form-styling">
+<form id="group_edit_form" action="{% url 'group_edit' thisGroup.id %}" method="POST" enctype="multipart/form-data" class="form-styling">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ thisGroup.name }}">
             </div>
             <div class="mb-3">
-                <input type="radio" class="form-control" id="choice1" name="isPrivate" value="Public">
+                <input type="radio" class="form-control" id="choice1" name="isPrivate" value="Public" required>
                 <label for="choice1" class="form-label">Public</label>
 
                 <input type="radio" class="form-control" id="choice2" name="isPrivate" value="Private">
