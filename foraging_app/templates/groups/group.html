@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -34,24 +35,149 @@
             {% else %}
             {{ thisGroup.description }}
         {% endif %}</div>
-    </div>
-
-    <div class = "mainContainer">
-        <div class="members">
-            {% if thisGroup == None %}
-                No users in an empty group
-            {% else %}
-                <ul>
-                {% for x in members %}
-{#                    TODO: replace with proper user page url#}
-                    <li><a href="{% url 'home' %}">{{ x.username }}</a></li>
-                {%  endfor %}
-                </ul>
+        <div>
+            {% if thisGroup.user_admin.id ==  request.user.id %}
+            <form action="{% url 'group_delete_confirmation' thisGroup.id %}">
+            <input class="deleteOption" type="submit" value="Delete Group" />
+            </form>
+            <form action="{% url 'group_edit' thisGroup.id %}">
+            <input class="editOption" type="submit" value="Edit Group" />
+            </form>
+            {% endif %}
+            {% if not inGroup %}
+                <form action="{% url 'group' thisGroup.id %}" method="post">
+                {%csrf_token%}
+                <input class="joinOption" type="submit" value="Join Group" />
+                </form>
 
             {% endif %}
         </div>
-        <div class = "posts"></div>
     </div>
+{#    TODO: limit what non-group members can see in private group#}
+
+    <div class = "mainContainer">
+    {% if thisGroup.isPrivate and not inGroup %}
+        <div class="private-view">
+        This group is private, please request to join if you'd like to see the users and posts.
+        </div>
+    {% else %}
+{#    TODO: add ability for owner to remove members, also possibly adding owner to top of group list with special marking#}
+        <div class="members">
+            {% if thisGroup == None %}
+                No users in an empty group.
+            {% else %}
+                <ol>
+                {% for x in members %}
+                    <li><a href="{% url 'user' x.id %}">{{ x.username }}</a></li>
+                {%  endfor %}
+                </ol>
+
+            {% endif %}
+        </div>
+        <div class = "posts">
+            {% if thisGroup == None %}
+                No posts in an empty group.
+            {% else %}
+
+                <div class="container">
+            {% for marker in markers %}
+                <div class="image-container">
+                    <div class="owner-info">
+                        {% if marker.owner.profile_image %}
+                            <img src="{{ marker.owner.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
+                        <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
+                    </div>
+                    <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
+                    <div class="marker-details">
+                        <div class="marker-title">{{ marker.title }}</div>
+                        <!--<div class="marker-latlng">{{ marker.latitude }}, {{ marker.longitude }}</div>-->
+                        <div class="dropdown-divider"></div>
+                        <div class="marker-description">{{ marker.description }}</div>
+                        <!--<a href="{% url 'home' %}?marker_id={{ marker.id }}" class="btn btn-primary">View on Map</a>-->
+                            <div class="action-container">
+                            <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
+                                Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
+                            </button>
+                            <div class="comment-toggle" onclick="toggleComments({{ marker.id }})">
+                                <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
+                                {{ marker.comments.count }}
+                            </div>
+                        </div>
+                        <div id="comments-{{ marker.id }}" class="comments">
+                            <div class="comments-container">
+                                {% for comment in marker.comments.all %}
+                                    <div class="comment">
+                                        {% if comment.user.profile_image %}
+                                            <img src="{{ comment.user.profile_image.url }}" alt="{{ marker.owner.username }}" class="profile-image">
+                                        {% else %}
+                                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                                        {% endif %}
+                                        <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                        <div class="created-date">{{ comment.created_date|date:"F d, Y" }}</div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                {% endfor %}
+                            </div>
+                            {% if user.is_authenticated %}
+                                <form method="POST" action="{% url 'add_comment_group' marker.id thisGroup.id %}">
+                                    {% csrf_token %}
+                                    {{ form.text|add_class:"small-textarea" }}
+                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                </form>
+                            {% else %}
+                                <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+            <script>
+                document.querySelectorAll('.like-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const markerId = this.getAttribute('data-id');
+                        fetch(`/like/${markerId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.liked) {
+                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                            } else {
+                                this.innerHTML = `Like (<span class="likes-count">${data.likes_count}</span>)`;
+                            }
+                        });
+                    });
+                });
+                function clearSearch() {
+                    window.location.href = "{% url 'feed' %}";
+                }
+                function toggleComments(markerId) {
+                    const commentsDiv = document.getElementById(`comments-${markerId}`);
+                    console.log(commentsDiv)
+                    if (commentsDiv.style.display === "none") {
+                        commentsDiv.style.display = "block";
+                    } else {
+                        commentsDiv.style.display = "none";
+                    }
+                }
+
+            </script>
+        </div>
+    </div>
+
+            {% endif %}
+    {% endif %}
+        </div>
 
 
 </body>
