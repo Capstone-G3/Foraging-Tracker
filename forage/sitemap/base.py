@@ -2,7 +2,7 @@ from folium import Marker, Map, Figure, LayerControl
 from folium.plugins import MiniMap, LocateControl, MarkerCluster, TagFilterButton
 from folium.raster_layers import TileLayer
 
-from forage.sitemap.plugins import ToggleMarker, AutoMarker
+from forage.sitemap.plugins import ToggleMarker, AutoMarker, UserLocate
 
 from forage.sitemap.content import MarkerContent
 
@@ -16,7 +16,6 @@ GREEN_MARKER_SPEC = """new L.Icon({
                         });
                     """
 
-#TODO : Secure class to represent the Content for Markers.
 class BaseMap:
     """
     Create a Default Map Object, an Interface Map for other various type of Maps.
@@ -98,21 +97,18 @@ class BaseMap:
             zoom_control=self.zoom_control,
             attributionControl=False,
             tiles=TileLayer(tiles="OpenStreetMap", show=True, name="Light Mode", min_zoom=self.min_zoom),
-
         )
-        locate_control = LocateControl(
+        self.__locate_control__ = UserLocate(
             auto_start=True,
             locateOptions={"maxZoom":8},
-            strings={"title" : "Retrieve current location.", 'popup' : None}
+            strings={"title" : "Retrieve current location.", 'popup' : None},
         ) #Getting position of user.
-        self.__map__.add_child(locate_control)
         self.__styles__ = []
         self.__cluster__ = MarkerCluster(control=False, overlay=False) # Grouping Markers as Cluster
         self.__attribute__ = LayerControl(position="bottomleft")
         self.__toggle_pin__ = ToggleMarker()
         self.__map_size__ = 0
         
-
         
     def add_marker(self,location, **contents):
         """
@@ -171,7 +167,9 @@ class BaseMap:
 
         for i in range(len(locations)):
             self.add_marker(location=locations[i], **contents[i])
-            
+
+    def set_map_error_message(self, error_message):
+        self.__locate_control__.set_error_message(error_message)
 
     def compile_figure(self):
         """
@@ -188,6 +186,7 @@ class BaseMap:
             self.__map__.add_child(style)
         self.__map__.add_child(self.__cluster__)
         self.__map__.add_child(self.__attribute__)
+        self.__map__.add_child(self.__locate_control__)
         self.__figure__.add_child(self.__map__)
 
         return self.__figure__
