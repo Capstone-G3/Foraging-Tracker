@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View
+from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View, Group_Delete_View, AddCommentGroupView
 from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
-from foraging_app.views.user import User_View
+from foraging_app.views.user import User_View, AddCommentUserView
 from foraging_app.views.marker import Marker_Create_View, Marker_Edit_View, Marker_Home_View, Marker_Delete_View, Marker_Details_View
 from foraging_app.views.edit_profile import EditProfileView
 from foraging_app.views.delete_account import DeleteUserView
@@ -44,13 +44,17 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),name='password_reset_confirm'),
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html',),name='password_reset_complete'),
     path('register/', Register_View.as_view(), name = 'register'),
+
+    #User urls
     path('user/<int:userId>/', User_View.as_view(), name = 'user'),
+    path('add_comment/<int:marker_id>/<int:user_id>', AddCommentUserView.as_view(), name='add_comment'),
     path('about_us/', About_Us_View.as_view(), name='about_us'),
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
     path('group/<int:groupID>', Group_View.as_view(), name='group'),
     path('group_edit/<int:groupID>', Group_Edit_View.as_view(), name='group_edit'),
     path('group_nav/', Group_Nav_View.as_view(), name='group_nav'),
+    path('group_delete_confirmation/<int:groupID>', Group_Delete_View.as_view(), name='group_delete_confirmation'),
     path('create_group/', Create_Group_View.as_view(), name='create_group'),
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/<str:category>/', CategoryDetailView.as_view(), name='category_detail'),
@@ -69,6 +73,7 @@ urlpatterns = [
     path('delete/', DeleteUserView.as_view(), name='delete'),
     path('feed/', Feed_View.as_view(), name='feed'),
     path('like/<int:marker_id>/', LikeMarkerView.as_view(), name='like_marker'),
+    path('add_comment_group/<int:marker_id>/<int:groupID>/', AddCommentGroupView.as_view(), name='add_comment_group'),
     path('add_comment/<int:marker_id>/', AddCommentView.as_view(), name='add_comment'),
 
 

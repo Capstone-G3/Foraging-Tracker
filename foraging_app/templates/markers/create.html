@@ -1,53 +1,65 @@
+
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{%  static  'css/create.css'  %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Marker</title>
 </head>
 <body>
-    <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data">
-        {%csrf_token%}
-        {{marker_form}}
-            {%if species_form%}
-                <button id="display_button"></button>
-                <div id="species_form">
-                    {{species_form}}
-                </div>
-            {%endif%}
-        <input type="submit" value="Create">
-    </form>
-    
-    {{map | safe}}
-    {%if messages%}
-        {%for message in messages%}
-            <p class="message-{{message.tags}}">{{message}}</p>
-        {%endfor%}
-    {%endif%}
+    <div class="creationContainer">
+        <div class="createMarker">
+            <div class="title">New Marker</div>
+            <div class="dataContainer">
+                <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data" class="data">
+                    {%csrf_token%}
+                    {{form}}
+                    {{marker_form}}
+                        {%if species_form%}
+                            <button id="display_button"></button>
+                            <div id="species_form">
+                                {{species_form}}
+                            </div>
+                        {%endif%}
+                    <input type="submit" value="Create">
+                </form>
+                {{map | safe}}
+                {%if messages%}
+                    {%for message in messages%}
+                        <p class="message-{{message.tags}}">{{message}}</p>
+                    {%endfor%}
+                {%endif%}
+                {%if species_form%}
+                    <script type="text/javascript">
+                        const speciesSelectContainer = document.getElementById('id_marker-species').parentElement;
+                        const speciesField = speciesSelectContainer.innerHTML;
+                        const speciesContainer = document.getElementById('species_form');
+                        const speciesForm = speciesContainer.innerHTML;
+                        const displayButton = document.getElementById('display_button');
+                        speciesContainer.innerHTML = '';
+                        displayButton.innerHTML = "Show Species Form";
+                        displayButton.addEventListener('click', hideshow, false);
 
-    {%if species_form%}
-        <script type="text/javascript">
-            const speciesSelectContainer = document.getElementById('id_marker-species').parentElement;
-            const speciesField = speciesSelectContainer.innerHTML;
-            const speciesContainer = document.getElementById('species_form');
-            const speciesForm = speciesContainer.innerHTML;
-            const displayButton = document.getElementById('display_button');
-            speciesContainer.innerHTML = '';
-            displayButton.innerHTML = "Show Species Form";
-            displayButton.addEventListener('click', hideshow, false);
-
-            function hideshow(){
-                if(displayButton.innerHTML === "Show Species Form"){
-                    displayButton.innerHTML = "Hide Species Form"
-                    speciesContainer.innerHTML = speciesForm;
-                    speciesSelectContainer.innerHTML = '';
-                }else{
-                    displayButton.innerHTML = "Show Species Form"
-                    speciesContainer.innerHTML = '';
-                    speciesSelectContainer.innerHTML = speciesField;
-                }
-            }
-        </script>
-    {%endif%}
+                        function hideshow(){
+                            if(displayButton.innerHTML === "Show Species Form"){
+                                displayButton.innerHTML = "Hide Species Form"
+                                speciesContainer.innerHTML = speciesForm;
+                                speciesSelectContainer.innerHTML = '';
+                            }else{
+                                displayButton.innerHTML = "Show Species Form"
+                                speciesContainer.innerHTML = '';
+                                speciesSelectContainer.innerHTML = speciesField;
+                            }
+                        }
+                    </script>
+                {%endif%}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+{% endblock %}
