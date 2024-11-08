@@ -24,7 +24,7 @@ class MarkerContent:
                 </a>
                 {%endif%}
             </div>
-            <div>Owner : <a href="{% url 'user'%}">@{{owner.username}}</a></div>
+            <div>Owner : <a href="{% url 'user' userId=owner.id%}">@{{owner.username}}</a></div>
             <div>Location: {{marker.latitude}},{{marker.longitude}}</div>
             {%if marker.species.category%}
             <div>Category : {{marker.species.category}}</div>
