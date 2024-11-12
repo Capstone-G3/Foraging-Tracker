@@ -2,7 +2,8 @@ from django.views import View
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from forage.sitemap import DesktopMap, BaseMap
 from foraging_app.forms import CommentForm
-from foraging_app.models import Marker, Species
+from foraging_app.models import Marker, Species, Group
+from foraging_app.models.group import User_Group
 from foraging_app.models.user import User_Profile
 
 
@@ -60,12 +61,19 @@ class Feed_View(View):
         species_filter = request.GET.getlist('species')
         user_query = request.GET.get('q')
         profile_query = request.GET.get('u')
-        print(profile_query)
+        group_query = request.GET.get('g')
+
         if profile_query:
             print("profile query")
             profiles = User_Profile.objects.filter(user_id__username__icontains=profile_query)
             print(profiles)
             markers = None
+            groups = None
+
+        elif group_query:
+            groups = Group.objects.filter(name__icontains=group_query)
+            markers = None
+            profiles = None
 
         else:
             markers = Marker.objects.filter(is_private=False).order_by('-created_date')
@@ -76,13 +84,19 @@ class Feed_View(View):
             if user_query:
                 markers = markers.filter(owner__username__icontains=user_query)
             profiles = None
+            groups = None
+            print(request.user.getGroups())
+
         species_list = Species.objects.all()
-        print(markers)
+        user_groups = User_Group.objects.all()
+        print(user_groups)
         return render(request, 'feed.html', {
             'markers': markers,
             'species_filter': species_filter,
             'species_list': species_list,
             'profiles': profiles,
+            'groups': groups,
+            'user_groups': user_groups,
             'form': CommentForm()
         })
 

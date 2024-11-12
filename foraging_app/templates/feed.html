@@ -205,9 +205,9 @@
 
             </div>
         <ul class="navbar-nav">
-
+            <li>
             <!-- Second Dropdown -->
-            <li class="nav-item dropdown">
+            <a class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Make Connections!
                 </a>
@@ -227,6 +227,27 @@
 
                     </form>
                 </div>
+            </a>
+            </li>
+            <li>
+            <a class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Search Groups
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                        <input type="text" name="g" placeholder="Search groups..." value="{{ request.GET.g|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </a>
             </li>
         </ul>
 
@@ -298,6 +319,17 @@
 
                     </div>
                 </div>
+            {% endfor %}
+        {% elif groups is not None%}
+            {% for group in groups %}
+            <div class="image-container">
+                    <div class="owner-info">
+                        <span class="owner-username"><a href="{% url 'group' group.id %}">{{ group.name }}</a></span>
+                        
+                    </div>
+                    <div class="dropdown-divider"></div>
+                        {{ group.description }}
+               </div>
             {% endfor %}
         {% else %}
             {% for profile in profiles %}
