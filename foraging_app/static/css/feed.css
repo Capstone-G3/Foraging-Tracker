@@ -59,7 +59,7 @@
     margin-bottom: 20px;
 }
 
-.filter-dropdown .dropdown-menu {
+.dropdown-menu {
     max-height: 300px;
     overflow-y: auto;
 }
@@ -174,4 +174,7 @@
     background-color: #007bff;
     color: white;
     cursor: pointer;
+}
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3) !important; /* Adjust the opacity */
 }

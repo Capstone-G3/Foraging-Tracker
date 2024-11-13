@@ -4,7 +4,9 @@ from forage.sitemap import DesktopMap, BaseMap
 from foraging_app.forms import CommentForm
 from foraging_app.models import Marker, Species, Group
 from foraging_app.models.group import User_Group
-from foraging_app.models.user import User_Profile
+from foraging_app.models.user import User_Profile, User
+from foraging_app.models.friend import Friend
+from django.contrib import messages
 
 
 class Home_View(View):
@@ -59,9 +61,11 @@ class NavBar_View(View):
 class Feed_View(View):
     def get(self, request):
         species_filter = request.GET.getlist('species')
+        group_filter = request.GET.getlist('group')
         user_query = request.GET.get('q')
         profile_query = request.GET.get('u')
         group_query = request.GET.get('g')
+        friend_filter = request.GET.getlist('friend')
 
         if profile_query:
             print("profile query")
@@ -83,21 +87,49 @@ class Feed_View(View):
 
             if user_query:
                 markers = markers.filter(owner__username__icontains=user_query)
+
+            if group_filter:
+                print(f"Filtering markers by group: {group_filter}")
+
+                # Find all users in the specified groups
+                user_ids_in_groups = User_Group.objects.filter(group_id__name__in=group_filter).values_list('user_id',
+                                                                                                            flat=True)
+
+                # Filter markers by the users found in the groups
+                markers = markers.filter(owner__id__in=user_ids_in_groups)
+            if friend_filter:
+                print(f"Filtering markers by friends: {friend_filter}")
+
+                # Assuming 'friend_filter' contains a list of usernames (or you could change it to user ids)
+                # Get the users who are friends of the current user
+                # Assuming there's a 'Friendship' model where friendships are stored
+                friends = User.objects.filter(username__in=friend_filter)
+
+
+
+                # Filter the markers to only include those whose owners are friends
+                markers = Marker.objects.filter(owner__in=friends)
+
             profiles = None
             groups = None
             print(request.user.getGroups())
 
         species_list = Species.objects.all()
-        user_groups = User_Group.objects.all()
-        print(user_groups)
+        user_groups = Group.objects.all()
+        friends = Friend.objects.filter(friends=request.user)
+        print(friends)
+        #print(user_groups)
         return render(request, 'feed.html', {
             'markers': markers,
             'species_filter': species_filter,
+            'group_filter': group_filter,
+            'friend_filter': friend_filter,
             'species_list': species_list,
             'profiles': profiles,
             'groups': groups,
             'user_groups': user_groups,
-            'form': CommentForm()
+            'form': CommentForm(),
+            'friends': friends
         })
 
 class AddCommentView(View):
@@ -140,3 +172,22 @@ class SingleMarkerView(View):
         return render(request, "single_marker_map.html", {
             "map": home_map.compile_figure(),
         })
+
+class ShareMarkerView(View):
+    def post(self, request, *args, **kwargs):
+        marker_id = request.POST.get('marker_id')
+        friend_id = request.POST.get('friend_id')
+        # Try to fetch the marker and friend, and handle errors
+        try:
+            marker = get_object_or_404(Marker, id=marker_id)
+            friend = get_object_or_404(Friend, user_id=friend_id)
+
+            # Add the marker to friend's shared markers list
+            friend.shared_markers.add(marker)
+
+            # Add a success message
+            messages.success(request, 'Marker shared successfully')
+        except Exception as e:
+            # Add an error message if something goes wrong
+            messages.error(request, 'Failed to share marker: ' + str(e))
+        return redirect('feed')
