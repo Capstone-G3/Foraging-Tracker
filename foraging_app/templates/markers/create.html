@@ -29,38 +29,36 @@
                 </form>                
             </div>
         </div>
-        <div class="containerForMap">
-            {{map | safe}}
-            {%if messages%}
-                {%for message in messages%}
-                    <p class="message-{{message.tags}}">{{message}}</p>
-                {%endfor%}
-            {%endif%}
-            {%if species_form%}
-                <script type="text/javascript">
-                    const speciesSelectContainer = document.getElementById('id_marker-species').parentElement;
-                    const speciesField = speciesSelectContainer.innerHTML;
-                    const speciesContainer = document.getElementById('species_form');
-                    const speciesForm = speciesContainer.innerHTML;
-                    const displayButton = document.getElementById('display_button');
-                    speciesContainer.innerHTML = '';
-                    displayButton.innerHTML = "Show Species Form";
-                    displayButton.addEventListener('click', hideshow, false);
+        {{map | safe}}
+        {%if messages%}
+            {%for message in messages%}
+                <p class="message-{{message.tags}}">{{message}}</p>
+            {%endfor%}
+        {%endif%}
+        {%if species_form%}
+            <script type="text/javascript">
+                const speciesSelectContainer = document.getElementById('id_marker-species').parentElement;
+                const speciesField = speciesSelectContainer.innerHTML;
+                const speciesContainer = document.getElementById('species_form');
+                const speciesForm = speciesContainer.innerHTML;
+                const displayButton = document.getElementById('display_button');
+                speciesContainer.innerHTML = '';
+                displayButton.innerHTML = "Show Species Form";
+                displayButton.addEventListener('click', hideshow, false);
 
-                    function hideshow(){
-                        if(displayButton.innerHTML === "Show Species Form"){
-                            displayButton.innerHTML = "Hide Species Form"
-                            speciesContainer.innerHTML = speciesForm;
-                            speciesSelectContainer.innerHTML = '';
-                        }else{
-                            displayButton.innerHTML = "Show Species Form"
-                            speciesContainer.innerHTML = '';
-                            speciesSelectContainer.innerHTML = speciesField;
-                        }
+                function hideshow(){
+                    if(displayButton.innerHTML === "Show Species Form"){
+                        displayButton.innerHTML = "Hide Species Form"
+                        speciesContainer.innerHTML = speciesForm;
+                        speciesSelectContainer.innerHTML = '';
+                    }else{
+                        displayButton.innerHTML = "Show Species Form"
+                        speciesContainer.innerHTML = '';
+                        speciesSelectContainer.innerHTML = speciesField;
                     }
-                </script>
-            {%endif%}
-        </div>
+                }
+            </script>
+        {%endif%}
     </div>    
 </body>
 </html>
