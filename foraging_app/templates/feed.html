@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="https://code.jquery.com/jquery-3.6.0.min.js">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'css/feed.css' %}">
@@ -90,7 +91,7 @@
             color: white;
             cursor: pointer;
         }
-
+    
         .image-wrapper {
             position: relative;
             display: inline-block;
@@ -161,6 +162,15 @@
     </style>
 </head>
 <body>
+    {% if messages %}
+        <script>
+            window.onload = function() {
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            }
+        </script>
+    {% endif %}
     <div class="wrapper">
         <nav class="nav flex-column">
             <a class="nav-link">
@@ -186,7 +196,10 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
             min-width: 200px; /* Ensure a minimum width */
             background-color: black !important;
-            color: floralwhite;">
+            color: floralwhite;height: 200px;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;">
                 Species
                 <div class="dropdown-divider"></div>
                 <form method="get" class="filter-form">
@@ -202,12 +215,51 @@
                     <button type="submit" class="btn btn-primary">Apply Filters</button>
                     <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
                 </form>
-
+            <br>
+                Groups
+            <div class="dropdown-divider"></div>
+            <form method="get" class="filter-form">
+                    {% for group in user_groups %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="group" value="{{ group.name }}" id="group{{ forloop.counter }}" {% if group.name in group_filter %}checked{% endif %}>
+                            <label class="form-check-label" for="group{{ forloop.counter }}">
+                                {{ group.name }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p>No groups found.</p>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                </form>
+            {% if friends is not None %}
+                <br>
+                Friends
+            <div class="dropdown-divider"></div>
+            <form method="get" class="filter-form">
+                    {% for friend in friends %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="friend" value="{{ friend.user.username }}" id="friend{{ forloop.counter }}" {% if friend.user.username in friend_filter %}checked{% endif %}>
+                            <label class="form-check-label" for="friend{{ forloop.counter }}">
+                                {{ friend.user.username }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p>No friends found.</p>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                </form>
+            {% endif %}
             </div>
-        <ul class="navbar-nav">
 
+
+        <ul class="navbar-nav">
+            <li>
             <!-- Second Dropdown -->
-            <li class="nav-item dropdown">
+            <a class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Make Connections!
                 </a>
@@ -227,6 +279,27 @@
 
                     </form>
                 </div>
+            </a>
+            </li>
+            <li>
+            <a class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Search Groups
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                        <input type="text" name="g" placeholder="Search groups..." value="{{ request.GET.g|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </a>
             </li>
         </ul>
 
@@ -264,6 +337,11 @@
                             <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
                                 Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
                             </button>
+                                <!-- Button to trigger the modal, passing the marker_id -->
+                            <button type="button" class="btn btn-primary" onclick="openShareModal({{ marker.id }})">
+                                Share Marker
+                            </button>
+
                             <div class="comment-toggle" onclick="toggleComments({{ marker.id }})">
                                 <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
                                 {{ marker.comments.count }}
@@ -299,6 +377,17 @@
                     </div>
                 </div>
             {% endfor %}
+        {% elif groups is not None%}
+            {% for group in groups %}
+            <div class="image-container">
+                    <div class="owner-info">
+                        <span class="owner-username"><a href="{% url 'group' group.id %}">{{ group.name }}</a></span>
+                        
+                    </div>
+                    <div class="dropdown-divider"></div>
+                        {{ group.description }}
+               </div>
+            {% endfor %}
         {% else %}
             {% for profile in profiles %}
                <div class="image-container">
@@ -324,7 +413,60 @@
                     <a id="viewOnMapBtn" href="#" class="btn btn-secondary">View on Map</a>
                 </div>
             </div>
+        <!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Share Marker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="shareMarkerForm" method="post" action="{% url 'share_marker' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="marker_id" id="markerIdField">
+
+                    <!-- Dropdown for selecting a friend -->
+                    <label for="friendSelect">Select Friend</label>
+                    <select name="friend_id" id="friendSelect" class="form-control">
+                        <option value="">Choose a friend</option>
+                        {% for friend in friends %}
+                            <option value="{{ friend.user_id }}">{{ friend.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="shareMarkerForm">Share</button>
+            </div>
+        </div>
+    </div>
+</div>
+
             <script>
+
+                function openShareModal(markerId) {
+                    document.getElementById('markerIdField').value = markerId;
+                    $('#shareModal').modal({ backdrop: false });
+                }
+
+
+
+                function closeShareModal() {
+                    document.getElementById('shareModal').style.display = 'none';
+                }
+
+
+
+                window.onclick = function(event) {
+                    if (event.target === document.getElementById('shareModal')) {
+                        closeShareModal();
+                    }
+                };
+
                 function showModal(title, description, markerId, latitude, longitude) {
                     document.getElementById('modal').style.display = 'block';
                     document.getElementById('modalTitle').textContent = title;

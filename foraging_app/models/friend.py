@@ -3,12 +3,14 @@ from django.db.models import (Model, IntegerField,
                               ManyToManyField)
 
 from foraging_app.models.user import User
+from foraging_app.models.marker import Marker
 
 
 class Friend(Model):
     user = OneToOneField(User, on_delete=CASCADE, related_name='user')
     friends = ManyToManyField(User, blank=True, related_name='friends')
     friend_since = DateTimeField(auto_now=True)
+    shared_markers = ManyToManyField(Marker, blank=True, related_name='shared_markers')
 
     def __str__(self):
         return self.user.username
