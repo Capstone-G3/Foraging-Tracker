@@ -33,11 +33,15 @@ class Friend(Model):
         """
         Initiate the action of unfriending users // logic check
         """
-        self.remove_friend(account)  # remove a user from the remover's friends list
-        friends_list = Friend.objects.filter(user=account)  # query friends list of user being removed
-        for friend in friends_list:  # loop through that query to find user
-            friend.remove_friend(self.user)  # remove user from person being removed's friends list
+        # self.remove_friend(account)  # remove a user from the remover's friends list
+        # friends_list = Friend.objects.filter(user=account)  # query friends list of user being removed
+        # for friend in friends_list:  # loop through that query to find user
+        #     friend.remove_friend(self.user)  # remove user from person being removed's friends list
+        user_friends_list = self
+        user_friends_list.remove_friend(account)
 
+        friend_list = Friend.objects.get(user=account)
+        friend_list.remove_friend(account)
     def is_friend(self, account):
         """
         Checks if a friend is friend
