@@ -20,7 +20,7 @@ from django.urls import path
 
 from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View, \
     Group_Delete_View, AddCommentGroupView, RemoveMemberGroupView, Request_Private_Group_Join_View
-from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView
+from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView, ShareMarkerView
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
@@ -80,7 +80,7 @@ urlpatterns = [
     path('request_private_group_join_response/<int:groupID>/<int:newMemberID>/', Request_Private_Group_Join_View.as_view(), name='request_private_group_join_response'),
     path('add_comment/<int:marker_id>/', AddCommentView.as_view(), name='add_comment'),
     path('map/marker/<int:marker_id>/', SingleMarkerView.as_view(), name='single_marker'),
-
+    path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
 
 ]
 
