@@ -85,6 +85,14 @@
 
 @media only screen and (max-width: 640px) {
 
+    .wrapper {
+        flex-direction: column !important;
+    }
+
+    .flex-column {
+        position: relative;
+    }
+
     .topLeftContainer {
         padding-bottom: 4px;
     }
