@@ -197,6 +197,10 @@
 }
 
 @media only screen and (max-width: 640px) {
+    #filtersContainer {
+        display: none;
+    }
+    
     .filterIcon {
         position: sticky;
         margin: 10px;
