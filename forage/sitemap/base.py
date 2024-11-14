@@ -101,7 +101,10 @@ class BaseMap:
         self.__locate_control__ = UserLocate(
             auto_start=True,
             locateOptions={"maxZoom":8},
-            strings={"title" : "Retrieve current location.", 'popup' : None},
+            strings={
+                "title" : "Retrieve current location.",
+                "popup" : None,
+            },
         ) #Getting position of user.
         self.__styles__ = []
         self.__cluster__ = MarkerCluster(control=False, overlay=False) # Grouping Markers as Cluster
