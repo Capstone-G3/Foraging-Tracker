@@ -1,0 +1,27 @@
+html{
+    background-color: #3C9E51;
+}
+
+
+.mainContainer{
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+h1{
+    color: red;
+    font-size: xxx-large;
+}
+
+p{
+    color: red;
+    font-size: xx-large;
+}
+
+.bigRed{
+    background-color: red;
+    margin: auto;
+    border-radius: 25px;
+}

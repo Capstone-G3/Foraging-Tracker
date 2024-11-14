@@ -49,6 +49,17 @@
             opacity: 85%;
             color: #fff;
         }
+        .navbar-nav{
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: floralwhite;
+            background-color: black;
+
+            border: 1px solid transparent;
+            text-align: center;
+            text-decoration: none;
+        }
         .container {
             flex: 1;
             padding: 20px;
@@ -80,7 +91,71 @@
             cursor: pointer;
         }
 
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
 
+        .marker-image {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .more-options {
+            position: absolute;
+            top: 10px;  /* Adjust as needed */
+            right: 10px;  /* Adjust as needed */
+            background-color: rgba(0, 0, 0, 0.1);  /* Optional: background for better visibility */
+            color: white;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;  /* Adjust as needed */
+            display: flex;
+            flex-direction: column;  /* Arrange dots vertically */
+            align-items: center;  /* Center dots horizontally */
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            display: block;
+            margin: 2px 0;  /* Adjust vertical spacing between dots */
+            transition: background-color 0.3s;
+        }
+
+        .dot:hover {
+            background-color: #333;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
 
 
     </style>
@@ -104,11 +179,11 @@
             <a class="nav-link" href="#">Groups</a>
             <a class="nav-link" href="#">Notifications</a>
         -->
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFilter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Content
             </a>
         <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: auto !important;
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
             min-width: 200px; /* Ensure a minimum width */
             background-color: black !important;
             color: floralwhite;">
@@ -129,11 +204,38 @@
                 </form>
 
             </div>
+        <ul class="navbar-nav">
 
+            <!-- Second Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Make Connections!
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                          </div>
+                        <input type="text" name="u" placeholder="Search users..." value="{{ request.GET.u|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </li>
+        </ul>
 
         </nav>
         <div class="container">
+        {% if markers is not None %}
             {% for marker in markers %}
+
+
                 <div class="image-container">
                     <div class="owner-info">
                         {% if marker.owner.profile_image %}
@@ -141,16 +243,23 @@
                         {% else %}
                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                         {% endif %}
-                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
+                        <span class="owner-username"><a href="{% url 'user' marker.owner.id %}">{{ marker.owner.username }}</a></span>
                         <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
                     </div>
+                <div class="image-wrapper">
                     <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
+                    <div class="more-options" onclick="showModal('{{ marker.title }}', '{{ marker.description }}', '{{ marker.id }}', '{{ marker.latitude }}', '{{ marker.longitude }}')">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
                     <div class="marker-details">
                         <div class="marker-title">{{ marker.title }}</div>
                         <!--<div class="marker-latlng">{{ marker.latitude }}, {{ marker.longitude }}</div>-->
                         <div class="dropdown-divider"></div>
                         <div class="marker-description">{{ marker.description }}</div>
-                        <!--<a href="{% url 'home' %}?marker_id={{ marker.id }}" class="btn btn-primary">View on Map</a>-->
+
                             <div class="action-container">
                             <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
                                 Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
@@ -159,6 +268,7 @@
                                 <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
                                 {{ marker.comments.count }}
                             </div>
+
                         </div>
                         <div id="comments-{{ marker.id }}" class="comments">
                             <div class="comments-container">
@@ -189,7 +299,49 @@
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+            {% for profile in profiles %}
+               <div class="image-container">
+                    <div class="owner-info">
+                        {% if profile.user_id.profile_image %}
+                            <img src="{{ profile.user_id.profile_image.url }}" alt="{{ profile.user_id }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <span class="owner-username"><a href="{% url 'user' profile.user_id.id %}">{{ profile.user_id }}</a></span>
+
+                    </div>
+               </div>
+                
+            {% endfor %}
+        {% endif %}
+        <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalLatitude"></p>
+                    <p id="modalLongitude"></p>
+                    <a id="viewOnMapBtn" href="#" class="btn btn-secondary">View on Map</a>
+                </div>
+            </div>
             <script>
+                function showModal(title, description, markerId, latitude, longitude) {
+                    document.getElementById('modal').style.display = 'block';
+                    document.getElementById('modalTitle').textContent = title;
+                    document.getElementById('modalLatitude').textContent = 'Latitude: ' + latitude;
+                    document.getElementById('modalLongitude').textContent = 'Longitude: ' + longitude;
+                    document.getElementById('viewOnMapBtn').href = `/map/marker/${markerId}/`;
+                }
+
+                function closeModal() {
+                    document.getElementById('modal').style.display = 'none';
+                }
+
+                window.onclick = function(event) {
+                    if (event.target === document.getElementById('modal')) {
+                        closeModal();
+                    }
+                };
                 document.querySelectorAll('.like-button').forEach(button => {
                     button.addEventListener('click', function() {
                         const markerId = this.getAttribute('data-id');

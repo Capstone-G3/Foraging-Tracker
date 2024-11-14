@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group_Delete_Confirmation</title>
+    <link rel="stylesheet" href="{%  static  'css/delete_group.css' %}">
+</head>
+<body>
+<div class="mainContainer">
+    {% if thisGroup.user_admin.id != request.user.id %}
+        <h1>Wait how'd you get here?</h1>
+        <p>You shouldn't be here.  Please return to the main webpage.</p>
+    {% else %}
+        <h1>Wait!  Are you sure you want to delete {{ thisGroup.name }}</h1>
+        <p>If you wish to delete {{ thisGroup.name }}, please click the button below. </p>
+        <form action="{% url 'group_delete_confirmation' thisGroup.id %}" method="post">
+        {% csrf_token %}
+            <input class="bigRed" type="submit" value="Confirm Delete Group" />
+        </form>
+    {% endif %}
+
+</div>
+</body>
+</html>
