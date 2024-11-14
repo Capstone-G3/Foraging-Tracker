@@ -9,7 +9,6 @@
     padding: 10px !important; /* Padding for aesthetic look */
 }
 
-
 .custom-dropdown-width.show {
     align-content: normal;
     width: 300px; /* Adjust the width as needed */
@@ -35,6 +34,3 @@
 .dropdown-item:hover {
     background-color: #f1f1f1 !important;
 }
-
-
-

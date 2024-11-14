@@ -15,13 +15,6 @@
     margin-bottom: 15px;
 }
 
-.profile-image {
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    margin-right: 15px;
-}
-
 .owner-username a {
     color: #333;
     font-weight: bold;
@@ -199,14 +192,33 @@
     height: 30px;
 }
 
+.filterIcon {
+    display: none;
+}
+
 @media only screen and (max-width: 640px) {
+    .filterIcon {
+        position: sticky;
+        margin: 10px;
+        display: flex;
+        padding: 10px;
+        background-color: #3c9e51;
+        width: fit-content;
+        border-radius: 100%;
+    }
+
+    .filterIcon:hover {
+        background-color: #88cb97;
+        cursor: pointer;
+    }
+
     .nav {
         width: -webkit-fill-available !important;
         margin: 10px;
     }
     
     .wrapper {
-        height: calc(100vh - 116px) !important;
+        height: calc(100vh - 108px) !important;
         flex-direction: column;
     }
 
@@ -220,5 +232,9 @@
     .search-container input[type="text"] {
         height: 100%;
         margin: 0px;
+    }
+
+    .container {
+        padding-top: 0px !important;
     }
 }
