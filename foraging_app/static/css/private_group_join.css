@@ -1,0 +1,39 @@
+
+body{
+    margin: auto;
+    background-color: #3c9e51;
+}
+
+p{
+    border: 5px #6FC081;
+    padding: 10px;
+    width: 60%;
+    margin: auto;
+    font-size: xx-large;
+}
+
+.accept{
+    border: 5px #6FC081;
+    padding: 10px;
+    margin: auto;
+}
+
+.bigButton{
+    width:400px;
+    height:75px;
+    margin: auto;
+    border-radius: 25px;
+}
+
+@media only screen and (max-width: 640px) {
+
+    .bigButton{
+        width: 500px;
+        height: 300px;
+    }
+
+    p{
+        font-size: xxx-large;
+    }
+
+}

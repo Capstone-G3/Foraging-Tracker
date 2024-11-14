@@ -43,7 +43,6 @@ class Group_View(LoginRequiredMixin,View):
     def post(self, request, groupID):
         thisGroup = Group.objects.get(id=groupID)
         if thisGroup.isPrivate:
-            # TODO: set up request system for private groups
             text_content = render_to_string("emails/request_private_join.txt")
             html_content = render_to_string("emails/request_private_group_join.html",
                                             context={'thisGroup': thisGroup, 'thisUser': request.user})
