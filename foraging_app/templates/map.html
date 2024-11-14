@@ -1,6 +1,15 @@
 {% extends 'index.html' %}
 {% block title %}Map{% endblock %}
 {% block content %}
+    {% if messages %}
+        <script>
+            window.onload = function() {
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            }
+        </script>
+    {% endif %}
     <div class="map styling" style="display: flex; flex-direction: column; height: 100%;">
         {{ map.render | safe }}
     </div>

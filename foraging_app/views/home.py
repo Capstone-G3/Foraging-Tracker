@@ -60,6 +60,9 @@ class NavBar_View(View):
 
 class Feed_View(View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please login or register to see the feed')
+            return redirect('home')
         species_filter = request.GET.getlist('species')
         group_filter = request.GET.getlist('group')
         user_query = request.GET.get('q')
@@ -107,7 +110,7 @@ class Feed_View(View):
 
             profiles = None
             groups = None
-            print(request.user.getGroups())
+            #print(request.user.getGroups())
 
         species_list = Species.objects.all()
         user_groups = Group.objects.filter(isPrivate=False)
