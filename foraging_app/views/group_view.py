@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 from oauthlib.openid.connect.core.exceptions import LoginRequired
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.template.loader import render_to_string
 
 from foraging_app.forms.group import GroupCreateForm
 from foraging_app.models.group import Group, User_Group
@@ -42,12 +44,39 @@ class Group_View(LoginRequiredMixin,View):
         thisGroup = Group.objects.get(id=groupID)
         if thisGroup.isPrivate:
             # TODO: set up request system for private groups
+            text_content = render_to_string("emails/request_private_join.txt")
+            html_content = render_to_string("emails/request_private_group_join.html",
+                                            context={'thisGroup': thisGroup, 'thisUser': request.user})
+            msg = EmailMultiAlternatives("Request to Join Your Group!",
+                                         text_content,
+                                         "<EMAIL>",
+                                         [thisGroup.user_admin.email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             messages.success(request, "Requested to join " + thisGroup.name)
             return redirect('group', groupID)
         else:
             User_Group.objects.create(group_id=thisGroup, user_id=request.user)
             messages.success(request, "Successfully joined " + thisGroup.name)
             return redirect('group', groupID)
+
+class Request_Private_Group_Join_View(LoginRequiredMixin,View):
+    login_url = '/login/'
+    def get(self, request, groupID, newMemberID):
+        thisGroup = Group.objects.get(id=groupID)
+        newMember = User.objects.get(id=newMemberID)
+        return render(request, 'groups/request_private_group_join_response.html',
+                      {'thisGroup': thisGroup, 'newMember': newMember})
+
+    def post(self, request, groupID, newMemberID):
+        thisGroup = Group.objects.get(id=groupID)
+        newMember = User.objects.get(id=newMemberID)
+        User_Group.objects.create(group_id=thisGroup, user_id=newMember)
+        send_mail("Accepted into " + thisGroup.name,
+                  "Yippee!  You were accepted into the group " + thisGroup.name,
+                  "<EMAIL>",
+                  [newMember.email])
+        return redirect('group', groupID)
 
 
 
@@ -60,6 +89,14 @@ class AddCommentGroupView(View):
             comment.marker = marker
             comment.user = request.user
             comment.save()
+        return redirect('group', groupID)
+
+class RemoveMemberGroupView(View):
+    def post(self, request, groupID, userID):
+        thisGroup = Group.objects.get(id=groupID)
+        thisUser = User.objects.get(id=userID)
+        thisUserGroup = User_Group.objects.get(group_id=thisGroup, user_id=thisUser)
+        thisUserGroup.delete()
         return redirect('group', groupID)
 
 

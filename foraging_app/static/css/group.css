@@ -54,7 +54,7 @@
     margin: auto;
     border-radius: 25px;
     position: absolute;
-    right: 1800px;
+    right: 1700px;
     top: 170px;
 }
 
@@ -215,4 +215,11 @@
     margin: auto;
     display: flex;
     border-radius: 15px;
+}
+
+.removebtn{
+    color: black;
+    background-color: red;
+    margin: auto;
+    border-radius: 25px;
 }

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Private Group Join</title>
+</head>
+<body>
+<p> It looks like {{ thisUser.username }} wants to join your group "{{ thisGroup.name }}"<br></p>
+
+<a href="http://localhost:8000/request_private_group_join_response/{{ thisGroup.id }}/{{ thisUser.id }}/">
+    Click here to let {{ thisUser.username }} into {{ thisGroup.name }}</a>
+
+</body>
+</html>
