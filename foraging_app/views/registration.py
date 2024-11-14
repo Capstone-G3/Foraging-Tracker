@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.views import View
 from foraging_app.forms import UserRegistrationForm, UserProfileForm
+from foraging_app.models.friend import Friend
+
 
 class Register_View(View):
     def get(self, request):
@@ -21,6 +23,8 @@ class Register_View(View):
             profile = profile_form.save(commit=False)
             profile.user_id = user
             profile.save()
+            friend_list = Friend.objects.create(user=user)
+            friend_list.save()
             login(request, user)
             return redirect('login')  # Redirect to a login page after successful registration
         else:

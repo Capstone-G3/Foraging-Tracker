@@ -33,6 +33,8 @@ from foraging_app.views.like_view import LikeMarkerView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.core.mail import send_mail
+from foraging_app.views.friends import AcceptFriendRequestView, RejectFriendRequestView, \
+    FriendsView, RemoveFriendView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -80,8 +82,14 @@ urlpatterns = [
     path('request_private_group_join_response/<int:groupID>/<int:newMemberID>/', Request_Private_Group_Join_View.as_view(), name='request_private_group_join_response'),
     path('add_comment/<int:marker_id>/', AddCommentView.as_view(), name='add_comment'),
     path('map/marker/<int:marker_id>/', SingleMarkerView.as_view(), name='single_marker'),
-    path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
 
+    #friend urls
+    path('friends/', FriendsView.as_view(), name='friends'),
+    path('send_friend_request/<int:user_id>/', FriendsView.as_view(), name='send_friend_request'),
+    path('accept_friend_request/<int:user_id>/', AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+    path('reject_friend_request/<int:user_id>/', RejectFriendRequestView.as_view(), name='reject_friend_request'),
+    path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend'),
+    path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
 ]
 
 # Remove for Production
