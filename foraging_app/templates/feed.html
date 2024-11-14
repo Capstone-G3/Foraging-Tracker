@@ -91,7 +91,7 @@
             color: white;
             cursor: pointer;
         }
-
+    
         .image-wrapper {
             position: relative;
             display: inline-block;
@@ -196,9 +196,10 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
             min-width: 200px; /* Ensure a minimum width */
             background-color: black !important;
-            color: floralwhite;max-height: 300px;
-            margin-top: 20px;
-    overflow-y: auto;">
+            color: floralwhite;height: 200px;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;">
                 Species
                 <div class="dropdown-divider"></div>
                 <form method="get" class="filter-form">
@@ -245,7 +246,7 @@
                             </label>
                         </div>
                     {% empty %}
-                        <p>No groups found.</p>
+                        <p>No friends found.</p>
                     {% endfor %}
                     <div class="dropdown-divider"></div>
                     <button type="submit" class="btn btn-primary">Apply Filters</button>

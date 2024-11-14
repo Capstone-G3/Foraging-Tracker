@@ -100,14 +100,9 @@ class Feed_View(View):
             if friend_filter:
                 print(f"Filtering markers by friends: {friend_filter}")
 
-                # Assuming 'friend_filter' contains a list of usernames (or you could change it to user ids)
-                # Get the users who are friends of the current user
-                # Assuming there's a 'Friendship' model where friendships are stored
                 friends = User.objects.filter(username__in=friend_filter)
 
 
-
-                # Filter the markers to only include those whose owners are friends
                 markers = Marker.objects.filter(owner__in=friends)
 
             profiles = None
@@ -115,10 +110,9 @@ class Feed_View(View):
             print(request.user.getGroups())
 
         species_list = Species.objects.all()
-        user_groups = Group.objects.all()
+        user_groups = Group.objects.filter(isPrivate=False)
         friends = Friend.objects.filter(friends=request.user)
-        print(friends)
-        #print(user_groups)
+
         return render(request, 'feed.html', {
             'markers': markers,
             'species_filter': species_filter,
@@ -134,8 +128,7 @@ class Feed_View(View):
 
 class AddCommentView(View):
     def post(self, request, marker_id):
-        #current_url = request.build_absolute_uri()
-        #print(current_url)
+
         marker = Marker.objects.get(id=marker_id)
         form = CommentForm(request.POST)
         if form.is_valid():
