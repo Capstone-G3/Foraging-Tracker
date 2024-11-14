@@ -96,7 +96,7 @@ class UserLocate(LocateControl):
         {% macro script(this, kwargs) %}
                 
             var {{this.get_name()}} = L.control.locate(
-                {{this.options | tojson}},
+                {{this.options | tojson}} ,
             );
 
             {{this._parent.get_name()}}.off('locationerror');
@@ -113,8 +113,8 @@ class UserLocate(LocateControl):
         {% endmacro %}
         """)
     
-    def __init__(self, error_message="Access Denied",auto_start=False, **kwargs):
-        super().__init__(auto_start= auto_start, kwargs= kwargs)
+    def __init__(self, error_message="Access Denied", auto_start=False, **kwargs):
+        super().__init__(auto_start= auto_start, **kwargs)
         self._error_message = error_message
         self._name = "UserLocate"
     
