@@ -17,9 +17,7 @@ body {
 }
 
 .groupedPageLinks {
-    flex: 1;
     justify-content: center;
-    height: 100%;
     display: flex;
     align-items: inherit;
 }
@@ -124,6 +122,11 @@ body {
 @media only screen and (max-width: 640px) {
     .leaflet-control-minimap {
         display: none;
+    }
+
+    .leaflet-popup-content-wrapper {
+        width: 300px;
+        font-size: medium;
     }
 
     .map.styling {
