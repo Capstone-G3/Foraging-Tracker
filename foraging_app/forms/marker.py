@@ -4,7 +4,7 @@ from foraging_app.models.marker import Comment
 
 
 class MarkerCreateForm(ModelForm):
-    species = ModelChoiceField(queryset=Species.objects.all(), widget=Select, required=False)
+    species = ModelChoiceField(queryset=Species.objects.all(), widget=Select, required=False, empty_label="New")
     class Meta:
         model = Marker
         fields = [
@@ -15,6 +15,9 @@ class MarkerCreateForm(ModelForm):
             'image',
             'description'
         ]
+        widgets = {
+            'description' : Textarea(attrs={'rows': 4, 'cols': 32}),
+        }
     
 class MarkerEditForm(MarkerCreateForm):
     description = CharField(widget=Textarea())
