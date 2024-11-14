@@ -45,15 +45,25 @@
             </form>
             {% endif %}
             {% if not inGroup %}
-                <form action="{% url 'group' thisGroup.id %}" method="post">
+                {% if thisGroup.isPrivate %}
+                    <form action="{% url 'group' thisGroup.id %}" method="post">
+                        {%csrf_token%}
+                        <input class="joinOption" type="submit" value="Request to Join Group" />
+                        </form>
+                    {% else %}
+                        <form action="{% url 'group' thisGroup.id %}" method="post">
+                        {%csrf_token%}
+                        <input class="joinOption" type="submit" value="Join Group" />
+                        </form>
+                    {% endif %}
+            {% elif inGroup and thisGroup.user_admin.id != request.user.id %}
+                <form action="{% url 'remove_member_group' thisGroup.id request.user.id %}" method="post">
                 {%csrf_token%}
-                <input class="joinOption" type="submit" value="Join Group" />
+                <input class="joinOption" type="submit" value="Leave Group" style="background-color: red"/>
                 </form>
-
             {% endif %}
         </div>
     </div>
-{#    TODO: limit what non-group members can see in private group#}
 
     <div class = "mainContainer">
     {% if thisGroup.isPrivate and not inGroup %}
@@ -61,15 +71,32 @@
         This group is private, please request to join if you'd like to see the users and posts.
         </div>
     {% else %}
-{#    TODO: add ability for owner to remove members, also possibly adding owner to top of group list with special marking#}
         <div class="members">
             {% if thisGroup == None %}
                 No users in an empty group.
             {% else %}
                 <ol>
-                {% for x in members %}
-                    <li><a href="{% url 'user' x.id %}">{{ x.username }}</a></li>
+                {% if thisGroup.user_admin.id == request.user.id %}
+                    {% for x in members %}
+                    {% if x.id == thisGroup.user_admin.id %}
+                        <li><a href="{% url 'user' x.id %}">{{ x.username }}-----<b>Owner</b></a></li>
+                    {% else %}
+                        <li><a href="{% url 'user' x.id %}">{{ x.username }}</a>
+                            <form action="{% url 'remove_member_group' thisGroup.id x.id %}" method="post">
+                            {%csrf_token%}
+                            <input class="removebtn" type="submit" value="Remove From Group" />
+                        </form></li>
+                    {% endif %}
                 {%  endfor %}
+                {% else %}
+                    {% for x in members %}
+                        {% if x.id == thisGroup.user_admin.id %}
+                            <li><a href="{% url 'user' x.id %}">{{ x.username }}-----<b>Owner</b></a></li>
+                        {% else %}
+                            <li><a href="{% url 'user' x.id %}">{{ x.username }}</a></li>
+                        {% endif %}
+                    {%  endfor %}
+                {% endif %}
                 </ol>
 
             {% endif %}
