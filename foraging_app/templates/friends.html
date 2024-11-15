@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friends</title>
+    <style>
+.main-container {
+    display: flex;            
+    justify-content: space-between; 
+    height: 100vh;            
+}
+
+.sections {
+    width: 33%;              
+    padding: 20px;            
+    overflow-y: auto;        
+}
+
+.image-container {
+    display: block;          
+    margin-bottom: 30px;    
+    padding: 15px;         
+    border: 1px solid #ddd;    
+    border-radius: 10px;     
+    background-color: #f9f9f9;  
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;        
+    gap: 15px;               
+}
+
+.profile-image {
+    width: 80px;           
+    height: 80px;              
+    border-radius: 15px;      
+    object-fit: cover;       
+}
+
+button {
+    background-color: green; 
+    color: white;              
+    padding: 10px 20px;       
+    border: none;               
+    border-radius: 25px;      
+    cursor: pointer;            
+    font-size: 16px;           
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+button:hover {
+    background-color: darkgreen; 
+    transform: scale(1.05);       
+}
+    </style>
+</head>
+<body>
+    <div class="behind">
+   <div class="main-container">
+   
+    <div class="sections">
+        <h2>Friends</h2>
+        {% for friend in friends %}
+            <div class="image-container">
+                <div class="owner-info">
+                    {% if friend.profile_image %}
+                        <img src="{{ friend.profile_image.url }}" alt="{{ friend.username }}" class="profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                    {% endif %}
+                    <a href="{% url 'user' userId=friend.id %}"><h4>{{ friend.username }}</h4></a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    
+        <div class="sections">
+        <h2>Users</h2>
+        {% for u in all_users %}
+            <div class="image-container">
+                <div class="owner-info">
+                    {% if u.profile_image %}
+                        <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                    {% endif %}
+                    <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>
+
+                    {% if u.id != user.id %} 
+                        {% if u.id in sent_friend_request_users %}
+                            <span>pending</span>
+                        {% else %}
+                            <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Add</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+   
+   
+   <div class="sections">
+        <h2>Requests</h2>
+        {% for request in received_requests %}
+          
+            <div class="image-container">
+                <div class="owner-info">
+                    {% if request.uid_sender.profile_image %}
+                        <img src="{{ request.uid_sender.profile_image.url }}" alt="{{ request.uid_sender.username }}" class="profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                    {% endif %}
+                    <a href="{% url 'user' userId=request.uid_sender.id %}"><h4>{{ request.uid_sender.username }}</h4></a>
+                    <form method="post" action="{% url 'accept_friend_request' user_id=request.uid_sender.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Accept</button>
+                    </form>
+                    
+                </div>
+            </div>
+        {% endfor %}
+    
+    </div>
+    
+    
+</div>>
+</div>
+</body>
+</html>
+
+{% endblock %}

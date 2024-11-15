@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Private Group Join</title>
+{#    TODO: Style it!#}
+</head>
+<body>
+
+    {% if thisGroup.user_admin.id == request.user.id %}
+
+    <form action="{% url 'request_private_group_join_response' thisGroup.id newMember.id %}" method="post">
+        {%csrf_token%}
+        <input type="submit" value="Accept {{ newMember.username }} into {{ thisGroup.name }}" />
+    </form>
+    {% else %}
+        <p>You must be signed in as the group admin to accept members into your group.</p>
+    {% endif %}
+
+</body>
+</html>
