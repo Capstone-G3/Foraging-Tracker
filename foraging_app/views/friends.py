@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.views import View
 from foraging_app.models.user import User
 from foraging_app.models.friend import Friend, Friend_Request
@@ -22,7 +21,7 @@ class FriendsView(LoginRequiredMixin, View):
             unfiltered_users = User.objects.all().exclude(id=user.id)
             for u in unfiltered_users:
                 if not Friend_Request.objects.filter(uid_sender=u, uid_receiver=user):
-                    if not Friend_Request.objects.filter(uid_receiver=u, uid_sender=user):
+                    if not Friend_Request.objects.filter(uid_receiver=u, uid_sender=user, status=0):
                         all_users.append(u)
         except User.DoesNotExist:
             all_users = None
@@ -53,7 +52,7 @@ class FriendsView(LoginRequiredMixin, View):
         user_sender = request.user
         user_to_add = User.objects.get(id=user_id)
 
-        if not Friend_Request.objects.filter(uid_receiver=user_to_add, uid_sender=user_sender).exists():
+        if not Friend_Request.objects.filter(uid_receiver=user_to_add, uid_sender=user_sender):
             Friend_Request.objects.create(uid_receiver=user_to_add, uid_sender=user_sender)
         return redirect('friends')
 
