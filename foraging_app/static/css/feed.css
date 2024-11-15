@@ -220,6 +220,73 @@
 .filterIcon {
     display: none;
 }
+    
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.more-options {
+    position: absolute;
+    top: 10px;  /* Adjust as needed */
+    right: 10px;  /* Adjust as needed */
+    background-color: rgba(0, 0, 0, 0.1);  /* Optional: background for better visibility */
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;  /* Adjust as needed */
+    display: flex;
+    flex-direction: column;  /* Arrange dots vertically */
+    align-items: center;  /* Center dots horizontally */
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    display: block;
+    margin: 2px 0;  /* Adjust vertical spacing between dots */
+    transition: background-color 0.3s;
+}
+
+.dot:hover {
+    background-color: #333;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.close {
+    align-self: end;
+}
+
+.close:hover {
+    cursor: pointer;
+}
 
 @media only screen and (max-width: 640px) {
     #filtersContainer {
@@ -251,7 +318,7 @@
         flex-direction: column;
     }
 
-    .postSearch {
+    .searchFilter {
         display: flex;
         height: 30px;
         gap: 5px;
