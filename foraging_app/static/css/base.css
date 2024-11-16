@@ -73,12 +73,28 @@ body {
     display: flex;
 }
 
+.mobile {
+    display: none;
+}
+
 @media only screen and (max-width: 640px) {
-    .navbar, .groupedPageLinks {
+    .navbar, #dropdownMenuButton {
         height: 54px;
     }
 
     .desktop {
         display: none;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .mobile {
+        display: flex !important;
+    }
+
+    .custom-dropdown-width.show {
+        left: -170px;
     }
 }

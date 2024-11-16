@@ -66,6 +66,46 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <a href="{% url 'home' %}" style="margin-right: 20px;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></a>
+        <div class="userLink mobile">
+            <div class="dropdown">
+                <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
+                        transparent; border: transparent;">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-header">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
+                        {% endif %}
+                        User Menu
+                    </div>
+                    <ul class="dropdownList" style="margin: 0px;">
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                        {% endif %}
+                        {% if not user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                        <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
+                        <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
+                        <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
+                    {% endif %}
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -142,23 +182,5 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    
-    <div class="appbar bottomBar mobile">
-        <div>
-            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-        </div>
-        <div class="aboutLink">
-            <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
-        </div>
-        <div class="categoriesLink">
-            <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-        </div>
-        <div class="nav-item groupLink">
-            <a class="nav-link" href="{% url 'group_nav' %}">Groups</a>
-        </div>
-        <div class="friendsLink">
-            <a class="nav-link" href="{% url 'friends' %}">Friends</a>
-        </div>
-    </div>
 </body>
 </html>
