@@ -144,24 +144,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     
     <div class="appbar bottomBar mobile">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item aboutLink">
-                <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
-            </li>
-            <li class="nav-item categoriesLink">
-                <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-            </li>
-            <li class="nav-item groupLink">
-                <a class="nav-link" href="{% url 'group_nav' %}">Groups</a>
-            </li>
-            <li class="nav-item friendsLink">
-                <a class="nav-link" href="{% url 'friends' %}">Friends</a>
-            </li>
-            
-        </ul>
+        <div>
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </div>
+        <div class="aboutLink">
+            <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+        </div>
+        <div class="categoriesLink">
+            <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+        </div>
+        <div class="nav-item groupLink">
+            <a class="nav-link" href="{% url 'group_nav' %}">Groups</a>
+        </div>
+        <div class="friendsLink">
+            <a class="nav-link" href="{% url 'friends' %}">Friends</a>
+        </div>
     </div>
 </body>
 </html>
