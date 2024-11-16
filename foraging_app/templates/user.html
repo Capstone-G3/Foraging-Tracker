@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="{%  static  'css/base.css' %}">
         <link rel="stylesheet" href="{%  static  'css/user.css'  %}">
-        <link rel="stylesheet" href="{% static 'css/feed.css' %}">        
+        <link rel="stylesheet" href="{% static 'css/feed.css' %}">
         <style>
             .wrapper {
                 height: 100%;
@@ -80,7 +80,7 @@
                 <div style="overflow-y: auto; height: 100%">
                     <div class="wrapper">
                         <nav class="nav flex-column" style="position: fixed;">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle userFilters" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter Content
                             </a>
                         <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
@@ -105,7 +105,7 @@
                                 </form>                
                             </div>
                             {%if isPersonalAccount%}                         
-                                <a class="nav-link" href="{% url 'create_marker' %}">Create New Marker</a> 
+                                <a class="nav-link userFilters" href="{% url 'create_marker' %}">Create New Marker</a> 
                             {%endif%}               
                         </nav>
                         {% if not markers %}

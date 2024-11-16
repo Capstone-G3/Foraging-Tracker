@@ -114,7 +114,7 @@
                             {% endif %}
                             User Menu
                         </div>
-                        <ul>
+                        <ul class="dropdownList">
                             {% if user.is_authenticated %}
                             <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
                             {% endif %}
