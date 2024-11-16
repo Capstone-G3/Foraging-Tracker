@@ -12,6 +12,10 @@
     padding: 20px;
 }
 
+#dropdownMenuButton {
+    height: 52px;
+}
+
 .owner-info {
     display: flex;
     align-items: center;

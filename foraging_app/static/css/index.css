@@ -68,7 +68,7 @@
     position: relative; /* Positioning context for the dropdown */
 }
 
-.userLink:hover {
+.username-text:hover {
     text-decoration: underline;
 }
 
