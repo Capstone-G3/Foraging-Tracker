@@ -6,8 +6,8 @@ body {
 }
 
 .appbar {
-    padding: 0px 10px;
-    min-height: 54px;
+    padding: 0rem 1rem;
+    height: 74px;
     background-color: #6FC081;
     display: flex;
     justify-content: space-between;
@@ -20,6 +20,7 @@ body {
     justify-content: center;
     display: flex;
     align-items: inherit;
+    height: 74px;
 }
 
 .mapLink, .feedLink {
@@ -29,12 +30,16 @@ body {
     align-items: inherit;
     color: white;
     justify-content: center;
+    border-radius: 10px;
 }
 
 .mapLink:hover, .feedLink:hover {
     background-color: #88cb97;
-    border-radius: 10px;
     cursor: pointer;
+}
+
+.mapLink:hover > *, .feedLink:hover > * {
+    text-decoration: none;
 }
 
 .mapLink {
@@ -46,7 +51,7 @@ body {
     color: white;
     font-size: x-large;
     width: 40px;
-    height: 40%;
+    height: 40px;
     display: flex;
     justify-content: center;
     margin: 0px 8px 0px 8px;
@@ -120,6 +125,10 @@ body {
 }
 
 @media only screen and (max-width: 640px) {
+    .appbar, .groupedPageLinks {
+        height: 54px;
+    }
+
     .leaflet-control-minimap {
         display: none;
     }

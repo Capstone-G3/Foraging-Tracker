@@ -1,3 +1,7 @@
+.addLink {
+    background-color: #3c9e51;
+    border-radius: 20px;
+}
 
 .creationContainer {
     align-items: center;
@@ -12,6 +16,7 @@
     background-size: cover;
     background-position: center;
 }
+
 .createMarker {
     background-color: #3c9e51;
     border-radius: 10px;
@@ -19,12 +24,14 @@
     color: white;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
 }
+
 .title {
     font-size: 20px;
     font-weight: 600;
     text-align: center;
     padding: 10px;
 }
+
 .dataContainer {
     display: flex;
     flex-direction: column;
@@ -34,11 +41,13 @@
     border-radius: 0 0 10px 10px;
     font-weight: 500;
 }
+
 .data {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
+
 input[type="submit"], input::file-selector-button {
     border: none;
     background-color: #3c9e51;
@@ -48,15 +57,18 @@ input[type="submit"], input::file-selector-button {
     align-self: center;
     border-radius: 5px;
 }
+
 input[type="submit"] {    
     filter: drop-shadow(#207933 4px 4px 1px);
     width: 300px;
 }
+
 input[type="submit"]:hover, input::file-selector-button:hover {
     background-color: #88cb97;
     border-radius: 10px;
     cursor: pointer;
 }
+
 input[type="number"], input[type="text"], select {
     border-radius: 10px;
     border: none;

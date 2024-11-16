@@ -12,6 +12,10 @@ body {
     padding: 20px;
 }
 
+.aboutLink {
+    background-color: #3c9e51;
+}
+
 .header {
     text-align: center;
     padding: 50px 0;
@@ -86,5 +90,11 @@ body {
 @media (max-width: 768px) {
     .content {
         grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .header {
+        padding-top: 0px;
     }
 }

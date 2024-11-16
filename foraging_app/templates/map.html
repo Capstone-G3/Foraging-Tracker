@@ -1,6 +1,11 @@
 {% extends 'index.html' %}
 {% block title %}Map{% endblock %}
 {% block content %}
+<style> 
+    .mapLink {
+        background-color: #3c9e51;
+    }
+</style>
     {% if messages %}
         <script>
             window.onload = function() {

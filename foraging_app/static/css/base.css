@@ -1,3 +1,8 @@
+.navbar {
+    padding: 0rem 1rem !important;
+    height: 74px;
+}
+
 .dropdown-menu {
     background-color: white !important;
     width: 400px !important; /* Increase width */
@@ -18,8 +23,6 @@
     margin: 1px;
 }
 
-
-
 /* Ensure dropdown items are styled correctly */
 .dropdown-item {
     color: black !important;
@@ -33,4 +36,14 @@
 
 .dropdown-item:hover {
     background-color: #f1f1f1 !important;
+}
+
+.nav-item {    
+    border-radius: 10px;
+}
+
+.nav-link {
+    height: 74px;
+    align-items: center;
+    display: flex;
 }
