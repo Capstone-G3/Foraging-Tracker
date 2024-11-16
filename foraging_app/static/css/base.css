@@ -30,12 +30,11 @@
     display: block !important;
     font-size: 15px !important; /* Increase font size */
     line-height: 1.5 !important; /* Adjust line height */
-    padding: 12px 16px 0px 16px !important
+    padding: 12px 16px !important
 }
 
 .dropdown-menu > *:not(:first-child) > *:not(:last-child) {
     border-bottom: 1px solid #ddd !important; /* Add border for separation */
-    padding-bottom: 12px;
 }
 
 .dropdown-item:hover {
