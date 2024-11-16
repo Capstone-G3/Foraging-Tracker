@@ -322,7 +322,7 @@
     }
     
     .wrapper {
-        height: calc(100vh - 108px) !important;
+        height: calc(100vh - 107px) !important;
         flex-direction: column;
     }
 
