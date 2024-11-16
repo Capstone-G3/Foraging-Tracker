@@ -2,11 +2,9 @@
     background-color: #3c9e51;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
+.categoriesLink {
+    background-color: #3c9e51;    
+    border-radius: 20px;
 }
 
 h1 {

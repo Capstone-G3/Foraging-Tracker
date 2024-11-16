@@ -1,6 +1,14 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
 .navbar {
-    padding: 0rem 1rem !important;
+    padding: 0px 15px;
     height: 74px;
+    align-content: center;
 }
 
 .dropdown-menu {
@@ -59,4 +67,18 @@
 
 #dropdownMenuButton {
     height: 100%;
+}
+
+.desktop {
+    display: flex;
+}
+
+@media only screen and (max-width: 640px) {
+    .navbar, .groupedPageLinks {
+        height: 54px;
+    }
+
+    .desktop {
+        display: none;
+    }
 }

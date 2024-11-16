@@ -1,12 +1,5 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
-
 .appbar {
-    padding: 0rem 1rem;
+    padding: 0px 15px;
     height: 74px;
     background-color: #6FC081;
     display: flex;
@@ -79,6 +72,24 @@ body {
     text-decoration: underline;
 }
 
+.dropdown {
+    height: 74px;
+    display: flex;
+    align-items: center;
+    width: 150px;
+}
+
+.dropdown-toggle::after {
+    width: 8px;
+    height: 4px;
+}
+
+
+.username-text {
+    color: white !important; /* Set the username text color to white */
+    font-weight: bold; /* Optional: make the text bold */
+}
+
 .dropdown-menu {
     background-color: white !important;
     width: 400px !important; /* Increase width */
@@ -124,6 +135,10 @@ body {
     display: flex;
 }
 
+.map.styling {    
+    height: calc(100vh - 74px) !important;
+}
+
 @media only screen and (max-width: 640px) {
     .appbar, .groupedPageLinks {
         height: 54px;
@@ -139,7 +154,7 @@ body {
     }
 
     .map.styling {
-        height: calc(100% - 108px) !important;
+        height: calc(100vh - 108px) !important;
     }
 
     .desktop .groupedPageLinks {
