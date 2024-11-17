@@ -1,5 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
+
+from foraging_app.models.friend import Friend
 from foraging_app.models.user import User
 from foraging_app.models.user import User_Profile
 from foraging_app.forms import CommentForm
@@ -35,14 +37,21 @@ class User_View(View):
             markers = Marker.objects.filter(owner=userId).filter(is_private=False).order_by('-created_date')
         except User_Profile.DoesNotExist:
             markers = None
-
+        # Attempt to query friends then assign the count to variable friend_count
+        friend_count = 0  # default friend_count value
+        try:
+            friends = user.friends.all()
+            friend_count = friends.count()
+        except Friend.DoesNotExist:
+            friends = None
         return render(request, "user.html", {
             "form": CommentForm(), 
             "userModel": user, 
             "userProfile": userProfile, 
             "profilePhoto": profilePhoto, 
             "markers": markers, 
-            "isPersonalAccount": isPersonalAccount})
+            "isPersonalAccount": isPersonalAccount,
+            "friend_count": friend_count})
     
 class AddCommentUserView(View):
     def post(self, request, marker_id, user_id):
