@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="https://code.jquery.com/jquery-3.6.0.min.js">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'css/feed.css' %}">
@@ -25,13 +26,156 @@
                 background-image: url('{% static "img/Default_Background.jpg" %}')
             {% endif %}
         }
+        .nav {
+            width: 200px;
+            height: auto;
+            background-color: transparent;
+            opacity: 90%;
+            padding-top: 5px;
+            flex-shrink: 0;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: floralwhite;
+            background-color: black;
+
+            border: 1px solid transparent;
+            text-align: center;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            background-color: black;
+            opacity: 85%;
+            color: #fff;
+        }
+        .navbar-nav{
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: floralwhite;
+            background-color: black;
+
+            border: 1px solid transparent;
+            text-align: center;
+            text-decoration: none;
+        }
+        .container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+
+        .button-container button {
+            flex: 1;
+            padding: 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+    
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .marker-image {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .more-options {
+            position: absolute;
+            top: 10px;  /* Adjust as needed */
+            right: 10px;  /* Adjust as needed */
+            background-color: rgba(0, 0, 0, 0.1);  /* Optional: background for better visibility */
+            color: white;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;  /* Adjust as needed */
+            display: flex;
+            flex-direction: column;  /* Arrange dots vertically */
+            align-items: center;  /* Center dots horizontally */
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            display: block;
+            margin: 2px 0;  /* Adjust vertical spacing between dots */
+            transition: background-color 0.3s;
+        }
+
+        .dot:hover {
+            background-color: #333;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+
     </style>
 </head>
 <body>
+    {% if messages %}
+        <script>
+            window.onload = function() {
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            }
+        </script>
+    {% endif %}
     <div class="wrapper">
         <nav class="nav flex-column">
             <a class="nav-link">
                 <div class="search-container">
+
                     <form method="GET" action="{% url 'feed' %}">
                         <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q|default_if_none:'' }}">
                         <button type="submit">Search</button>
@@ -45,14 +189,17 @@
             <a class="nav-link" href="#">Groups</a>
             <a class="nav-link" href="#">Notifications</a>
         -->
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFilter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Filter Content
             </a>
         <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="width: auto !important;
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
             min-width: 200px; /* Ensure a minimum width */
             background-color: black !important;
-            color: floralwhite;">
+            color: floralwhite;height: 200px;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;">
                 Species
                 <div class="dropdown-divider"></div>
                 <form method="get" class="filter-form">
@@ -68,13 +215,100 @@
                     <button type="submit" class="btn btn-primary">Apply Filters</button>
                     <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
                 </form>
-
+            <br>
+                Groups
+            <div class="dropdown-divider"></div>
+            <form method="get" class="filter-form">
+                    {% for group in user_groups %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="group" value="{{ group.name }}" id="group{{ forloop.counter }}" {% if group.name in group_filter %}checked{% endif %}>
+                            <label class="form-check-label" for="group{{ forloop.counter }}">
+                                {{ group.name }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p>No groups found.</p>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                </form>
+            {% if friends is not None %}
+                <br>
+                Friends
+            <div class="dropdown-divider"></div>
+            <form method="get" class="filter-form">
+                    {% for friend in friends %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="friend" value="{{ friend.user.username }}" id="friend{{ forloop.counter }}" {% if friend.user.username in friend_filter %}checked{% endif %}>
+                            <label class="form-check-label" for="friend{{ forloop.counter }}">
+                                {{ friend.user.username }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p>No friends found.</p>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
+                </form>
+            {% endif %}
             </div>
 
 
+        <ul class="navbar-nav">
+            <li>
+            <!-- Second Dropdown -->
+            <a class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Make Connections!
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                          </div>
+                        <input type="text" name="u" placeholder="Search users..." value="{{ request.GET.u|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </a>
+            </li>
+            <li>
+            <a class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Search Groups
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" style="width: auto !important;
+            min-width: 250px; /* Ensure a minimum width */
+            background-color: black !important;
+            color: floralwhite;">
+                    <form method="GET" action="{% url 'feed' %}">
+                        <div class="input-group">
+                        <input type="text" name="g" placeholder="Search groups..." value="{{ request.GET.g|default_if_none:'' }}">
+                            </div>
+                        <button type="submit">Search</button>
+                        <button type="button" onclick="clearSearch()">Clear</button>
+
+                    </form>
+                </div>
+            </a>
+            </li>
+        </ul>
+
         </nav>
         <div class="container">
+        {% if markers is not None %}
             {% for marker in markers %}
+
+
                 <div class="image-container">
                     <div class="owner-info">
                         {% if marker.owner.profile_image %}
@@ -82,24 +316,37 @@
                         {% else %}
                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                         {% endif %}
-                        <span class="owner-username"><a href="#">{{ marker.owner.username }}</a></span>
+                        <span class="owner-username"><a href="{% url 'user' marker.owner.id %}">{{ marker.owner.username }}</a></span>
                         <span class="created-date">{{ marker.created_date|date:"F d, Y" }}</span>
                     </div>
+                <div class="image-wrapper">
                     <img src="{{ marker.image.url }}" alt="{{ marker.title }}" class="marker-image">
+                    <div class="more-options" onclick="showModal('{{ marker.title }}', '{{ marker.description }}', '{{ marker.id }}', '{{ marker.latitude }}', '{{ marker.longitude }}')">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
                     <div class="marker-details">
                         <div class="marker-title">{{ marker.title }}</div>
                         <!--<div class="marker-latlng">{{ marker.latitude }}, {{ marker.longitude }}</div>-->
                         <div class="dropdown-divider"></div>
                         <div class="marker-description">{{ marker.description }}</div>
-                        <!--<a href="{% url 'home' %}?marker_id={{ marker.id }}" class="btn btn-primary">View on Map</a>-->
+
                             <div class="action-container">
                             <button class="btn btn-primary like-button" data-id="{{ marker.id }}">
                                 Like (<span class="likes-count">{{ marker.like_marker_set.count }}</span>)
                             </button>
+                                <!-- Button to trigger the modal, passing the marker_id -->
+                            <button type="button" class="btn btn-primary" onclick="openShareModal({{ marker.id }})">
+                                Share Marker
+                            </button>
+
                             <div class="comment-toggle" onclick="toggleComments({{ marker.id }})">
                                 <img src="{% static 'img/comment-detail-solid-24.png' %}" height="30" width="30" alt="comment detail">
                                 {{ marker.comments.count }}
                             </div>
+
                         </div>
                         <div id="comments-{{ marker.id }}" class="comments">
                             <div class="comments-container">
@@ -130,7 +377,113 @@
                     </div>
                 </div>
             {% endfor %}
+        {% elif groups is not None%}
+            {% for group in groups %}
+            <div class="image-container">
+                    <div class="owner-info">
+                        <span class="owner-username"><a href="{% url 'group' group.id %}">{{ group.name }}</a></span>
+                        
+                    </div>
+                    <div class="dropdown-divider"></div>
+                        {{ group.description }}
+               </div>
+            {% endfor %}
+        {% else %}
+            {% for profile in profiles %}
+               <div class="image-container">
+                    <div class="owner-info">
+                        {% if profile.user_id.profile_image %}
+                            <img src="{{ profile.user_id.profile_image.url }}" alt="{{ profile.user_id }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <span class="owner-username"><a href="{% url 'user' profile.user_id.id %}">{{ profile.user_id }}</a></span>
+
+                    </div>
+               </div>
+                
+            {% endfor %}
+        {% endif %}
+        <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalLatitude"></p>
+                    <p id="modalLongitude"></p>
+                    <a id="viewOnMapBtn" href="#" class="btn btn-secondary">View on Map</a>
+                </div>
+            </div>
+        <!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Share Marker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="shareMarkerForm" method="post" action="{% url 'share_marker' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="marker_id" id="markerIdField">
+
+                    <!-- Dropdown for selecting a friend -->
+                    <label for="friendSelect">Select Friend</label>
+                    <select name="friend_id" id="friendSelect" class="form-control">
+                        <option value="">Choose a friend</option>
+                        {% for friend in friends %}
+                            <option value="{{ friend.user_id }}">{{ friend.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="shareMarkerForm">Share</button>
+            </div>
+        </div>
+    </div>
+</div>
+
             <script>
+
+                function openShareModal(markerId) {
+                    document.getElementById('markerIdField').value = markerId;
+                    $('#shareModal').modal({ backdrop: false });
+                }
+
+
+
+                function closeShareModal() {
+                    document.getElementById('shareModal').style.display = 'none';
+                }
+
+
+
+                window.onclick = function(event) {
+                    if (event.target === document.getElementById('shareModal')) {
+                        closeShareModal();
+                    }
+                };
+
+                function showModal(title, description, markerId, latitude, longitude) {
+                    document.getElementById('modal').style.display = 'block';
+                    document.getElementById('modalTitle').textContent = title;
+                    document.getElementById('modalLatitude').textContent = 'Latitude: ' + latitude;
+                    document.getElementById('modalLongitude').textContent = 'Longitude: ' + longitude;
+                    document.getElementById('viewOnMapBtn').href = `/map/marker/${markerId}/`;
+                }
+
+                function closeModal() {
+                    document.getElementById('modal').style.display = 'none';
+                }
+
+                window.onclick = function(event) {
+                    if (event.target === document.getElementById('modal')) {
+                        closeModal();
+                    }
+                };
                 document.querySelectorAll('.like-button').forEach(button => {
                     button.addEventListener('click', function() {
                         const markerId = this.getAttribute('data-id');

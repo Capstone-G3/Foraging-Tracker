@@ -3,12 +3,14 @@ from django.db.models import (Model, IntegerField,
                               ManyToManyField)
 
 from foraging_app.models.user import User
+from foraging_app.models.marker import Marker
 
 
 class Friend(Model):
     user = OneToOneField(User, on_delete=CASCADE, related_name='user')
     friends = ManyToManyField(User, blank=True, related_name='friends')
     friend_since = DateTimeField(auto_now=True)
+    shared_markers = ManyToManyField(Marker, blank=True, related_name='shared_markers')
 
     def __str__(self):
         return self.user.username
@@ -33,11 +35,15 @@ class Friend(Model):
         """
         Initiate the action of unfriending users // logic check
         """
-        self.remove_friend(account)  # remove a user from the remover's friends list
-        friends_list = Friend.objects.filter(user=account)  # query friends list of user being removed
-        for friend in friends_list:  # loop through that query to find user
-            friend.remove_friend(self.user)  # remove user from person being removed's friends list
+        # self.remove_friend(account)  # remove a user from the remover's friends list
+        # friends_list = Friend.objects.filter(user=account)  # query friends list of user being removed
+        # for friend in friends_list:  # loop through that query to find user
+        #     friend.remove_friend(self.user)  # remove user from person being removed's friends list
+        user_friends_list = self
+        user_friends_list.remove_friend(account)
 
+        friend_list = Friend.objects.get(user=account)
+        friend_list.remove_friend(account)
     def is_friend(self, account):
         """
         Checks if a friend is friend
