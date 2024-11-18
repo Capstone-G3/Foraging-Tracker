@@ -13,41 +13,38 @@ class Home_View(View):
     def __init__(self):
         self.list_contents = []
 
-    def getAllMarkers(self):
+    def getAllMarkers(self, request):
         query_marker = Marker.objects.all()
         for marker in query_marker:
-            category = marker.species.category if marker.species else ''
             contents = {
-                'location': (marker.latitude, marker.longitude),
-                'contents': {
-                    'image_url': marker.image.url if marker.image and marker.image.name else '',
-                    'species_name': marker.title.split(' ')[0],
-                    'species_full_name': marker.title,
-                    'latitude': str(marker.latitude),
-                    'longitude': str(marker.longitude),
-                    'category': str(category),
-                    'description': str(marker.description),
-                    'marker_ref': reverse('edit_marker', kwargs={'marker_id': marker.id}),
-                    'marker_name': 'Edit ' + str(marker.title)
-                }
+                'marker' : marker,
+                'owner' : marker.owner,
+                'request' : request
             }
             self.list_contents.append(contents)
 
-    def get(self, request):
-        device = request.user_agent
-        home_map = DesktopMap() if not (device.is_mobile or device.is_tablet) else BaseMap()
-        self.getAllMarkers()
-        marker_id = request.GET.get('marker_id')
-
-
+    # Complete.
+    def get(self,request):
+        username = request.user.username if request.user.is_authenticated else 'Log In'
+        device  = request.user_agent
+        home_map = DesktopMap()
+        if (device.is_mobile or device.is_tablet) and device.is_touch_capable:
+            home_map = BaseMap()
+        self.getAllMarkers(request)
         for marker in self.list_contents:
-            home_map.add_marker(location=marker['location'], contents=marker['contents'])
+            home_map.add_marker(
+                location=(marker['marker'].latitude,marker['marker'].longitude),
+                contents=marker
+            )
 
-        username = request.user.username if request.user.is_authenticated else "Log In"
-        return render(request, "map.html", {
-            "map": home_map.compile_figure(),
-            "username": username
-        })
+        return render(
+            request,
+            "map.html",
+            {
+                "map" : home_map.compile_figure(),
+                'username' : username
+            }
+        )
 
 class About_Us_View(View):
     def get(self, request):
