@@ -1,18 +1,21 @@
-from folium import Icon, Marker, Map, Figure, LayerControl, FeatureGroup
+from folium import Marker, Map, Figure, LayerControl
 from folium.plugins import MiniMap, LocateControl, MarkerCluster, TagFilterButton
 from folium.raster_layers import TileLayer
-from typing import Union
-from forage.sitemap.providers import MapStyleProvider
 
-from foraging_app.forms.marker import MarkerCreateForm
-
-from branca.element import MacroElement, Element, Html
-from jinja2 import Template
-
+from forage.sitemap.plugins import ToggleMarker, AutoMarker, UserLocate
 
 from forage.sitemap.content import MarkerContent
 
-#TODO : Secure class to represent the Content for Markers.
+GREEN_MARKER_SPEC = """new L.Icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        });
+                    """
+
 class BaseMap:
     """
     Create a Default Map Object, an Interface Map for other various type of Maps.
@@ -77,33 +80,38 @@ class BaseMap:
 
     # Constant
     MAX_BOUND = {'LONGITUDE' : (-180,180), 'LATITUDE' : (-90,90)}
-
-    map_source_tiles = "OpenStreetMap"
     center_zoom= 12
     zoom_control = False
     copy_on_jump = True
     max_bounds = True
-    min_zoom = 2.5
+    min_zoom = 3
 
-    def __init__(self, tile_source=map_source_tiles):
+    def __init__(self):
         self.__figure__= Figure()
         self.__map__ = Map(
-            zoom_start=self.center_zoom,
+            zoom_start=2.5,
             world_copy_jump=self.copy_on_jump,
             max_bounds=self.max_bounds,
             min_lon=self.MAX_BOUND['LONGITUDE'][0],
             max_lon=self.MAX_BOUND['LONGITUDE'][1],
             zoom_control=self.zoom_control,
-            tiles=None
-            )
-        locate_control = LocateControl(auto_start=False, strings={"title" : "Failed to get location."}) #Getting position of user.
-        self.__map__.add_child(locate_control)
-        self.__styles__ = [TileLayer(tiles=tile_source)]
-        self.__cluster__ = MarkerCluster() # Grouping Markers as Cluster
+            attributionControl=False,
+            tiles=TileLayer(tiles="OpenStreetMap", show=True, name="Light Mode", min_zoom=self.min_zoom),
+        )
+        self.__locate_control__ = UserLocate(
+            auto_start=True,
+            locateOptions={"maxZoom":8},
+            strings={
+                "title" : "Retrieve current location.",
+                "popup" : None,
+            },
+        ) #Getting position of user.
+        self.__styles__ = []
+        self.__cluster__ = MarkerCluster(control=False, overlay=False) # Grouping Markers as Cluster
         self.__attribute__ = LayerControl(position="bottomleft")
         self.__toggle_pin__ = ToggleMarker()
         self.__map_size__ = 0
-
+        
         
     def add_marker(self,location, **contents):
         """
@@ -135,7 +143,7 @@ class BaseMap:
         
         element = Marker(location=location)
         content_frame = MarkerContent()
-   
+
         element.add_child(content_frame.getPopup(contents['contents']))
         self.__cluster__.add_child(element)
         self.__map_size__ += 1
@@ -162,7 +170,9 @@ class BaseMap:
 
         for i in range(len(locations)):
             self.add_marker(location=locations[i], **contents[i])
-            
+
+    def set_map_error_message(self, error_message):
+        self.__locate_control__.set_error_message(error_message)
 
     def compile_figure(self):
         """
@@ -178,9 +188,10 @@ class BaseMap:
         for style in self.__styles__:
             self.__map__.add_child(style)
         self.__map__.add_child(self.__cluster__)
-        self.__figure__.add_child(self.__map__)
         self.__map__.add_child(self.__attribute__)
-        self.__map__.add_child(self.__toggle_pin__)
+        self.__map__.add_child(self.__locate_control__)
+        self.__figure__.add_child(self.__map__)
+
         return self.__figure__
     
     def __len__(self):
@@ -189,11 +200,11 @@ class BaseMap:
 class DesktopMap(BaseMap):
     """
     Desktop Map will contain Mini Map, allowed to be disabled through Layer Control.
-    TODO : Additional Requirement is needed for Desktop Map.
-    TODO : Mini Map styling
-    
     """ 
-    _available = [TileLayer("CartoDB dark_matter")] # TODO, add more styles to Layer Control.
+    _available = [
+        TileLayer("CartoDB dark_matter", name="Dark Mode", show=False, min_zoom=BaseMap.min_zoom),
+        TileLayer("Esri world_imagery", name="Satellite Mode", show=False, min_zoom=BaseMap.min_zoom),
+    ] 
 
     def __init__(self):
         super().__init__()
@@ -203,62 +214,45 @@ class DesktopMap(BaseMap):
     def compile_figure(self):
         return super().compile_figure() 
 
-
-
-class ToggleMarker(MacroElement):
+class PinMap(BaseMap):
     """
-        Toggle Marker Pin, once click a marker will appear, double click to disappear.
-            Addition feature added : 
-                Click on marker for Popup.
-        
+        Derived from Base Map, allow the User to select a point on the map and autofill Form for ease of finds.
     """
-    _template = Template(
-        """
-            {% macro script(this, kwargs) %}
-                var currentMarker = null;  
-
-                function toggleMarker(e) {
-                    if (currentMarker) {
-                        {{ this._parent.get_name() }}.removeLayer(currentMarker);
-                        currentMarker = null;  
-                    } else {
-                        
-                        var greenIcon = new L.Icon({
-                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                            iconSize: [25, 41],
-                            iconAnchor: [12, 41],
-                            popupAnchor: [1, -34],
-                            shadowSize: [41, 41]
-                        });
-
-                        currentMarker = L.marker(e.latlng, {icon : greenIcon}).addTo({{ this._parent.get_name() }});
-                        var lat = e.latlng.lat;
-                        var lng = e.latlng.lng;
-
-                        currentMarker.dragging.enable();
-
-                        currentMarker.on('click', function() {
-                            currentMarker.bindPopup({{ this.popup }}).openPopup();
-                        });
-
-                        currentMarker.on('dblclick', function() {
-                            {{ this._parent.get_name() }}.removeLayer(currentMarker);
-                            currentMarker = null;
-                        });
-                    }
-                };
-                {{ this._parent.get_name() }}.on('click', toggleMarker);
-            {% endmacro %}
-        """
-    ) 
-
-    def __init__(self, popup: Union[Html, str, None] = None):
+    def __init__(self):
         super().__init__()
-        self._name = "ToggleMarker"
+        self.__pin__ = ToggleMarker()
+        self.__auto_marker__ = AutoMarker()
+
+    def compile_figure(self):
+        self.__map__.add_child(self.__pin__)
+        self.__map__.add_child(self.__auto_marker__)
+        return super().compile_figure()  
+
+class InformationMap:
+    """
+        A different type of Map for viewing a single
+    """
+    def __init__(self):
+        self.__figure__ = Figure(width="300px", height="300px")
+        self.__map__ = Map(
+            dragging=False,
+            min_zoom=3,
+            max_zoom=8,
+            zoom_control=True,
+            scrollWheelZoom=False,
+            doubleClickZoom=False,
+            attributionControl=False
+        )
+        self.__cluster__ = MarkerCluster(control=False, overlay=False) # Grouping Markers as Cluster
+        self.__map_size__ = 0
+
+    def add_marker(self,location):
+        self.__map__.add_child(Marker(location=location))
+        self.__map__.location=location
+    
+    def compile_figure(self):
+        self.__map__.add_child(self.__cluster__)
+        self.__figure__.add_child(self.__map__)
+        return self.__figure__
         
-        if isinstance(popup, Element):
-            popup = popup.render()
-        
-        # TODO : Create marker right on marker
-        self.popup = '"<strong>Latitude</strong> : " + lat + "<br> <strong>Longitude</strong>: " + lng'
+

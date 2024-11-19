@@ -6,7 +6,6 @@ from foraging_app.models.user import User_Profile  # Import the User_Profile mod
 class DeleteUserView(LoginRequiredMixin, View):
     def post(self, request):
         user = request.user
-        print("hello")
         try:
             user_profile = User_Profile.objects.get(user_id=user)
             user_profile.delete()  # Delete user profile first

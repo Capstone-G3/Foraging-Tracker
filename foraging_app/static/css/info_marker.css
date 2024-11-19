@@ -1,0 +1,9 @@
+.pane-display{
+    display: inline-block;
+}
+
+.info-pane-container{
+    border: 1px solid black;
+}
+.map-pane-container{
+}

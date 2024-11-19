@@ -73,7 +73,7 @@ class User_Profile(Model):
     phone = CharField(max_length=15, default=None)
     bio = CharField(max_length=500, blank=True)
     age = IntegerField(blank=True, null=True)
-    birthday = DateField(auto_now=False, null=False, default=datetime.datetime(1000,1,1))
+    # birthday = DateField(auto_now=False, null=False, default=datetime.datetime(1000,1,1))
     gender= IntegerField(choices=GENDER,default=MALE)
     user_id= ForeignKey(User, on_delete=CASCADE)
 

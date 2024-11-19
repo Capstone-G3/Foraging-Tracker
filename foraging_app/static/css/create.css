@@ -5,31 +5,30 @@
 
 .creationContainer {
     align-items: center;
-    justify-content: center;
     display: flex;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    top: 54px;
-    background-image: url('../img/map_background.png');
-    background-size: cover;
-    background-position: center;
+    flex-direction: row;
+    height: calc(100% - 54px);
+    background-color: #3c9e51;
 }
 
 .createMarker {
-    background-color: #3c9e51;
-    border-radius: 10px;
     font-size-adjust: none;
     color: white;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .title {
+    background-color: #6FC081;
+    border-radius: 20px;
+    padding: 10px 0px;
+    justify-content: center;
+    margin: 0px 20px;
     font-size: 20px;
     font-weight: 600;
-    text-align: center;
-    padding: 10px;
+    display: flex;
+    width: -webkit-fill-available;
 }
 
 .dataContainer {
@@ -37,8 +36,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 20px;
-    background-color: #6FC081;
-    border-radius: 0 0 10px 10px;
+    background-color: #3c9e51;
     font-weight: 500;
 }
 
@@ -50,12 +48,12 @@
 
 input[type="submit"], input::file-selector-button {
     border: none;
-    background-color: #3c9e51;
+    background-color: #6FC081;
     color: white;
     height: 35px;
     font-weight: 500;
     align-self: center;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 input[type="submit"] {    
@@ -73,4 +71,8 @@ input[type="number"], input[type="text"], select {
     border-radius: 10px;
     border: none;
     height: 26px;
+}
+
+.containerForMap {
+    padding: 0px;
 }
