@@ -91,7 +91,7 @@
             color: white;
             cursor: pointer;
         }
-    
+
         .image-wrapper {
             position: relative;
             display: inline-block;
@@ -177,7 +177,7 @@
                 <div class="search-container">
 
                     <form method="GET" action="{% url 'feed' %}">
-                        <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q|default_if_none:'' }}">
+                        <input type="text" name="q" placeholder="Search users posts..." value="{{ request.GET.q|default_if_none:'' }}">
                         <button type="submit">Search</button>
                         <button type="button" onclick="clearSearch()">Clear</button>
                     </form>
@@ -281,6 +281,8 @@
                 </div>
             </a>
             </li>
+        </ul>
+        <ul class="navbar-nav">
             <li>
             <a class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
