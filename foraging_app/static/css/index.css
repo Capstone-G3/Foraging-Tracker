@@ -1,13 +1,6 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
-
 .appbar {
-    padding: 0px 10px;
-    min-height: 54px;
+    padding: 0px 15px;
+    height: 74px;
     background-color: #6FC081;
     display: flex;
     justify-content: space-between;
@@ -17,11 +10,10 @@ body {
 }
 
 .groupedPageLinks {
-    flex: 1;
     justify-content: center;
-    height: 100%;
     display: flex;
     align-items: inherit;
+    height: 74px;
 }
 
 .mapLink, .feedLink {
@@ -31,12 +23,16 @@ body {
     align-items: inherit;
     color: white;
     justify-content: center;
+    border-radius: 10px;
 }
 
 .mapLink:hover, .feedLink:hover {
     background-color: #88cb97;
-    border-radius: 10px;
     cursor: pointer;
+}
+
+.mapLink:hover > *, .feedLink:hover > * {
+    text-decoration: none;
 }
 
 .mapLink {
@@ -48,7 +44,7 @@ body {
     color: white;
     font-size: x-large;
     width: 40px;
-    height: 40%;
+    height: 40px;
     display: flex;
     justify-content: center;
     margin: 0px 8px 0px 8px;
@@ -72,8 +68,27 @@ body {
     position: relative; /* Positioning context for the dropdown */
 }
 
-.userLink:hover {
+.username-text:hover {
     text-decoration: underline;
+}
+
+.dropdown {
+    height: 74px;
+    display: flex;
+    align-items: center;
+    width: 150px;
+    justify-content: end;
+}
+
+.dropdown-toggle::after {
+    width: 8px;
+    height: 4px;
+}
+
+
+.username-text {
+    color: white !important; /* Set the username text color to white */
+    font-weight: bold; /* Optional: make the text bold */
 }
 
 .dropdown-menu {
@@ -117,7 +132,32 @@ body {
     display: none;
 }
 
+.leaflet-control-minimap {
+    display: flex;
+}
+
+.map.styling {    
+    height: calc(100vh - 74px) !important;
+}
+
 @media only screen and (max-width: 640px) {
+    .appbar, .groupedPageLinks {
+        height: 54px;
+    }
+
+    .leaflet-control-minimap {
+        display: none;
+    }
+
+    .leaflet-popup-content-wrapper {
+        width: 300px;
+        font-size: medium;
+    }
+
+    .map.styling {
+        height: calc(100vh - 107px) !important;
+    }
+
     .desktop .groupedPageLinks {
         display: none;
     }
