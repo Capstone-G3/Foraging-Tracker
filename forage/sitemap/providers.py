@@ -5,7 +5,6 @@ from folium.raster_layers import TileLayer
  # Dictionary Attribute Access Providers
 providers_list = [
     providers.OpenStreetMap,
-    providers.Stadia,
     providers.OpenSeaMap,
     providers.OPNVKarte,
     providers.OpenTopoMap,
@@ -62,3 +61,6 @@ class MapStyleProvider:
                     return option
                 
         raise KeyError("Tile Option cannot be found.")
+    
+    def get_all_options(self):
+        return self.__tile_sets__

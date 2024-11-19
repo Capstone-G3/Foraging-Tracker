@@ -7,15 +7,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="https://code.jquery.com/jquery-3.6.0.min.js">
+    <link rel="https://code.jquery.com/jquery-3.6.0.min.js">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'css/feed.css' %}">
     <style>
         .wrapper {
             display: flex;
-            height: 100vh;
+            height: calc(100vh - 74px);
             background-size: cover;
             background-position: center;
             position:relative;
@@ -26,139 +25,6 @@
                 background-image: url('{% static "img/Default_Background.jpg" %}')
             {% endif %}
         }
-        .nav {
-            width: 200px;
-            height: auto;
-            background-color: transparent;
-            opacity: 90%;
-            padding-top: 5px;
-            flex-shrink: 0;
-        }
-        .nav-link {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            color: floralwhite;
-            background-color: black;
-
-            border: 1px solid transparent;
-            text-align: center;
-            text-decoration: none;
-        }
-        .nav-link:hover {
-            background-color: black;
-            opacity: 85%;
-            color: #fff;
-        }
-        .navbar-nav{
-            display: inline-block;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            color: floralwhite;
-            background-color: black;
-
-            border: 1px solid transparent;
-            text-align: center;
-            text-decoration: none;
-        }
-        .container {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .search-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .search-container input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-
-        .button-container button {
-            flex: 1;
-            padding: 10px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-    
-        .image-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .marker-image {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .more-options {
-            position: absolute;
-            top: 10px;  /* Adjust as needed */
-            right: 10px;  /* Adjust as needed */
-            background-color: rgba(0, 0, 0, 0.1);  /* Optional: background for better visibility */
-            color: white;
-            padding: 5px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;  /* Adjust as needed */
-            display: flex;
-            flex-direction: column;  /* Arrange dots vertically */
-            align-items: center;  /* Center dots horizontally */
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            background-color: white;
-            border-radius: 50%;
-            display: block;
-            margin: 2px 0;  /* Adjust vertical spacing between dots */
-            transition: background-color 0.3s;
-        }
-
-        .dot:hover {
-            background-color: #333;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-
     </style>
 </head>
 <body>
@@ -172,137 +38,74 @@
         </script>
     {% endif %}
     <div class="wrapper">
-        <nav class="nav flex-column">
-            <a class="nav-link">
-                <div class="search-container">
-
-                    <form method="GET" action="{% url 'feed' %}">
-                        <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q|default_if_none:'' }}">
-                        <button type="submit">Search</button>
-                        <button type="button" onclick="clearSearch()">Clear</button>
-                    </form>
-                </div>
-            </a>
-            <a class="nav-link" href="{% url 'create_marker' %}">Create New Marker</a>
-        <!--
-            <a class="nav-link" href="#">Friends</a>
-            <a class="nav-link" href="#">Groups</a>
-            <a class="nav-link" href="#">Notifications</a>
-        -->
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFilter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Filter Content
-            </a>
-        <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
-            min-width: 200px; /* Ensure a minimum width */
-            background-color: black !important;
-            color: floralwhite;height: 200px;
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;">
-                Species
-                <div class="dropdown-divider"></div>
-                <form method="get" class="filter-form">
-                    {% for species in species_list %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="species" value="{{ species.name }}" id="species{{ forloop.counter }}" {% if species.name in species_filter %}checked{% endif %}>
-                            <label class="form-check-label" for="species{{ forloop.counter }}">
-                                {{ species.name }}
-                            </label>
-                        </div>
-                    {% endfor %}
-                    <div class="dropdown-divider"></div>
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
-                </form>
-            <br>
-                Groups
-            <div class="dropdown-divider"></div>
-            <form method="get" class="filter-form">
-                    {% for group in user_groups %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="group" value="{{ group.name }}" id="group{{ forloop.counter }}" {% if group.name in group_filter %}checked{% endif %}>
-                            <label class="form-check-label" for="group{{ forloop.counter }}">
-                                {{ group.name }}
-                            </label>
-                        </div>
-                    {% empty %}
-                        <p>No groups found.</p>
-                    {% endfor %}
-                    <div class="dropdown-divider"></div>
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
-                </form>
-            {% if friends is not None %}
-                <br>
-                Friends
-            <div class="dropdown-divider"></div>
-            <form method="get" class="filter-form">
-                    {% for friend in friends %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="friend" value="{{ friend.user.username }}" id="friend{{ forloop.counter }}" {% if friend.user.username in friend_filter %}checked{% endif %}>
-                            <label class="form-check-label" for="friend{{ forloop.counter }}">
-                                {{ friend.user.username }}
-                            </label>
-                        </div>
-                    {% empty %}
-                        <p>No friends found.</p>
-                    {% endfor %}
-                    <div class="dropdown-divider"></div>
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
-                </form>
-            {% endif %}
+        <div class="filterContainer">
+            <div class="filterIcon">
+                <a onclick="toggleFilters()"><img src="/static/css/images/filter_icon.png" width="30" height="30" alt="Filter Icon"></a>
             </div>
-
-
-        <ul class="navbar-nav">
-            <li>
-            <!-- Second Dropdown -->
-            <a class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Make Connections!
+            <nav class="nav flex-column" id="filtersContainer">
+                <a class="nav-link search">
+                    <div class="search-container">
+                        <form class="searchFilter" method="GET" action="{% url 'feed' %}">
+                            <input type="text" name="q" placeholder="Search user posts..." value="{{ request.GET.q|default_if_none:'' }}">
+                            <button type="submit">Search</button>
+                            <button type="button" onclick="clearSearch()">Clear</button>
+                        </form>
+                    </div>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="width: auto !important;
-            min-width: 250px; /* Ensure a minimum width */
-            background-color: black !important;
-            color: floralwhite;">
-                    <form method="GET" action="{% url 'feed' %}">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">@</span>
-                          </div>
-                        <input type="text" name="u" placeholder="Search users..." value="{{ request.GET.u|default_if_none:'' }}">
-                            </div>
-                        <button type="submit">Search</button>
-                        <button type="button" onclick="clearSearch()">Clear</button>
+                <a class="nav-link search">
+                    <div class="search-container">
+                        <form class="searchFilter" method="GET" action="{% url 'feed' %}">
+                            <input type="text" name="u" placeholder="Search users..." value="{{ request.GET.u|default_if_none:'' }}">
+                            <button type="submit">Search</button>
+                            <button type="button" onclick="clearSearch()">Clear</button>
+                        </form>
+                    </div>
+                </a>
+                <a class="nav-link search">
+                    <div class="search-container">
+                        <form class="searchFilter" method="GET" action="{% url 'feed' %}">
+                            <div class="input-group">
+                            <input type="text" name="g" placeholder="Search groups..." value="{{ request.GET.g|default_if_none:'' }}">
+                                </div>
+                            <button type="submit">Search</button>
+                            <button type="button" onclick="clearSearch()">Clear</button>
+                        </form>
+                    </div>
+                </a>
 
+                <!--
+                <a class="nav-link" href="#">Friends</a>
+                <a class="nav-link" href="#">Groups</a>
+                <a class="nav-link" href="#">Notifications</a>
+            -->
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFilter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter Content
+                </a>
+            <!-- added css styling inside the div so it didn't override main nav dropdown menu -->
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownFilter" style="width: auto !important;
+                min-width: 200px; /* Ensure a minimum width */
+                background-color: black !important;
+                color: floralwhite;height: 200px;
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;">
+                    Species
+                    <div class="dropdown-divider"></div>
+                    <form method="get" class="filter-form">
+                        {% for species in species_list %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="species" value="{{ species.name }}" id="species{{ forloop.counter }}" {% if species.name in species_filter %}checked{% endif %}>
+                                <label class="form-check-label" for="species{{ forloop.counter }}">
+                                    {{ species.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
                     </form>
                 </div>
-            </a>
-            </li>
-            <li>
-            <a class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Search Groups
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" style="width: auto !important;
-            min-width: 250px; /* Ensure a minimum width */
-            background-color: black !important;
-            color: floralwhite;">
-                    <form method="GET" action="{% url 'feed' %}">
-                        <div class="input-group">
-                        <input type="text" name="g" placeholder="Search groups..." value="{{ request.GET.g|default_if_none:'' }}">
-                            </div>
-                        <button type="submit">Search</button>
-                        <button type="button" onclick="clearSearch()">Clear</button>
-
-                    </form>
-                </div>
-            </a>
-            </li>
-        </ul>
-
+            </div>
         </nav>
         <div class="container">
         {% if markers is not None %}
@@ -505,6 +308,14 @@
                         });
                     });
                 });
+                function toggleFilters() {
+                    const filtersContainer = document.getElementById(`filtersContainer`);
+                    if (filtersContainer.style.display === "none") {
+                        filtersContainer.style.display = "block";
+                    } else {
+                        filtersContainer.style.display = "none";
+                    }
+                }
                 function clearSearch() {
                     window.location.href = "{% url 'feed' %}";
                 }

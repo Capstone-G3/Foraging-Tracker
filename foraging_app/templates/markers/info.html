@@ -1,21 +1,35 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css/info_marker.css'%}">
     <title>{{marker.title}}</title>
 </head>
 <body>
-    {%for key,value in marker%}
-        {%if key != 'image'%}
-            <p><strong>{{key|upper}}</strong> : {{value}}</p>
-        {%else%}
-            <img src="{{value}}" height="100", width="100">
+    <div class="pane-display info-pane-container">
+        {%for key,value in marker%}
+            {%if key != 'image'%}
+                <p><strong>{{key|upper}}</strong> : {{value}}</p>
+            {%else%}
+                <img src="{{value}}" height="100", width="100">
+            {%endif%}
+        {%endfor%}
+        <p>Total Likes : {{total_likes}}</p>
+        
+        {%if request.user%}
+            {%if request.user.id == owner.id%}
+                <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
+                
+                <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
+                    {%csrf_token%}
+                    <input type="submit" value="Delete">
+                </form>
+            {%endif%}
         {%endif%}
-    {%endfor%}
-    <p>Total Likes : {{total_likes}}</p>
-    
-    <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
-
+    </div>
+    <div class="pane-display map-pane-container">
+        {{map | safe}}
+    </div>
 </body>
 </html>

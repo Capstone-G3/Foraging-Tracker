@@ -18,16 +18,27 @@
                 <form method="post", action="{% url 'create_marker'%}", enctype="multipart/form-data" class="data">
                     {%csrf_token%}
                     {{form}}
+                    {{marker_form}}
+                        {%if species_form%}
+                            <div id="species_form">
+                                {{species_form}}
+                            </div>
+                        {%endif%}
                     <input type="submit" value="Create">
-                </form>
-                {%if messages%}
-                    {%for message in messages%}
-                        <p class="message-{{message.tags}}">{{message}}</p>
-                    {%endfor%}
-                {%endif%}
+                </form>                
             </div>
         </div>
-    </div>
+        {{map | safe}}
+        {%if messages%}
+            {%for message in messages%}
+                <p class="message-{{message.tags}}">{{message}}</p>
+            {%endfor%}
+        {%endif%}
+
+        {% if species_form %}
+            <script src="{% static 'script/marker/create.js'%}"></script>
+        {%endif%}
+    </div>    
 </body>
 </html>
 {% endblock %}
