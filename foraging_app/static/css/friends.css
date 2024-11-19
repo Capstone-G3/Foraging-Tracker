@@ -1,0 +1,45 @@
+.friendsLink {
+    background-color: #3c9e51;
+}
+
+.main-container {
+    display: flex;            
+    justify-content: space-between; 
+    height: 100vh;            
+}
+
+.sections {
+    width: 33%;              
+    padding: 20px;            
+    overflow-y: auto;        
+}
+
+.image-container {
+    display: block;          
+    margin-bottom: 30px;    
+    padding: 15px;         
+    border: 1px solid #ddd;    
+    border-radius: 10px;     
+    background-color: #f9f9f9;  
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;        
+    gap: 15px;               
+}
+
+button {
+    background-color: green; 
+    color: white;              
+    padding: 10px 20px;       
+    border: none;               
+    border-radius: 25px;      
+    cursor: pointer;            
+    font-size: 16px;           
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+button:hover {
+    background-color: darkgreen; 
+    transform: scale(1.05);       
+}

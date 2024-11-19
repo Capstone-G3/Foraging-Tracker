@@ -1,3 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    padding: 0px 15px;
+    height: 74px;
+    align-content: center;
+}
+
 .dropdown-menu {
     background-color: white !important;
     width: 400px !important; /* Increase width */
@@ -9,17 +22,13 @@
     padding: 10px !important; /* Padding for aesthetic look */
 }
 
-
 .custom-dropdown-width.show {
     align-content: normal;
     width: 300px; /* Adjust the width as needed */
-    height: 200px;
     left: -200px;
     right: 0px;
     margin: 1px;
 }
-
-
 
 /* Ensure dropdown items are styled correctly */
 .dropdown-item {
@@ -29,6 +38,10 @@
     display: block !important;
     font-size: 15px !important; /* Increase font size */
     line-height: 1.5 !important; /* Adjust line height */
+    padding: 12px 16px !important
+}
+
+.dropdown-menu > *:not(:first-child) > *:not(:last-child) {
     border-bottom: 1px solid #ddd !important; /* Add border for separation */
 }
 
@@ -36,5 +49,52 @@
     background-color: #f1f1f1 !important;
 }
 
+.nav-item {    
+    border-radius: 10px;
+}
 
+.nav-link {
+    height: 74px;
+    align-items: center;
+    display: flex;
+}
 
+.dropdown {
+    height: 74px;
+    display: flex;
+    align-items: center;
+}
+
+#dropdownMenuButton {
+    height: 100%;
+}
+
+.desktop {
+    display: flex;
+}
+
+.mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .navbar, #dropdownMenuButton {
+        height: 54px;
+    }
+
+    .desktop {
+        display: none;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .mobile {
+        display: flex !important;
+    }
+
+    .custom-dropdown-width.show {
+        left: -170px;
+    }
+}

@@ -1,8 +1,10 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
+.categoriesLink {
+    background-color: #3c9e51;
+}
+
+.categoriesLink {
+    background-color: #3c9e51;    
+    border-radius: 20px;
 }
 
 h1 {
@@ -17,6 +19,7 @@ h1 {
     display: flex;
     justify-content: right;
     margin-bottom: 20px;
+    padding: 0px 20px;
 }
 
 .search-container form {
@@ -28,7 +31,7 @@ h1 {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ddd;
-    border-radius: 5px 0 0 5px;
+    border-radius: 5px;
     outline: none;
 }
 
@@ -39,7 +42,7 @@ h1 {
     border-left: none;
     background-color: #004d00;
     color: #fff;
-    border-radius: 0 5px 5px 0;
+    border-radius: 5px;
     cursor: pointer;
     margin-left: 5px;
 }
@@ -132,5 +135,16 @@ h1 {
 .no-categories-message {
     text-align: right;
     margin: 20px 0;  /* Optional: adjust spacing as needed */
+    justify-content: center;
+    display: flex;
 }
 
+@media only screen and (max-width: 640px) {
+    .search-container button {
+        padding: 10px 10px;
+    }
+
+    .search-container {
+        justify-content: center;
+    }
+}
