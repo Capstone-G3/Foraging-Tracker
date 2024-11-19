@@ -30,6 +30,7 @@ class GroupPageTest(TestCase):
         )
         self.user_profile = User_Profile.objects.create(home_address='1111 N test st',
                                                         phone='5555555555',
+                                                        birthday=datetime.datetime(2002, 1, 3),
                                                         gender=1,
                                                         user_id=self.user)
         self.client.post(self.login_url, {'username': self.user.username, 'password': self.user.password})

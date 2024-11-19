@@ -10,7 +10,6 @@ class LikeMarkerView(View):
         marker = Marker.objects.get(id=marker_id)
         user = request.user
         like, created = Like_Marker.objects.get_or_create(user_id=user, marker_id=marker)
-        if marker.like_marker_set.count() == 5: marker.owner.rating += 50  # Assign points for getting 10 likes on a post
         if not created:
             like.delete()
             liked = False
