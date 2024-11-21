@@ -21,79 +21,104 @@
 </head>
 <body>
     <div class="behind">
-   <div class="main-container">
+    <div class="main-container">
    
     <div class="sections">
-        <h2>Friends</h2>
-        {% for friend in friends %}
-            <div class="image-container">
-                <div class="owner-info">
-                    {% if friend.profile_image %}
-                        <img src="{{ friend.profile_image.url }}" alt="{{ friend.username }}" class="profile-image">
-                    {% else %}
-                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
-                    {% endif %}
-                    <a href="{% url 'user' userId=friend.id %}"><h4>{{ friend.username }}</h4></a>
+        <div class="sectionHeader">
+            <h2>Friends</h2>
+            <div class="arrow-up" id="friendsArrow" onclick="hideSection('friendsContainer', 'friendsArrow')"></div>
+        </div>
+        <div id="friendsContainer">
+            {% for friend in friends %}
+                <div class="image-container">
+                    <div class="owner-info">
+                        {% if friend.profile_image %}
+                            <img src="{{ friend.profile_image.url }}" alt="{{ friend.username }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <a href="{% url 'user' userId=friend.id %}"><h4>{{ friend.username }}</h4></a>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-
+            {% endfor %}
+        </div>
     </div>
 
     
-        <div class="sections">
-        <h2>Users</h2>
-        {% for u in all_users %}
-            <div class="image-container">
-                <div class="owner-info">
-                    {% if u.profile_image %}
-                        <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">
-                    {% else %}
-                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
-                    {% endif %}
-                    <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>
-
-                    {% if u.id != user.id %} 
-                        {% if u.id in sent_friend_request_users %}
-                            <span>pending</span>
+    <div class="sections">
+        <div class="sectionHeader">
+            <h2>Users</h2>
+            <div class="arrow-up" id="usersArrow" onclick="hideSection('usersContainer', 'usersArrow')"></div>
+        </div>
+        <div id="usersContainer">
+            {% for u in all_users %}
+                <div class="image-container">
+                    <div class="owner-info">
+                        {% if u.profile_image %}
+                            <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">
                         {% else %}
-                            <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Add</button>
-                            </form>
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                         {% endif %}
-                    {% endif %}
+                        <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>
+
+                        {% if u.id != user.id %} 
+                            {% if u.id in sent_friend_request_users %}
+                                <span>pending</span>
+                            {% else %}
+                                <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Add</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
    
    
    <div class="sections">
-        <h2>Requests</h2>
-        {% for request in received_requests %}
-          
-            <div class="image-container">
-                <div class="owner-info">
-                    {% if request.uid_sender.profile_image %}
-                        <img src="{{ request.uid_sender.profile_image.url }}" alt="{{ request.uid_sender.username }}" class="profile-image">
-                    {% else %}
-                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
-                    {% endif %}
-                    <a href="{% url 'user' userId=request.uid_sender.id %}"><h4>{{ request.uid_sender.username }}</h4></a>
-                    <form method="post" action="{% url 'accept_friend_request' user_id=request.uid_sender.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Accept</button>
-                    </form>
-                    
+        <div class="sectionHeader">
+            <h2>Requests</h2>
+            <div class="arrow-up" id="requestsArrow" onclick="hideSection('requestsContainer', 'requestsArrow')"></div>
+        </div>
+        <div id="requestsContainer">
+            {% for request in received_requests %}            
+                <div class="image-container">
+                    <div class="owner-info">
+                        {% if request.uid_sender.profile_image %}
+                            <img src="{{ request.uid_sender.profile_image.url }}" alt="{{ request.uid_sender.username }}" class="profile-image">
+                        {% else %}
+                            <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                        {% endif %}
+                        <a href="{% url 'user' userId=request.uid_sender.id %}"><h4>{{ request.uid_sender.username }}</h4></a>
+                        <form method="post" action="{% url 'accept_friend_request' user_id=request.uid_sender.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Accept</button>
+                        </form>
+                        
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    
-    </div>
-    
-    
-</div>>
+            {% endfor %}
+        </div>
+    </div> 
+    <script>        
+        function hideSection(sectionId, arrowId) {
+            const sectionContents = document.getElementById(sectionId);
+            const sectionArrow = document.getElementById(arrowId);
+            if (sectionArrow.classList.contains("arrow-up")) {
+                sectionContents.style.display = "none";
+                sectionArrow.classList.add("arrow-down");
+                sectionArrow.classList.remove("arrow-up");
+            } else {
+                sectionContents.style.display = "block";
+                sectionArrow.classList.add("arrow-up");
+                sectionArrow.classList.remove("arrow-down");
+            }
+        }
+    </script>
+</div>
 </div>
 </body>
 </html>
