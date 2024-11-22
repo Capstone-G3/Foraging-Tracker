@@ -30,6 +30,7 @@ from foraging_app.views.edit_profile import EditProfileView
 from foraging_app.views.delete_account import DeleteUserView
 from foraging_app.views.categories import CategoriesView, CategoryDetailView
 from foraging_app.views.like_view import LikeMarkerView
+from foraging_app.views.leaderboard import LeaderboardView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.core.mail import send_mail
@@ -89,6 +90,7 @@ urlpatterns = [
     path('reject_friend_request/<int:user_id>/', RejectFriendRequestView.as_view(), name='reject_friend_request'),
     path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend'),
     path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
+    path('leaderboard/', LeaderboardView.as_view(), name='leaderboard')
 ]
 
 # Remove for Production

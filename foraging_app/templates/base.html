@@ -97,8 +97,10 @@
                         <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                         <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
                         <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
-                        <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                        
                     {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                        <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
                     {% endif %}
                         
@@ -159,8 +161,10 @@
                             <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
                             <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
-                            <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                            
                         {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                            <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
                         {% endif %}
                             

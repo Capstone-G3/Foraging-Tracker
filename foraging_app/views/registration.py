@@ -25,6 +25,8 @@ class Register_View(View):
             profile.save()
             friend_list = Friend.objects.create(user=user)
             friend_list.save()
+            user.rating += 1 #counts as a "daily login"
+            user.save()
             login(request, user)
             return redirect('login')  # Redirect to a login page after successful registration
         else:

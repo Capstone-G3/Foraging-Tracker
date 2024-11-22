@@ -8,13 +8,13 @@ class User(AbstractUser):
     """
         Forage User Class with custom fields.
     """
-    BADGE = (
-        ("Diamond", 100000),
-        ("Platinum", 10000),
-        ("Gold", 1000),
-        ("Silver", 100),
-        ("Bronze", 10)
-    )
+    BADGE = {
+        "Diamond": 100000,
+        "Platinum": 10000,
+        "Gold": 1000,
+        "Silver": 100,
+        "Bronze": 10
+    }
     is_active=True
 
     id = AutoField(primary_key=True, editable=False)
@@ -56,6 +56,12 @@ class User(AbstractUser):
             groups.append(Group.objects.get(id=x))
         return groups
 
+    def get_badge(self):
+        for badge, threshold in self.BADGE.items():
+            if self.rating >= threshold:
+                return badge
+        return "No Badge"
+
 
 class User_Profile(Model):
     MALE=2
@@ -73,7 +79,7 @@ class User_Profile(Model):
     phone = CharField(max_length=15, default=None)
     bio = CharField(max_length=500, blank=True)
     age = IntegerField(blank=True, null=True)
-    # birthday = DateField(auto_now=False, null=False, default=datetime.datetime(1000,1,1))
+    birthday = DateField(auto_now=False, null=False, default=datetime.datetime(1000,1,1))
     gender= IntegerField(choices=GENDER,default=MALE)
     user_id= ForeignKey(User, on_delete=CASCADE)
 

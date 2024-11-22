@@ -33,6 +33,14 @@
     line-height: normal;
 }
 
+.badge-icon {
+    width: 25px; /* Adjust as needed */
+    height: 25px; /* Adjust as needed */
+    margin-left: 10px; /* Space between icon and badge */
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .username {
     font-size: 24px;
 }

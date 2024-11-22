@@ -19,8 +19,8 @@
                 background-position: center;
                 position:relative;
                 background-repeat: no-repeat;
-                {% if user.profile_image %}
-                    background-image: url('{{ user.profile_image.url }}');
+                {% if userModel.profile_image %} 
+                    background-image: url('{{ userModel.profile_image.url }}');
                 {% else %}
                     background-image: url('{% static "img/Default_Background.jpg" %}')
                 {% endif %}
@@ -35,7 +35,7 @@
                         <div>
                             <div class="topLeftContainer">
                                 <div class="profilePhoto desktop">
-                                    <img class="rounded-circle" src={{profilePhoto}} width="100" height="100" alt="User Icon">
+                                    <img class="rounded-circle" src={{profilePhoto}} width  ="100" height="100" alt="User Icon">
                                 </div>
                                 <div class="profilePhoto mobile">
                                     <img class="rounded-circle" src={{profilePhoto}} width="50" height="50" alt="User Icon">
@@ -44,6 +44,21 @@
                                     <div class="username">
                                         {% if userModel != None %}                                            
                                             {{userModel}}
+                                            {% if userModel.rating > 9 %}
+                                                {% with userModel.get_badge as badge %}
+                                                    {% if badge == "Diamond" %}
+                                                        <img src="{% static 'img/diamond-badge.png' %}" alt="Diamond Badge" class="badge-icon">
+                                                    {% elif badge == "Platinum" %}
+                                                        <img src="{% static 'img/platinum-badge.png' %}" alt="Platinum Badge" class="badge-icon">
+                                                    {% elif badge == "Gold" %}
+                                                        <img src="{% static 'img/gold-badge.png' %}" alt="Gold Badge" class="badge-icon">
+                                                    {% elif badge == "Silver" %}
+                                                        <img src="{% static 'img/silver-badge.png' %}" alt="Silver Badge" class="badge-icon">
+                                                    {% elif badge == "Bronze" %}
+                                                        <img src="{% static 'img/bronze-badge.png' %}" alt="Bronze Badge" class="badge-icon">
+                                                    {% endif %}
+                                                {% endwith %}
+                                            {% endif %}
                                         {% else %}
                                             User Does Not Exist
                                         {% endif %}
