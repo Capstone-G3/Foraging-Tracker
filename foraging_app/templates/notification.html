@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+    <head>
+    <title>{% block title %}Notifications{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/notification.css' %}">
+    </head>
+    <div class="head-container">
+  <h2>Notifications</h2>
+    <form class="center-form" method="post" action="{% url 'mark_notifications_as_read' %}">
+    {% csrf_token %}
+    <button type="submit">Mark all as read</button>
+  </form>
+  <ul class="notification-list">
+    {% for notification in notifications %}
+      <li class="notification-item">
+      <div class="notification-message">
+          {{ notification.message }} - {{ notification.created_at }} 
+      {% if notification.marker %}
+          <a href="{% url 'info_marker' notification.marker.id %}">Click to view</a>
+        {% endif %}
+      </div>
+      
+      {% if not notification.is_read %}
+          <form action="{% url 'mark_notification_as_read' notification.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Mark as read</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+    
+    </div>
+{% endblock %}

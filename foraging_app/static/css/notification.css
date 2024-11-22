@@ -1,0 +1,73 @@
+.head-container h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.notification-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.notification-item {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #f1f1f1;
+}
+
+
+
+/* Notification Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+.center-form {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    margin-bottom: 20px;      /* Adds some space below the form */
+}
+
+.center-form button {
+    background-color: #4CAF50; /* Green background */
+    color: white;              /* White text */
+    padding: 10px 20px;        /* Padding */
+    border: none;              /* No border */
+    border-radius: 5px;        /* Rounded corners */
+    cursor: pointer;           /* Pointer cursor on hover */
+}
+
+.center-form button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.notification-list .notification-item button {
+    background-color: #4CAF50; /* Green background */
+    color: white;              /* White text */
+    width: 150px;
+    border: none;              /* No border */
+    border-radius: 5px;        /* Rounded corners */
+    cursor: pointer;           /* Pointer cursor on hover */
+    font-size: 16px;           /* Font size */
+    margin-left: 5px;             /* Margin */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+
+

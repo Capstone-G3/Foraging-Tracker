@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from foraging_app.forms.group import GroupCreateForm
 from foraging_app.models.group import Group, User_Group
 from foraging_app.forms import group, CommentForm
+from foraging_app.models.notification import Notification
 from foraging_app.models.user import User
 from django.contrib.auth.hashers import make_password
 from foraging_app.models import Marker
@@ -43,6 +44,8 @@ class Group_View(LoginRequiredMixin,View):
     def post(self, request, groupID):
         thisGroup = Group.objects.get(id=groupID)
         if thisGroup.isPrivate:
+            notification_message = f"{request.user} has requested to join your group {thisGroup.name}. Please visit your email to accept."
+            Notification.objects.create(user=thisGroup.user_admin, message=notification_message)
             # TODO: set up request system for private groups
             text_content = render_to_string("emails/request_private_join.txt")
             html_content = render_to_string("emails/request_private_group_join.html",
@@ -76,6 +79,8 @@ class Request_Private_Group_Join_View(LoginRequiredMixin,View):
                   "Yippee!  You were accepted into the group " + thisGroup.name,
                   "<EMAIL>",
                   [newMember.email])
+        notification_message = f"Congratulations! You've been accepted into {thisGroup.name}."
+        Notification.objects.create(user=newMember, message=notification_message)
         return redirect('group', groupID)
 
 

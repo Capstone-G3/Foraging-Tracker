@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from foraging_app.models.user import User
 from foraging_app.models.friend import Friend, Friend_Request
+from foraging_app.models.notification import Notification
 
 
 class FriendsView(LoginRequiredMixin, View):
@@ -54,6 +55,10 @@ class FriendsView(LoginRequiredMixin, View):
 
         if not Friend_Request.objects.filter(uid_receiver=user_to_add, uid_sender=user_sender):
             Friend_Request.objects.create(uid_receiver=user_to_add, uid_sender=user_sender)
+        Notification.objects.create(
+            user=user_to_add,
+            message=f'{user_sender.username} sent you a friend request.'
+        )
         return redirect('friends')
 
 
@@ -62,6 +67,10 @@ class AcceptFriendRequestView(LoginRequiredMixin, View):
         user = request.user
         user_to_add = User.objects.get(id=user_id)
         Friend_Request.objects.get(uid_receiver=user, uid_sender=user_to_add).accept()
+        Notification.objects.create(
+            user=user_to_add,
+            message=f'{user.username} accepted your friend request.'
+        )
         return redirect('friends')
 
 

@@ -1,6 +1,6 @@
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 
@@ -143,31 +143,27 @@ class Marker_Delete_View(LoginRequiredMixin, View):
 
 class Marker_Details_View(LoginRequiredMixin, View):
     def get(self,request,marker_id):
-        query = Marker.objects.get(id=marker_id)
-        query_likes = Like_Marker.objects.filter(marker_id=marker_id)
-        users = []
-        
-        for user_like in query_likes:
-            user = User.objects.get(id=user_like.id)
-            if user :
-                users.append(user)
+        marker = get_object_or_404(Marker, id=marker_id)
+        likes = Like_Marker.objects.filter(marker_id=marker_id)
+        total_likes = likes.count()
+        users = User.objects.filter(id__in=likes.values_list('user_id', flat=True))[:3]
         
         figure = InformationMap()
-        figure.add_marker(location=(query.latitude,query.longitude))
+        figure.add_marker(location=(marker.latitude,marker.longitude))
         data = {
-            'title' : query.title,
-            'owner_name' : "@" + str(query.owner.username),
-            'latitude' : query.latitude,
-            'longitutde' : query.longitude,
-            'description' : query.description,
-            'species' : query.species,
-            'found' : query.created_date,
-            'image' : query.image.url,
+            'title' : marker.title,
+            'owner_name' : "@" + str(marker.owner.username),
+            'latitude' : marker.latitude,
+            'longitutde' : marker.longitude,
+            'description' : marker.description,
+            'species' : marker.species,
+            'found' : marker.created_date,
+            'image' : marker.image.url,
         }
 
         return render(request,'markers/info.html',{
             'marker' : data.items(),
-            'owner' : query.owner,
+            'owner' : marker.owner,
             'users_like': users[0:3],
             'total_likes' : len(users),
             'url_resolve' : marker_id,
