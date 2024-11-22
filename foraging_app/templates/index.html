@@ -56,6 +56,7 @@
                 </div>
             </div>
             <div class="userLink ml-auto">
+                
                 <div class="dropdown">
                     {% if not user.is_authenticated %}
                         <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
@@ -71,6 +72,12 @@
                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
                         {% endif %}
                     </button>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'notifications' %}">
+                            <img src="{% static 'img/email_icon.png' %}" alt="Email Icon" class="email-icon">
+                        <span id="notification-badge" class="notification-badge" style="display: none;"></span>
+                        </a>
+                    {% endif %}
                     <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-header">
                             {% if user.profile_image %}
@@ -130,3 +137,25 @@
     </div>
 </body>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updateNotificationCount() {
+        fetch('/api/notifications/count/')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('notification-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching notification count:', error));
+    }
+
+    // Update the notification count on page load
+    updateNotificationCount();
+
+});
+</script>

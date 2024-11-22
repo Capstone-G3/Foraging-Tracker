@@ -10,7 +10,26 @@ body {
     height: 74px;
     align-content: center;
 }
-
+.email-icon {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.email-icon:hover {
+    opacity: 0.7; /* Add a hover effect if desired */
+}
+.notification-badge {
+    position: absolute;
+    top: 12px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 9px;
+    font-weight: bold;
+}
 .dropdown-menu {
     background-color: white !important;
     width: 400px !important; /* Increase width */
