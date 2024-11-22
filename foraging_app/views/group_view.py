@@ -46,6 +46,7 @@ class Group_View(LoginRequiredMixin,View):
         if thisGroup.isPrivate:
             notification_message = f"{request.user} has requested to join your group {thisGroup.name}. Please visit your email to accept."
             Notification.objects.create(user=thisGroup.user_admin, message=notification_message)
+
             # TODO: set up request system for private groups
             text_content = render_to_string("emails/request_private_join.txt")
             html_content = render_to_string("emails/request_private_group_join.html",
