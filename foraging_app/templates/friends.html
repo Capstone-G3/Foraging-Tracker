@@ -9,24 +9,25 @@
     <title>Friends</title>
     <style>
 .main-container {
-    display: flex;            
-    justify-content: space-between; 
-    height: 100vh;            
+    display: flex;
+    flex-direction: column;      
 }
 
 .sections {
-    width: 33%;              
-    padding: 20px;            
+    display: block;
+    width: 100%;
+    padding: 20px;
     overflow-y: auto;        
 }
 
 .image-container {
-    display: block;          
-    margin-bottom: 30px;    
-    padding: 15px;         
-    border: 1px solid #ddd;    
-    border-radius: 10px;     
-    background-color: #f9f9f9;  
+    display: inline-block; 
+    margin-bottom: 30px;
+    padding: 20px; 
+    border: 1px solid grey;
+    border-radius: 10px;
+    {#background-color: #6FC081;#}
+    
 }
 
 .owner-info {
@@ -43,7 +44,7 @@
 }
 
 button {
-    background-color: green; 
+    background-color: #084708;
     color: white;              
     padding: 10px 20px;       
     border: none;               
@@ -52,10 +53,17 @@ button {
     font-size: 16px;           
     transition: background-color 0.3s ease, transform 0.2s ease; 
 }
-button:hover {
-    background-color: darkgreen; 
-    transform: scale(1.05);       
+.button-2 {
+    background-color: red; 
+    color: white;              
+    padding: 10px 20px;       
+    border: none;               
+    border-radius: 25px;      
+    cursor: pointer;            
+    font-size: 16px;           
+    transition: background-color 0.3s ease, transform 0.2s ease; 
 }
+
     </style>
 </head>
 <body>
@@ -73,45 +81,22 @@ button:hover {
                         <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                     {% endif %}
                     <a href="{% url 'user' userId=friend.id %}"><h4>{{ friend.username }}</h4></a>
-                </div>
-            </div>
-        {% endfor %}
-
-    </div>
-
-    
-        <div class="sections">
-        <h2>Users</h2>
-        {% for u in all_users %}
-            <div class="image-container">
-                <div class="owner-info">
-                    {% if u.profile_image %}
-                        <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">
-                    {% else %}
-                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
-                    {% endif %}
-                    <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>
-
-                    {% if u.id != user.id %} 
-                        {% if u.id in sent_friend_request_users %}
-                            <span>pending</span>
-                        {% else %}
-                            <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">
+                    <form method="post" action="{% url 'remove_friend' user_id=friend.id %}">
                                 {% csrf_token %}
-                                <button type="submit">Add</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
+                                <button type="submit" class="button-2">Unfriend</button>
+                        </form>
                 </div>
             </div>
         {% endfor %}
+
     </div>
-   
+
+
    
    <div class="sections">
-        <h2>Requests</h2>
+        <h2>Incoming Requests</h2>
         {% for request in received_requests %}
-          
+
             <div class="image-container">
                 <div class="owner-info">
                     {% if request.uid_sender.profile_image %}
@@ -124,15 +109,38 @@ button:hover {
                                 {% csrf_token %}
                                 <button type="submit">Accept</button>
                     </form>
+                    <form method="post" action="{% url 'reject_friend_request' user_id=request.uid_sender.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="button-2">Reject</button>
+                    </form>
                     
                 </div>
             </div>
         {% endfor %}
-    
     </div>
-    
-    
-</div>>
+
+      <div class="sections">
+        <h2>Sent Requests</h2>
+        {% for request in sent_friend_request %}
+
+            <div class="image-container">
+                <div class="owner-info">
+                    {% if request.uid_receiver.profile_image %}
+                        <img src="{{ request.uid_receiver.profile_image.url }}" alt="{{ request.uid_receiver.username }}" class="profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
+                    {% endif %}
+                    <a href="{% url 'user' userId=request.uid_receiver.id %}"><h4>{{ request.uid_receiver.username }}</h4></a>
+                        <form method="post" action="{% url 'cancel_friend_request' user_id=request.uid_receiver.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button-2">cancel</button>
+                        </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+   
+</div>
 </div>
 </body>
 </html>

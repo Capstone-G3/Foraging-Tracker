@@ -23,7 +23,28 @@
                 {% else %}
                     background-image: url('{% static "img/Default_Background.jpg" %}')
                 {% endif %}
-            }            
+            }  
+            .add_friend_button {
+                background-color: #084708;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                
+            }
+            .unfriend_button{
+                background-color: white; 
+                color: #084708;              
+                padding: 10px 20px;       
+                border: none;               
+                border-radius: 25px;      
+                cursor: pointer;            
+                font-size: 16px;           
+                transition: background-color 0.3s ease, transform 0.2s ease; 
+            }
         </style>
     </head>
     <body>
@@ -54,6 +75,31 @@
                                     <div class="desktop userAssociations">
                                         <div>Friends: {{ friend_count }}</div>
                                         <div>Groups: 0</div>
+                                    </div>
+                                    <div>
+                                        {% if not isPersonalAccount %}
+                                            {% if is_friend %}
+                                                <form method="post" action="{% url 'remove_friend' user_id=user_to_add.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="unfriend_button">Unfriend</button>
+                                                </form>
+                                            {% elif user_to_add.id in sent_friend_request_users %}
+                                                <form method="post" action="{% url 'cancel_friend_request' user_id=user_to_add.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="add_friend_button">cancel</button>
+                                                </form>
+                                            {% elif this_user == received_friend_request.uid_receiver %} 
+                                                <form method="post" action="{% url 'accept_friend_request' user_id=user_to_add.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="add_friend_button">Accept</button>
+                                            </form>
+                                            {% else %}
+                                                <form method="post" action="{% url 'send_friend_request' user_id=user_to_add.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="add_friend_button">Add</button>
+                                                </form>
+                                            {% endif %}
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

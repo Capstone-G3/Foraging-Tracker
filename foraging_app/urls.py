@@ -34,7 +34,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from foraging_app.views.friends import AcceptFriendRequestView, RejectFriendRequestView, \
-    FriendsView, RemoveFriendView
+    FriendsView, RemoveFriendView, CancelFriendRequestView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -90,6 +90,7 @@ urlpatterns = [
     path('reject_friend_request/<int:user_id>/', RejectFriendRequestView.as_view(), name='reject_friend_request'),
     path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend'),
     path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
+    path('cancel_friend_request/<int:user_id>/', CancelFriendRequestView.as_view(), name='cancel_friend_request'),
 ]
 
 # Remove for Production
