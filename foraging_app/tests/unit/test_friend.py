@@ -89,6 +89,7 @@ class TestFriendshipModel(TestCase):
 
         self.assertNotIn(self.user2, self.friend1.friends.all())
 
+    # test cancel() function correctly removes the sent friend request
     def test_cancel_friend_request(self):
         friend_request = friend.Friend_Request.objects.create(uid_sender=self.user1, uid_receiver=self.user2)
         self.assertTrue(friend.Friend_Request.objects.filter(uid_sender=self.user1, uid_receiver=self.user2).exists())
