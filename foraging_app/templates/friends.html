@@ -41,32 +41,32 @@
     </div>
 
     
-        <div class="sections">
-        <h2>Users</h2>
-        {% for u in all_users %}
-            <div class="image-container">
-                <div class="owner-info">
-                    {% if u.profile_image %}
-                        <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">
-                    {% else %}
-                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
-                    {% endif %}
-                    <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>
-
-                    {% if u.id != user.id %} 
-                        {% if u.id in sent_friend_request_users %}
-                            <span>pending</span>
-                        {% else %}
-                            <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Add</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+{#        <div class="sections">#}
+{#        <h2>Users</h2>#}
+{#        {% for u in all_users %}#}
+{#            <div class="image-container">#}
+{#                <div class="owner-info">#}
+{#                    {% if u.profile_image %}#}
+{#                        <img src="{{ u.profile_image.url }}" alt="{{ u.username }}" class="profile-image">#}
+{#                    {% else %}#}
+{#                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">#}
+{#                    {% endif %}#}
+{#                    <a href="{% url 'user' userId=u.id %}"><h4>{{ u.username }}</h4></a>#}
+{##}
+{#                    {% if u.id != user.id %} #}
+{#                        {% if u.id in sent_friend_request_users %}#}
+{#                            <span>pending</span>#}
+{#                        {% else %}#}
+{#                            <form method="post" action="{% url 'send_friend_request' user_id=u.id %}">#}
+{#                                {% csrf_token %}#}
+{#                                <button type="submit">Add</button>#}
+{#                            </form>#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
    
    
    <div class="sections">

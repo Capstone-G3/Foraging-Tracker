@@ -33,23 +33,27 @@ class Friend(Model):
 
     def unfriend(self, account):
         """
-        Initiate the action of unfriending users // logic check
+        Initiate the action of unfriending users // logic check.
+        Delete Friend Request object from terminated friend relationship
         """
-        # self.remove_friend(account)  # remove a user from the remover's friends list
-        # friends_list = Friend.objects.filter(user=account)  # query friends list of user being removed
-        # for friend in friends_list:  # loop through that query to find user
-        #     friend.remove_friend(self.user)  # remove user from person being removed's friends list
+
         user_friends_list = self
         user_friends_list.remove_friend(account)
 
         friend_list = Friend.objects.get(user=account)
-        friend_list.remove_friend(account)
+        friend_list.remove_friend(self.user)
+
     def is_friend(self, account):
         """
         Checks if a friend is friend
         """
-        if account in self.friends.all():  # check account (user 2) is friends with user 1 return true is so
-            return True
+        # if account in self.friends.all():  # check account (user 2) is friends with user 1 return true is so
+        #     return True
+        user_friend_list = Friend.objects.get(user=self)
+        friends = user_friend_list.friends.all()
+        for friend in friends:
+            if friend == account:
+                return True
 
 
 class Friend_Request(Model):
@@ -87,3 +91,9 @@ class Friend_Request(Model):
         """
         self.status = 2  # update F.R. status to 2 (aka rejected)
         self.save()
+
+    def cancel(self, sent_request):
+        """"
+        cancel a sent friend request
+        """
+        sent_request.delete()
