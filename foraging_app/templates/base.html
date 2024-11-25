@@ -131,8 +131,18 @@
                 <li class="nav-item groupLink">
                     <a class="nav-link" href="{% url 'group_nav' %}">Groups</a>
                 </li>
+{#                <li class="nav-item friendsLink">#}
+{#                    <a class="nav-link" href="{% url 'friends' %}">Friends</a>#}
+{#                </li>#}
                 <li class="nav-item friendsLink">
-                    <a class="nav-link" href="{% url 'friends' %}">Friends</a>
+                    <a class="nav-link position-relative"  href="{% url 'friends' %}">
+                        Friends
+                        {%if friends_notification_count > 0 %}
+                        <span class="badge rounded-pill badge-notification bg-danger position-absolute" style="top: 2px; right: -1px;">
+                          {{ friends_notification_count }}
+                        </span>
+                        {% endif %}
+                    </a>
                 </li>
                 
             </ul>
