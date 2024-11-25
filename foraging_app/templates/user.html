@@ -64,6 +64,33 @@
                                         {% endif %}
                                     </div>
                                     <div>{{userModel.first_name}} {{userModel.last_name}}</div>
+                                
+                                    <div>
+                                            {% if not isPersonalAccount %}
+                                                {% if is_friend %}
+                                                    <form method="post" action="{% url 'remove_friend' user_id=user_to_add.id %}">
+                                                    {% csrf_token %}
+                                                    <button class="friend-button" type="submit"  >Unfriend</button>
+                                                    </form>
+                                                {% elif user_to_add.id in sent_friend_request_users %}
+                                                    <form method="post" action="{% url 'cancel_friend_request' user_id=user_to_add.id %}">
+                                                    {% csrf_token %}
+                                                    <button class="friend-button" type="submit">cancel</button>
+                                                    </form>
+                                                {% elif this_user == received_friend_request.uid_receiver %} 
+                                                    <form method="post" action="{% url 'accept_friend_request' user_id=user_to_add.id %}">
+                                                    {% csrf_token %}
+                                                    <button class="friend-button" type="submit">Accept</button>
+                                                </form>
+                                                {% else %}
+                                                    <form method="post" action="{% url 'send_friend_request' user_id=user_to_add.id %}">
+                                                        {% csrf_token %}
+                                                        <button class="friend-button" type="submit">Add</button>
+                                                    </form>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                
                                     <div class="desktop">
                                         {{userProfile.bio}}
                                     </div>

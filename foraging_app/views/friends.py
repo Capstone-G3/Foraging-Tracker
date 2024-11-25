@@ -76,9 +76,22 @@ class RemoveFriendView(LoginRequiredMixin, View):
         user = request.user
         user_to_remove = User.objects.get(id=user_id)
         friend_doing_removing = Friend.objects.get(user=user)
-        friend_to_remove = Friend.objects.get(user=user_to_remove)
+        # friend_to_remove = Friend.objects.get(user=user_to_remove)
         Friend.unfriend(friend_doing_removing, user_to_remove)
-        # return redirect('user', userId=user_to_remove.id)
+
+        #   handle removing friend_request from no longer active friend  relationship
+        try:
+            friend_req1 = Friend_Request.objects.get(uid_receiver=user, uid_sender=user_to_remove)
+        except Friend_Request.DoesNotExist:
+            friend_req1 = None
+        try:
+            friend_req2 = Friend_Request.objects.get(uid_receiver=user_to_remove, uid_sender=user)
+        except Friend_Request.DoesNotExist:
+            friend_req2 = None
+        if friend_req1:
+            friend_req1.delete()
+        if friend_req2:
+            friend_req2.delete()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'friends'))
 
 
