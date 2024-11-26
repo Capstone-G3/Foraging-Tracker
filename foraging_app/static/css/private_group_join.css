@@ -1,6 +1,5 @@
 
 body{
-    margin: auto;
     background-color: #3c9e51;
 }
 
@@ -16,6 +15,7 @@ p{
     border: 5px #6FC081;
     padding: 10px;
     margin: auto;
+    width: 50%;
 }
 
 .bigButton{
@@ -25,15 +25,39 @@ p{
     border-radius: 25px;
 }
 
+.desktop{
+    display: flex;
+}
+
+.mobile{
+    display: none;
+}
+
+
 @media only screen and (max-width: 640px) {
 
-    .bigButton{
-        width: 500px;
-        height: 300px;
+
+    .desktop{
+    display: none;
+    }
+
+    .mobile{
+     display: flex;
+    }
+
+    .accept{
+        width: 95%;
+    }
+
+     .bigButton{
+        width: 300px;
+        height: 100px;
     }
 
     p{
-        font-size: xxx-large;
+        width: 100%;
+        font-size: large;
     }
+
 
 }

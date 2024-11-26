@@ -12,6 +12,7 @@ html{
     align-content: center;
     align-items: center;
     margin: auto;
+    background-color: lightgrey;
 }
 
 h1{
@@ -25,7 +26,17 @@ p{
 }
 
 .bigRed{
+    font-size: xx-large;
     background-color: red;
     margin: auto;
     border-radius: 25px;
+}
+
+@media only screen and (max-width: 640px) {
+    .bigRed{
+        font-size: xxx-large;
+    }
+
+
+
 }
