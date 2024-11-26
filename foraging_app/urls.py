@@ -20,7 +20,8 @@ from django.urls import path
 
 from foraging_app.views.group_view import Group_View, Create_Group_View, Group_Nav_View, Group_Edit_View, \
     Group_Delete_View, AddCommentGroupView, RemoveMemberGroupView, Request_Private_Group_Join_View
-from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView, ShareMarkerView
+from foraging_app.views.home import Home_View, About_Us_View, Feed_View, AddCommentView, SingleMarkerView, \
+    ShareMarkerView, DeleteCommentView, notification_count
 from foraging_app.views.login import Login_View
 from foraging_app.views.logout import Logout_View
 from foraging_app.views.registration import Register_View
@@ -30,11 +31,13 @@ from foraging_app.views.edit_profile import EditProfileView
 from foraging_app.views.delete_account import DeleteUserView
 from foraging_app.views.categories import CategoriesView, CategoryDetailView
 from foraging_app.views.like_view import LikeMarkerView
+from foraging_app.views.leaderboard import LeaderboardView
+from foraging_app.views.notification_view import NotificationListView, mark_notifications_as_read, mark_notification_as_read
 from django.conf import settings
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from foraging_app.views.friends import AcceptFriendRequestView, RejectFriendRequestView, \
-    FriendsView, RemoveFriendView
+    FriendsView, RemoveFriendView, CancelFriendRequestView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -80,6 +83,7 @@ urlpatterns = [
     path('remove_member_group/<int:groupID>/<int:userID>/', RemoveMemberGroupView.as_view(), name='remove_member_group'),
     path('request_private_group_join_response/<int:groupID>/<int:newMemberID>/', Request_Private_Group_Join_View.as_view(), name='request_private_group_join_response'),
     path('add_comment/<int:marker_id>/', AddCommentView.as_view(), name='add_comment'),
+    path('delete_comment/<int:comment_id>/', DeleteCommentView.as_view(), name='delete_comment'),
     path('map/marker/<int:marker_id>/', SingleMarkerView.as_view(), name='single_marker'),
 
     #friend urls
@@ -89,6 +93,12 @@ urlpatterns = [
     path('reject_friend_request/<int:user_id>/', RejectFriendRequestView.as_view(), name='reject_friend_request'),
     path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend'),
     path('share_marker/', ShareMarkerView.as_view(), name='share_marker'),
+    path('notifications/', NotificationListView.as_view(), name='notifications'),
+    path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
+    path('api/notifications/count/', notification_count, name='notification_count'),
+    path('notifications/mark_as_read/', mark_notifications_as_read, name='mark_notifications_as_read'),
+    path('notifications/mark-as-read/<int:notification_id>/', mark_notification_as_read, name='mark_notification_as_read'),
+    path('cancel_friend_request/<int:user_id>/', CancelFriendRequestView.as_view(), name='cancel_friend_request'),
 ]
 
 # Remove for Production

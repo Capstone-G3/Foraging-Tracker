@@ -57,11 +57,13 @@
 }
 
 .joinOption{
-    margin: auto;
-    border-radius: 25px;
-    position: absolute;
-    right: 1700px;
-    top: 170px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px
 }
 
 .mainContainer{

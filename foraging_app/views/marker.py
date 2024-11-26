@@ -1,6 +1,6 @@
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 
@@ -61,14 +61,15 @@ class Marker_Create_View(LoginRequiredMixin, View):
 
         if marker_form.is_valid():
             data = marker_form.cleaned_data
-            # TODO : Resize Image before save -> Save space.
-            image = Image.open(request.FILES['image'])
+            # TODO : Resize Image before save -> Save space. commented out because issues with creating a marker
+            #following error when creating a marker - MultiValueDictKeyError at /marker/create
+            # image = Image.open(request.FILES['image'])
             if species_form.is_valid():
                 species_cleaned = species_form.cleaned_data
                 species = Species.objects.create(**species_cleaned)
                 data['species'] = species
-            image = image.resize(size=(400,400))            
-            data['image'] = image
+            # image = image.resize(size=(400,400))
+            # data['image'] = image
             marker_create = Marker.objects.create(**data, owner=request.user)
             if marker_create is not None:
                 messages.success(request,"Marker created complete.")
@@ -142,31 +143,27 @@ class Marker_Delete_View(LoginRequiredMixin, View):
 
 class Marker_Details_View(LoginRequiredMixin, View):
     def get(self,request,marker_id):
-        query = Marker.objects.get(id=marker_id)
-        query_likes = Like_Marker.objects.filter(marker_id=marker_id)
-        users = []
-        
-        for user_like in query_likes:
-            user = User.objects.get(id=user_like.id)
-            if user :
-                users.append(user)
+        marker = get_object_or_404(Marker, id=marker_id)
+        likes = Like_Marker.objects.filter(marker_id=marker_id)
+        total_likes = likes.count()
+        users = User.objects.filter(id__in=likes.values_list('user_id', flat=True))[:3]
         
         figure = InformationMap()
-        figure.add_marker(location=(query.latitude,query.longitude))
+        figure.add_marker(location=(marker.latitude,marker.longitude))
         data = {
-            'title' : query.title,
-            'owner_name' : "@" + str(query.owner.username),
-            'latitude' : query.latitude,
-            'longitutde' : query.longitude,
-            'description' : query.description,
-            'species' : query.species,
-            'found' : query.created_date,
-            'image' : query.image.url,
+            'title' : marker.title,
+            'owner_name' : "@" + str(marker.owner.username),
+            'latitude' : marker.latitude,
+            'longitutde' : marker.longitude,
+            'description' : marker.description,
+            'species' : marker.species,
+            'found' : marker.created_date,
+            'image' : marker.image.url,
         }
 
         return render(request,'markers/info.html',{
             'marker' : data.items(),
-            'owner' : query.owner,
+            'owner' : marker.owner,
             'users_like': users[0:3],
             'total_likes' : len(users),
             'url_resolve' : marker_id,

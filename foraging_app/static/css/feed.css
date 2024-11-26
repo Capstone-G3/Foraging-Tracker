@@ -90,6 +90,28 @@
     border-radius: 4px;
     margin-top: 10px;
 }
+/* Add margin to the delete comment form */
+.delete-comment-form {
+    margin-left: 20px;  /* Adds space to the left of the form */
+}
+
+/* Styling the delete button (optional) */
+.delete-comment-form button {
+    background-color: #e74c3c; /* Red background */
+    color: white;              /* White text */
+    padding: 10px 20px;        /* Padding */
+    border: none;              /* No border */
+    border-radius: 5px;        /* Rounded corners */
+    cursor: pointer;           /* Pointer cursor on hover */
+    font-size: 14px;           /* Font size */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for the button */
+.delete-comment-form button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
 .dropdown-menu {
     position: absolute;
     top: 100%; /* Position it below the toggle button */

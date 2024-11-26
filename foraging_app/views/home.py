@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.views import View
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from forage.sitemap import DesktopMap, BaseMap
@@ -6,8 +7,17 @@ from foraging_app.models import Marker, Species, Group
 from foraging_app.models.group import User_Group
 from foraging_app.models.user import User_Profile, User
 from foraging_app.models.friend import Friend
+from foraging_app.models.marker import Comment
+from foraging_app.models.notification import Notification
 from django.contrib import messages
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from foraging_app.models.notification import Notification
 
+@login_required
+def notification_count(request):
+    count = Notification.objects.filter(user=request.user, is_read=False).count()
+    return JsonResponse({'count': count})
 
 class Home_View(View):
     def __init__(self):
@@ -137,7 +147,14 @@ class AddCommentView(View):
             comment.user = request.user
             comment.save()
         return redirect('feed')
-
+class DeleteCommentView(View):
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+        if comment.user == request.user:
+            comment.delete()
+            return redirect('feed')
+        else:
+            return HttpResponseForbidden("You are not allowed to delete this comment.")
 class SingleMarkerView(View):
     def get(self, request, marker_id):
         print(marker_id)
@@ -177,6 +194,13 @@ class ShareMarkerView(View):
 
             # Add the marker to friend's shared markers list
             friend.shared_markers.add(marker)
+
+            #Create a notification
+            Notification.objects.create(
+                user=friend.user,
+                message=f'{request.user.username} shared a marker with you.',
+                marker=marker
+            )
 
             # Add a success message
             messages.success(request, 'Marker shared successfully')

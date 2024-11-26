@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/leaderboard.css' %}">
+    <title>Leaderboard</title>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <h2>Leaderboard</h2>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link {% if view_type == 'friends' %}active{% endif %}" href="?view=friends">Friends</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if view_type == 'all_time' %}active{% endif %}" href="?view=all_time">All time</a>
+          </li>
+        </ul>
+    {% if users %}
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Rating</th>
+                <th>Badge</th>
+            </tr>
+
+            {% for user in users %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="user-info">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                    {% else %}
+                        <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image" style="background-color: black;">
+                    {% endif %}
+                <div class="username"><a href="{% url 'user' user.id %}"  style="color : black !important;">{{ user.username }}</a></div>
+
+                </td>
+                <td>{{ user.rating }}</td>
+                <td>
+                    {% with user.get_badge as badge %}
+                        {% if badge == "Diamond" %}
+                            <img src="{% static 'img/diamond-badge.png' %}" alt="Diamond Badge" class="badge-icon">
+                        {% elif badge == "Platinum" %}
+                            <img src="{% static 'img/platinum-badge.png' %}" alt="Platinum Badge" class="badge-icon">
+                        {% elif badge == "Gold" %}
+                            <img src="{% static 'img/gold-badge.png' %}" alt="Gold Badge" class="badge-icon">
+                        {% elif badge == "Silver" %}
+                            <img src="{% static 'img/silver-badge.png' %}" alt="Silver Badge" class="badge-icon">
+                        {% elif badge == "Bronze" %}
+                            <img src="{% static 'img/bronze-badge.png' %}" alt="Bronze Badge" class="badge-icon">
+                        {% else %}
+                            No Badge
+                        {% endif %}
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="alert alert-info" role="alert" style="margin-top: 30px; margin-bottom:30px;">No friends here yet, but every friendship starts with a simple hello!</div>
+    {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

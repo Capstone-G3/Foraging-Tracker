@@ -33,6 +33,14 @@
     line-height: normal;
 }
 
+.badge-icon {
+    width: 25px; /* Adjust as needed */
+    height: 25px; /* Adjust as needed */
+    margin-left: 10px; /* Space between icon and badge */
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .username {
     font-size: 24px;
 }
@@ -85,7 +93,17 @@
 .userFilters {
     height: auto;
 }
-
+.friend-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #004d00;
+    border-left: none;
+    background-color: #004d00;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
 
 @media only screen and (max-width: 640px) {
 
