@@ -37,7 +37,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from foraging_app.views.friends import AcceptFriendRequestView, RejectFriendRequestView, \
-    FriendsView, RemoveFriendView
+    FriendsView, RemoveFriendView, CancelFriendRequestView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -98,6 +98,7 @@ urlpatterns = [
     path('api/notifications/count/', notification_count, name='notification_count'),
     path('notifications/mark_as_read/', mark_notifications_as_read, name='mark_notifications_as_read'),
     path('notifications/mark-as-read/<int:notification_id>/', mark_notification_as_read, name='mark_notification_as_read'),
+    path('cancel_friend_request/<int:user_id>/', CancelFriendRequestView.as_view(), name='cancel_friend_request'),
 ]
 
 # Remove for Production

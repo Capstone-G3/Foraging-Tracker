@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 
-from foraging_app.models.friend import Friend
+from foraging_app.models.friend import Friend, Friend_Request
 from foraging_app.models.user import User
 from foraging_app.models.user import User_Profile
 from foraging_app.forms import CommentForm
@@ -43,7 +43,28 @@ class User_View(View):
             friends = user.friends.all()
             friend_count = friends.count()
         except Friend.DoesNotExist:
-            friends = None
+            friend_count = None
+        this_user = request.user
+        # query user to add
+        try:
+            user_to_add = User.objects.get(id=userId)
+        except User.DoesNotExist:
+            user_to_add = None
+
+        is_friend = Friend.is_friend(this_user, user_to_add)
+
+        # query list of user's who user has sent friend request
+        try:
+            sent_friend_request = Friend_Request.objects.filter(uid_sender=this_user, status=1)
+            sent_friend_request_users = sent_friend_request.values_list('uid_receiver', flat=True)
+        except Friend_Request.DoesNotExist:
+            sent_friend_request_users = None
+        # query friend request received by user
+        try:
+            received_friend_request = Friend_Request.objects.get(uid_receiver=this_user, uid_sender=userId, status=1)
+        except Friend_Request.DoesNotExist:
+            received_friend_request = None
+
         return render(request, "user.html", {
             "form": CommentForm(), 
             "userModel": user, 
@@ -51,7 +72,12 @@ class User_View(View):
             "profilePhoto": profilePhoto, 
             "markers": markers, 
             "isPersonalAccount": isPersonalAccount,
-            "friend_count": friend_count})
+            "friend_count": friend_count,
+            "user_to_add": user_to_add,
+            "is_friend": is_friend,
+            "sent_friend_request_users": sent_friend_request_users,
+            "received_friend_request": received_friend_request,
+            "this_user": this_user, })
     
 class AddCommentUserView(View):
     def post(self, request, marker_id, user_id):
