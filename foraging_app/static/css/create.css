@@ -24,7 +24,7 @@
     border-radius: 20px;
     padding: 10px 0px;
     justify-content: center;
-    margin: 0px 20px;
+    margin: 20px 20px 0px 20px;
     font-size: 20px;
     font-weight: 600;
     display: flex;
@@ -105,5 +105,9 @@ input[type="number"], input[type="text"], select {
 
     .dataContainer:last-child {
         align-items: center;
+    }
+
+    .createMarker {
+        width: 100%;
     }
 }
