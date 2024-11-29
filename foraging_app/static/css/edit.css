@@ -1,0 +1,77 @@
+body, html {
+    height: 100%;
+}
+
+.container {
+    align-self: center;
+    width: fit-content;    
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    color: white;
+    padding: 0px;
+}
+
+.wrapper {
+    display: flex;
+    height: calc(100% - 74px);
+}
+
+h2 {
+    background-color: #3c9e51;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+    margin: 0px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.post {
+    padding: 20px;
+    border-radius: 0px 0px 20px 20px;   
+    background-color: #6FC081;
+    display: flex;
+    flex-direction: column;
+}
+
+div:has(#id_description) {
+    align-items: center;
+    display: flex;
+;
+}
+
+textarea {
+    height: 54px;
+    border-radius: 10px;
+}
+
+input[type="submit"] {    
+    filter: drop-shadow(#207933 4px 4px 1px);
+    width: 300px;
+}
+
+input[type="submit"]:hover, input::file-selector-button:hover {
+    background-color: #3c9e51;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+input[type="number"], input[type="text"], select {
+    border-radius: 10px;
+    border: none;
+    height: 26px;
+}
+
+input[type="submit"], input::file-selector-button {
+    border: none;
+    background-color: #3c9e51;
+    color: white;
+    height: 35px;
+    font-weight: 500;
+    align-self: center;
+    border-radius: 10px;
+}
+
+#id_marker-description {
+    border-radius: 10px;
+}

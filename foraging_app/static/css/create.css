@@ -56,6 +56,10 @@ input[type="submit"], input::file-selector-button {
     border-radius: 10px;
 }
 
+#id_marker-description {
+    border-radius: 10px;
+}
+
 input[type="submit"] {    
     filter: drop-shadow(#207933 4px 4px 1px);
     width: 300px;

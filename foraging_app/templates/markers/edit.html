@@ -1,16 +1,34 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Marker</title>
+    <link rel="stylesheet" href="{% static 'css/edit.css' %}">
 </head>
 <body>
-
-    <form method="post", enctype="multipart/form-data">
-        {%csrf_token%}
-        {{form}}
-        <input type="submit" value="Edit">
-    </form>
+    <style>
+        .wrapper {            
+            background-size: cover;
+            background-position: center;
+            position:relative;
+            background-repeat: no-repeat;
+            background-image: url('{% static "img/map_background.png" %}');
+        }
+    </style>
+    <div class="wrapper">          
+        <div class="container">
+            <h2>Edit marker</h2>
+            <form class="post" method="post", enctype="multipart/form-data">
+                {%csrf_token%}
+                {{form}}
+                <input type="submit" value="Edit">
+            </form>
+        </div>
+    </div>
 </body>
 </html>
+{% endblock %}
