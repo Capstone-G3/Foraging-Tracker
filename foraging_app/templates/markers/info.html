@@ -28,10 +28,15 @@
                         {%endif%}
                     {%endfor%}
                     <p>Total Likes : {{total_likes}}</p>
-                </div>
+                </div>                 
+                <div class="minimap">
+                    {{minimap | safe}}
+                </div>        
             </div>
         </div>
-        {{map | safe}}
+        <div class="map">
+            {{map | safe}}
+        </div>
     </div>
 </body>
 </html>

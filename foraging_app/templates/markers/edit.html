@@ -26,10 +26,15 @@
                         {%csrf_token%}
                         <input type="submit" value="Delete">
                     </form>
-                </form>                
+                </form>                 
+                <div class="minimap">
+                    {{minimap | safe}}
+                </div>               
             </div>
         </div>
-        {{map | safe}}
+        <div class="map">
+            {{map | safe}}
+        </div>
     </div>    
 </body>
 </html>

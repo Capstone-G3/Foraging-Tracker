@@ -23,10 +23,15 @@
                             </div>
                         {%endif%}
                     <input type="submit" value="Create">
-                </form>                
+                </form>                 
+                <div class="minimap">
+                    {{minimap | safe}}
+                </div>                 
             </div>
         </div>
-        {{map | safe}}
+        <div class="map">
+            {{map | safe}}
+        </div>
         {%if messages%}
             {%for message in messages%}
                 <p class="message-{{message.tags}}">{{message}}</p>
