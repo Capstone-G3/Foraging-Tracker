@@ -52,6 +52,7 @@ class Marker_Create_View(LoginRequiredMixin, View):
     def get(self,request):
         data = self.getCreateForm()
         data['map'] = PinMap().compile_figure().render()
+        data['minimap'] = PinMap().compile_figure()._repr_html_()
         return render(request, 'markers/create.html', data)
     
     def post(self,request):
@@ -99,9 +100,16 @@ class Marker_Edit_View(LoginRequiredMixin, View):
             if query not in list_owned:
                 messages.error(request, "The following marker is not owned by you.")
                 return redirect('/') # 401 Later.
-        
-        form = MarkerEditForm(instance=query)
-        return render(request, 'markers/edit.html', {'form' : form, 'marker' : query})
+
+        figure = InformationMap()
+        figure.add_marker(location=(query.latitude,query.longitude))
+        return render(request, 'markers/edit.html', 
+            {'marker_form': MarkerEditForm(instance=query),
+            'map': figure.compile_figure().render(),
+            'minimap': figure.compile_figure()._repr_html_(),
+            'url_resolve': marker_id
+            }
+        )
     
     def post(self,request, marker_id):
         status = 404
@@ -169,7 +177,7 @@ class Marker_Details_View(LoginRequiredMixin, View):
             'owner' : query.owner,
             'users_like': users[0:3],
             'total_likes' : len(users),
-            'url_resolve' : marker_id,
-            'map' : figure.compile_figure()._repr_html_()
+            'map': figure.compile_figure().render(),
+            'minimap': figure.compile_figure()._repr_html_()
             }
         )

@@ -5,30 +5,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%  static  'css/create.css'  %}">
     <title>Edit Marker</title>
-    <link rel="stylesheet" href="{% static 'css/edit.css' %}">
 </head>
 <body>
     <style>
-        .wrapper {            
-            background-size: cover;
-            background-position: center;
-            position:relative;
-            background-repeat: no-repeat;
-            background-image: url('{% static "img/map_background.png" %}');
+        .addLink {
+            background-color: #6FC081;
         }
     </style>
-    <div class="wrapper">          
-        <div class="container">
-            <h2>Edit marker</h2>
-            <form class="post" method="post", enctype="multipart/form-data">
-                {%csrf_token%}
-                {{form}}
-                <input type="submit" value="Edit">
-            </form>
+    <div class="creationContainer">
+        <div class="createMarker">
+            <div class="title">Edit Marker</div>
+            <div class="dataContainer">
+                <form method="post", method="post", enctype="multipart/form-data" class="post data">
+                    {%csrf_token%}
+                    {{marker_form}}
+                    <input type="submit" value="Edit">
+                    <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
+                        {%csrf_token%}
+                        <input type="submit" value="Delete">
+                    </form>
+                </form>                
+            </div>
         </div>
-    </div>
+        {{map | safe}}
+    </div>    
 </body>
 </html>
 {% endblock %}

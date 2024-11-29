@@ -7,7 +7,7 @@
     align-items: center;
     display: flex;
     flex-direction: row;
-    height: calc(100% - 54px);
+    height: calc(100% - 74px);
     background-color: #3c9e51;
 }
 
@@ -17,6 +17,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    min-width: 300px;
 }
 
 .title {
@@ -56,7 +57,7 @@ input[type="submit"], input::file-selector-button {
     border-radius: 10px;
 }
 
-#id_marker-description {
+#id_marker-description, #id_description {
     border-radius: 10px;
 }
 
