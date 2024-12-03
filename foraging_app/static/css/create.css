@@ -92,6 +92,10 @@ input[type="number"], input[type="text"], select {
     height: 300px;
 }
 
+.post > div > a {
+    color: white;
+}
+
 @media only screen and (max-width: 640px) {
     .creationContainer {
         height: calc(100% - 108px);
