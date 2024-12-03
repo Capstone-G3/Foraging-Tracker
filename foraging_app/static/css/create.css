@@ -126,4 +126,9 @@ input[type="number"], input[type="text"], select {
         overflow-y: scroll;
         height: 100%;
     }
+
+    .data {
+        width: 100%;
+        font-size: medium;
+    }
 }
