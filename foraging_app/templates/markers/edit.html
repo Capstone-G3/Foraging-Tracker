@@ -22,10 +22,6 @@
                     {%csrf_token%}
                     {{marker_form}}
                     <input type="submit" value="Edit">
-                    <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
-                        {%csrf_token%}
-                        <input type="submit" value="Delete">
-                    </form>
                 </form>                 
                 <div class="minimap">
                     {{minimap | safe}}
