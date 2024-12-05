@@ -30,7 +30,7 @@
                     <p>Total Likes : {{total_likes}}</p>
                     {%if request.user%}
                         {%if request.user.id == owner.id%}
-                            <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
+                            <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button class="editButton">Edit</button></a>
 
                             <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
                                 {%csrf_token%}
