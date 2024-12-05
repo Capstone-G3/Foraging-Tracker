@@ -13,9 +13,11 @@
 <body>
 <div class="behind">
 <div class="mainContainer">
+{% if user.is_authenticated %}
 <form action="{% url 'create_group' %}">
     <input class="create" type="submit" value="Create a New Group Here!" />
 </form>
+{% endif %}
 
 
 <ol>

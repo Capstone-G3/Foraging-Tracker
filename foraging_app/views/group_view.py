@@ -16,8 +16,7 @@ from django.contrib.auth.hashers import make_password
 from foraging_app.models import Marker
 
 
-class Group_View(LoginRequiredMixin,View):
-    login_url = '/login/'
+class Group_View(View):
 
     def rankingSort(self, member):
         return member.rating

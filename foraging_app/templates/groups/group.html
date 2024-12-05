@@ -45,7 +45,7 @@
             <input class="editOption" type="submit" value="Edit Group" />
             </form>
             {% endif %}
-            {% if not inGroup %}
+            {% if not inGroup and user.is_authenticated %}
                 {% if thisGroup.isPrivate %}
                     <form action="{% url 'group' thisGroup.id %}" method="post">
                         {%csrf_token%}

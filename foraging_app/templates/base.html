@@ -68,7 +68,12 @@
         <a href="{% url 'home' %}" style="margin-right: 20px;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></a>
         <div class="userLink mobile">
             <div class="dropdown">
-                <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
+                    {% else %}
+                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                    {% endif %}
+{#                <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>#}
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                         transparent; border: transparent;">
@@ -137,7 +142,12 @@
             </ul>
             <div class="userLink ml-auto">
                 <div class="dropdown">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
+                    {% else %}
                     <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                    {% endif %}
+{#                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>#}
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
