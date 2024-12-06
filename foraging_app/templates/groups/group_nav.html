@@ -17,15 +17,21 @@
     <input class="create" type="submit" value="Create a New Group Here!" />
 </form>
 
-
-<ol>
+<div class="group-cards">
     {% for x in allGroups %}
-        <li><a class="list_items" href="{% url 'group' x.id %}">{{ x.name }}</a></li>
-
+        <div class="card">
+            <a class="list_items" href="{% url 'group' x.id %}">
+                <h2>{{ x.name }}</h2>
+                
+            </a>
+            <div class="dropdown-divider"></div>
+        <p>{{ x.description }}</p>
+        </div>
     {% endfor %}
-</ol>
-
 </div>
+</div>
+
+
 </div>
 
 </body>

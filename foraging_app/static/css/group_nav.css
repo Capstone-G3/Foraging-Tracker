@@ -18,11 +18,11 @@ html{
 
 .mainContainer{
     margin: auto;
-    width: 50%;
+    width: 25%;
     text-align: center;
     background-color: #6FC081;
     border-radius: 25px;
-    list-style: decimal inside none;
+
 }
 
 .create{
@@ -30,10 +30,38 @@ html{
     border-radius: 25px;
 }
 
-.list_items{
-    color: white;
-    font-size: 25px;
+.group-cards {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
+
+.card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 200px;
+    text-align: left;
+}
+
+.list_items {
+    color: #3C9E51;
+    text-decoration: none;
+}
+
+.list_items h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.list_items p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
 
 
 @media only screen and (max-width: 640px) {
