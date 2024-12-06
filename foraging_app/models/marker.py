@@ -50,15 +50,6 @@ class User_Marker(Model):
     marker_id = ForeignKey(Marker, on_delete=CASCADE)
     saved_date = DateField(auto_now=True)
 
-    # Move this to Views.
-    # def getMarkers(self, targetUser):
-    #     target_id = targetUser.id
-    #     marker_ids = User_Marker.objects.filter(user_id=target_id).values_list('marker_id', flat=True)
-    #     markers = []
-    #     for x in marker_ids:
-    #         markers.append(Marker.objects.get(id=x))
-    #     return markers
-
 class Comment(Model):
     marker = ForeignKey(Marker, related_name='comments', on_delete=CASCADE)
     user = ForeignKey(User, on_delete=CASCADE)
