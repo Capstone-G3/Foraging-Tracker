@@ -20,7 +20,7 @@ class MarkerCreateForm(ModelForm):
         }
     
 class MarkerEditForm(MarkerCreateForm):
-    description = CharField(widget=Textarea())
+    description = CharField(widget=Textarea(attrs={'rows': 4, 'cols': 32}))
     class Meta:
         model = Marker
         exclude = ['longitude','latitude','owner']
