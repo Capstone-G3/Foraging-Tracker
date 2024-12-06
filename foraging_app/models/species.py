@@ -3,11 +3,12 @@ from django.db.models import (Model, AutoField, CharField, ImageField)
 class Species(Model):
 
     id = AutoField(primary_key=True)
-    name = CharField(max_length=120, unique=True, null=False)
+    type_animal = CharField(max_length=120, unique=True, null=False, verbose_name="type")
     category = CharField(max_length=120, null=False)
-    scope = CharField(max_length=120, null=False)
-    description = CharField(max_length=512)
-    image = ImageField(upload_to='species_images/', null=False)
+    breed = CharField(max_length=120, null=True)
+    # scope = CharField(max_length=120, null=False)
+    # description = CharField(max_length=512)
+    # image = ImageField(upload_to='species_images/', null=False)
     #image = ImageField(upload_to=None, height_field=None, width_field=None, max_length=100, null=False)
 
 
