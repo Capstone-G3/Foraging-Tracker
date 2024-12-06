@@ -105,8 +105,9 @@
                         <a href="{% url 'feed' %}" class="btn btn-secondary">Clear Filters</a>
                     </form>
                 </div>
-            </div>
+            
         </nav>
+        </div>
         <div class="container">
         {% if markers is not None %}
             {% for marker in markers %}
@@ -160,6 +161,12 @@
                                         {% endif %}
                                         <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
                                         <div class="created-date">{{ comment.created_date|date:"F d, Y" }}</div>
+                                    {% if comment.user == request.user %}
+                                        <form action="{% url 'delete_comment' comment.id %}" method="post" class="delete-comment-form">
+                                            {% csrf_token %}
+                                            <button type="submit">Delete</button>
+                                        </form>
+                                    {% endif %}
                                     </div>
                                     <div class="dropdown-divider"></div>
                                 {% endfor %}

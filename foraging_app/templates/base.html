@@ -68,7 +68,12 @@
         <a href="{% url 'home' %}" style="margin-right: 20px;"><img src="/static/css/images/FT_logo.png" height="48" alt="Foraging Tracker Logo"></a>
         <div class="userLink mobile">
             <div class="dropdown">
-                <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
+                    {% else %}
+                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                    {% endif %}
+{#                <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>#}
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                         transparent; border: transparent;">
@@ -78,6 +83,11 @@
                         <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
                     {% endif %}
                 </button>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'notifications' %}">
+                        <img src="{% static 'img/email_icon.png' %}" alt="Email Icon" class="email-icon">
+                    </a>
+                {% endif %}
                 <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
                     <div class="dropdown-header">
                         {% if user.profile_image %}
@@ -97,14 +107,17 @@
                         <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                         <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
                         <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
-                        <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                        
                     {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                        <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
                     {% endif %}
                         
                     </ul>
                 </div>
             </div>
+        
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -126,11 +139,15 @@
                 <li class="nav-item friendsLink">
                     <a class="nav-link" href="{% url 'friends' %}">Friends</a>
                 </li>
-                
             </ul>
             <div class="userLink ml-auto">
                 <div class="dropdown">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
+                    {% else %}
                     <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                    {% endif %}
+{#                    <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>#}
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
@@ -140,6 +157,12 @@
                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="rounded-circle profile-image">
                         {% endif %}
                     </button>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'notifications' %}">
+                        <img src="{% static 'img/email_icon.png' %}" alt="Email Icon" class="email-icon">
+                    <span id="notification-badge" class="notification-badge" style="display: none;"></span>
+                    </a>
+                {% endif %}
                     <div class="dropdown-menu custom-dropdown-width" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-header">
                             {% if user.profile_image %}
@@ -159,8 +182,10 @@
                             <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
                             <li><a class="dropdown-item" href="{% url 'categories' %}">Categories</a></li>
                             <li><a class="dropdown-item" href="{% url 'group_nav' %}">Groups</a></li>
-                            <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                            
                         {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'friends' %}">Friends</a></li>
+                            <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}" style="color : red !important;">Logout</a></li>
                         {% endif %}
                             
@@ -184,3 +209,25 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updateNotificationCount() {
+        fetch('/api/notifications/count/')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('notification-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching notification count:', error));
+    }
+
+    // Update the notification count on page load
+    updateNotificationCount();
+
+});
+</script>

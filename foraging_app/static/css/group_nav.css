@@ -20,7 +20,31 @@ html{
     margin: auto;
     width: 50%;
     text-align: center;
-    background-color: darkgrey;
+    background-color: #6FC081;
     border-radius: 25px;
     list-style: decimal inside none;
+}
+
+.create{
+    margin: auto;
+    border-radius: 25px;
+}
+
+.list_items{
+    color: white;
+    font-size: 25px;
+}
+
+
+@media only screen and (max-width: 640px) {
+
+    .list_items{
+        font-size: 15px;
+    }
+
+    .mainContainer{
+        width: 75%;
+    }
+
+
 }

@@ -13,14 +13,16 @@
 <body>
 <div class="behind">
 <div class="mainContainer">
+{% if user.is_authenticated %}
 <form action="{% url 'create_group' %}">
-    <input type="submit" value="Create a New Group Here!" />
+    <input class="create" type="submit" value="Create a New Group Here!" />
 </form>
+{% endif %}
 
 
 <ol>
     {% for x in allGroups %}
-        <li><a href="{% url 'group' x.id %}">{{ x.name }}</a></li>
+        <li><a class="list_items" href="{% url 'group' x.id %}">{{ x.name }}</a></li>
 
     {% endfor %}
 </ol>

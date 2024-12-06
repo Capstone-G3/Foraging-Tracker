@@ -1,6 +1,6 @@
 from os.path import join as path_join
 from PIL import Image
-from tensorflow import keras 
+from tensorflow import keras
 import numpy as np
 from enum import Enum
 
@@ -15,7 +15,7 @@ class NsfwDectector:
     __categories = ['drawing', 'hentai', 'neutral', 'porn', 'sexy']
     
     def __init__(self):
-        model_path = path_join('detect','model','nsfw_inception3.h5')
+        model_path = path_join('detect', 'model', 'nsfw_inception3.h5')
         self._model = keras.models.load_model(model_path, compile=False) # Using static model
         self._img_size = (299,299) #Inception 3 use 299 and MobileNetV2 use 224
 

@@ -1,3 +1,7 @@
+html{
+    background-color: #3C9E51;
+}
+
 .groupLink {
     background-color: #3c9e51;
 }
@@ -7,7 +11,11 @@
 }
 
 .mobile {
-    display: none;
+    display: none !important;
+}
+
+.desktop{
+    display: flex;
 }
 
 .groupDetails {
@@ -57,15 +65,17 @@
 }
 
 .joinOption{
-    margin: auto;
-    border-radius: 25px;
-    position: absolute;
-    right: 1700px;
-    top: 170px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px
 }
 
 .mainContainer{
-    background-color: white;
+    background-color: #3C9E51;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -80,6 +90,7 @@
     height: 100%;
     text-align: left;
     padding: 20px;
+    border-radius: 25px;
 
 }
 
@@ -89,6 +100,8 @@
     width: 75%;
     height: 100%;
     padding: 20px;
+    border-radius: 25px;
+    text-align: center;
 
 }
 
@@ -228,4 +241,114 @@
     background-color: red;
     margin: auto;
     border-radius: 25px;
+}
+
+@media only screen and (max-width: 640px) {
+
+    .mobile {
+    display: flex !important;
+}
+
+.desktop{
+    display: none;
+}
+
+html{
+    background-color: #3C9E51;
+}
+
+.groupTitle{
+    font-size: x-large;
+    padding: 0px 10px;
+    text-align: left;
+
+}
+
+.groupCategory{
+    font-size: medium;
+    text-align: left;
+    position: absolute;
+    right: 85%;
+    top: 15%;
+}
+
+.groupDescription{
+    font-size: medium;
+    text-align: left;
+    max-width: 1000px;
+}
+
+.deleteOption{
+    background-color: red;
+    margin: auto;
+    border-radius: 25px;
+    position: absolute;
+    right: 20%;
+    top: 20%;
+}
+
+.editOption{
+    margin: auto;
+    border-radius: 25px;
+    position: absolute;
+    right: 50%;
+    top: 20%;
+}
+
+.joinOption{
+    margin: auto;
+    border-radius: 25px;
+    position: absolute;
+    right: 50%;
+    top: 20%;
+}
+
+.members{
+
+    background-color: darkgrey;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    padding: 20px;
+    border-radius: 25px;
+
+}
+
+.posts{
+    background-color: lightgrey;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 25px;
+    text-align: center;
+    align-content: center;
+
+}
+
+
+
+.image-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 300px;
+    max-width: 600px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.created-date{
+    font-size: 0.6em;
+}
+
+.small-textarea {
+    height: 50px;
+    width: 90%;
+}
+
+
+
 }
