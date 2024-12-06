@@ -4,6 +4,8 @@ from tensorflow import keras
 import numpy as np
 from enum import Enum
 
+from django.conf import settings
+
 class DectectorStatus(Enum):
     """
         A simple way to represent Determined Status, can always be changed to binaries or keep it as String. 
@@ -15,7 +17,8 @@ class NsfwDectector:
     __categories = ['drawing', 'hentai', 'neutral', 'porn', 'sexy']
     
     def __init__(self):
-        model_path = path_join('detect','model','nsfw_inception3.h5')
+        # Changed to make sure Django can recognize.
+        model_path = path_join(settings.BASE_DIR,'forage','detect','model','nsfw_inception3.h5')
         self._model = keras.models.load_model(model_path, compile=False) # Using static model
         self._img_size = (299,299) #Inception 3 use 299 and MobileNetV2 use 224
 
