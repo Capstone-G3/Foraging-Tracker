@@ -84,7 +84,7 @@ ASGI_APPLICATION = 'foraging_app.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE",False) == 'True'
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE",'False') == 'True'
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
@@ -137,10 +137,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'foraging_app', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR,'foraging_app','static')
 STATIC_URL = 'static/'
 #by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
-STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
+# STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
 
 # Media images. Change when production.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'foraging_app','static','media')
