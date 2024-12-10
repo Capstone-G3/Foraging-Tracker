@@ -19,49 +19,40 @@ html{
 }
 
 .groupDetails {
-    background-color: #3C9E51;
-    color: white;
-    display: flex;
-    width: 100%;
-    height: 200px;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.groupTitle {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3C9E51;
+}
+.groupCategory, .groupDescription {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #333;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
-.groupTitle{
-    font-size: xxx-large;
-    padding: 0px 10px;
-    text-align: left;
-
-}
-
-.groupCategory{
-    font-size: large;
-    text-align: left;
-    position: absolute;
-    right: 1850px;
-    top: 140px;
-}
-
-.groupDescription{
-    font-size: x-large;
-    text-align: left;
-    max-width: 1000px;
-}
 
 .deleteOption{
     background-color: red;
     margin: auto;
     border-radius: 25px;
-    position: absolute;
-    right: 1575px;
-    top: 170px;
+    display: block;
+    margin-top: 10px;
+    text-align: center;
 }
-
-.editOption{
+.editOption {
     margin: auto;
     border-radius: 25px;
-    position: absolute;
-    right: 1700px;
-    top: 170px;
+    display: block;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .joinOption{
@@ -80,22 +71,23 @@ html{
     justify-content: space-between;
     width: 100%;
     height: 100%;
+    padding-top:20px;
 }
 
 .members{
 
-    background-color: darkgrey;
+    background-color: white;
     display: inline-block;
     width: 25%;
     height: 100%;
     text-align: left;
     padding: 20px;
     border-radius: 25px;
-
+    margin-right: 20px;
 }
 
 .posts{
-    background-color: lightgrey;
+    background-color: #6FC081;
     display: inline-block;
     width: 75%;
     height: 100%;
@@ -104,6 +96,29 @@ html{
     text-align: center;
 
 }
+.posts h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3C9E51;
+    padding: 10px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.posts h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #3C9E51;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
 
 .container {
             flex: 1;
@@ -230,9 +245,10 @@ html{
 .private-view{
     text-align: center;
     font-size: xx-large;
-    background-color: darkgrey;
+    background-color: white;
     margin: auto;
     display: flex;
+    padding: 10px;
     border-radius: 15px;
 }
 
@@ -256,43 +272,38 @@ html{
 html{
     background-color: #3C9E51;
 }
-
-.groupTitle{
-    font-size: x-large;
-    padding: 0px 10px;
-    text-align: left;
-
+body{
+    background-color: #3C9E51;
+}
+.groupDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
 }
 
-.groupCategory{
-    font-size: medium;
-    text-align: left;
-    position: absolute;
-    right: 85%;
-    top: 15%;
+.groupTitle {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 
-.groupDescription{
-    font-size: medium;
-    text-align: left;
-    max-width: 1000px;
+.groupCategory {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
 }
 
-.deleteOption{
-    background-color: red;
-    margin: auto;
-    border-radius: 25px;
-    position: absolute;
-    right: 20%;
-    top: 20%;
+.groupDescription {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
-
-.editOption{
-    margin: auto;
-    border-radius: 25px;
-    position: absolute;
-    right: 50%;
-    top: 20%;
+.deleteOption, .editOption {
+        display: block;
+        position: relative;
+        margin: 10px auto;
+        width: 90%;
+        text-align: center;
 }
 
 .joinOption{
@@ -305,7 +316,7 @@ html{
 
 .members{
 
-    background-color: darkgrey;
+    background-color: white;
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -316,7 +327,7 @@ html{
 }
 
 .posts{
-    background-color: lightgrey;
+    background-color: #6FC081;
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -348,7 +359,6 @@ html{
     height: 50px;
     width: 90%;
 }
-
 
 
 }
