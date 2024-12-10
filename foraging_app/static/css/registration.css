@@ -1,70 +1,59 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
+/* Center Alignment for the Form Container */
 .center {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
     width: 100%;
+    background: linear-gradient(135deg, #3c9e51, #76c897);
 }
 
+/* Card Styling */
 .card {
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
-h2 {
-    text-align: center;
-    color: #333333;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 5px;
-    color: #555555;
-}
-
-input {
-    padding: 6px;
-    margin-bottom: 10px;
+/* Form Fields */
+.card input {
+    padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid #cccccc;
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
+    font-size: 14px;
 }
 
-small.error {
+/* Error Messages */
+.card small.error {
     color: #ff0000;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: -5px;
+    margin-bottom: 10px;
     display: block;
+    font-size: 12px;
 }
 
-.btn {
+/* Button Styling */
+.card input[type="submit"] {
     background-color: #007bff;
     color: #ffffff;
-    padding: 8px;
+    padding: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn:hover {
+.card input[type="submit"]:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
 }

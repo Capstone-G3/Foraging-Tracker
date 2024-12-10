@@ -1,42 +1,55 @@
+{% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{%  static  'css/base.css' %}">
+    <link rel="stylesheet" href="{%  static  'css/registration.css' %}">
 </head>
-<body>
-    <div class = "center">
-<form method="POST" novalidate class="card">
-	{% csrf_token %}
-	<h2>Sign Up</h2>
-		
-	{% for field in user_form %}
-	<div class="form-group">
-	 	{{ field.label_tag }} {{ field }}
-		{% if field.errors %}
-		<small class="error">
-			{% for error in field.errors %}
-			{{ error }}
-			{% endfor %}
-		</small>
-		{% endif %}
-	</div>
-	{% endfor %}
-    {% for field in profile_form %}
-        <div class="form-group">
-	    
-	 	{{ field.label_tag }} {{ field }}
-		{% if field.errors %}
-		<small class="error">
-			{% for error in field.errors %}
-			{{ error }}
-			{% endfor %}
-		</small>
-		{% endif %}
-	
-        </div>
-	{% endfor %}
-	<br><input type="submit" value="Register" />
-</form>
-    </div>
-</body>
+
+    <body>
+<div class="center">
+    <section class="card">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <h2>Sign Up</h2>
+
+            {% for field in user_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <small class="error" id="{{ field.id_for_label }}-error">
+                    {% for error in field.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </small>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            {% for field in profile_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <small class="error" id="{{ field.id_for_label }}-error">
+                    {% for error in field.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </small>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <input type="submit" value="Register" />
+        </form>
+    </section>
+</div>
+    </body>
+{% endblock %}
