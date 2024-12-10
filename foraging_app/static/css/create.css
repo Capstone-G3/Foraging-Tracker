@@ -7,7 +7,7 @@
     align-items: center;
     display: flex;
     flex-direction: row;
-    height: calc(100% - 54px);
+    height: calc(100% - 74px);
     background-color: #3c9e51;
 }
 
@@ -24,7 +24,7 @@
     border-radius: 20px;
     padding: 10px 0px;
     justify-content: center;
-    margin: 0px 20px;
+    margin: 20px 20px 0px 20px;
     font-size: 20px;
     font-weight: 600;
     display: flex;
@@ -38,6 +38,7 @@
     padding: 20px;
     background-color: #3c9e51;
     font-weight: 500;
+    min-width: 300px;
 }
 
 .data {
@@ -46,7 +47,7 @@
     gap: 8px;
 }
 
-input[type="submit"], input::file-selector-button {
+input[type="submit"], input::file-selector-button, .editButton {
     border: none;
     background-color: #6FC081;
     color: white;
@@ -56,7 +57,11 @@ input[type="submit"], input::file-selector-button {
     border-radius: 10px;
 }
 
-input[type="submit"] {    
+#id_marker-description, #id_description {
+    border-radius: 10px;
+}
+
+input[type="submit"], .editButton {    
     filter: drop-shadow(#207933 4px 4px 1px);
     width: 300px;
 }
@@ -75,4 +80,55 @@ input[type="number"], input[type="text"], select {
 
 .containerForMap {
     padding: 0px;
+}
+
+.map {
+    display: contents;
+}
+
+.minimap {
+    display: none;
+    width: 300px;
+    height: 300px;
+}
+
+.post > div > a {
+    color: white;
+}
+
+@media only screen and (max-width: 640px) {
+    .creationContainer {
+        height: calc(100% - 108px);
+    }
+
+    .map {
+        display: none;
+    }    
+
+    .minimap {
+        display: none;
+        width: 300px;
+        display: flex;
+        height: 300px;
+    }
+
+    .minimap > div > div {
+        height: 100% !important;
+        margin: 10px 0px;
+    }
+
+    .dataContainer:last-child {
+        align-items: center;
+    }
+
+    .createMarker {
+        width: 100%;
+        overflow-y: scroll;
+        height: 100%;
+    }
+
+    .data {
+        width: 100%;
+        font-size: medium;
+    }
 }

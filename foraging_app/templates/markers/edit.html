@@ -1,16 +1,37 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%  static  'css/create.css'  %}">
     <title>Edit Marker</title>
 </head>
 <body>
-
-    <form method="post", enctype="multipart/form-data">
-        {%csrf_token%}
-        {{form}}
-        <input type="submit" value="Edit">
-    </form>
+    <style>
+        .addLink {
+            background-color: #6FC081;
+        }
+    </style>
+    <div class="creationContainer">
+        <div class="createMarker">
+            <div class="title">Edit Marker</div>
+            <div class="dataContainer">
+                <form method="post", method="post", enctype="multipart/form-data" class="post data">
+                    {%csrf_token%}
+                    {{marker_form}}
+                    <input type="submit" value="Edit">
+                </form>                 
+                <div class="minimap">
+                    {{minimap | safe}}
+                </div>               
+            </div>
+        </div>
+        <div class="map">
+            {{map | safe}}
+        </div>
+    </div>    
 </body>
 </html>
+{% endblock %}

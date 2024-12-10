@@ -16,8 +16,7 @@ from django.contrib.auth.hashers import make_password
 from foraging_app.models import Marker
 
 
-class Group_View(LoginRequiredMixin,View):
-    login_url = '/login/'
+class Group_View(View):
 
     def rankingSort(self, member):
         return member.rating
@@ -75,14 +74,17 @@ class Request_Private_Group_Join_View(LoginRequiredMixin,View):
     def post(self, request, groupID, newMemberID):
         thisGroup = Group.objects.get(id=groupID)
         newMember = User.objects.get(id=newMemberID)
-        User_Group.objects.create(group_id=thisGroup, user_id=newMember)
-        send_mail("Accepted into " + thisGroup.name,
+        if User_Group.existInGroup(None, newMember, thisGroup):
+            return redirect('group', groupID)
+        else:
+            User_Group.objects.create(group_id=thisGroup, user_id=newMember)
+            send_mail("Accepted into " + thisGroup.name,
                   "Yippee!  You were accepted into the group " + thisGroup.name,
                   "<EMAIL>",
                   [newMember.email])
-        notification_message = f"Congratulations! You've been accepted into {thisGroup.name}."
-        Notification.objects.create(user=newMember, message=notification_message)
-        return redirect('group', groupID)
+            notification_message = f"Congratulations! You've been accepted into {thisGroup.name}."
+            Notification.objects.create(user=newMember, message=notification_message)
+            return redirect('group', groupID)
 
 
 
@@ -129,8 +131,7 @@ class Create_Group_View(LoginRequiredMixin,View):
         return render(request, "groups/create_group.html", {'form': GroupCreateForm()}, status=status)
 
 
-class Group_Nav_View(LoginRequiredMixin,View):
-    login_url = '/login/'
+class Group_Nav_View(View):
 
     def get(self, request):
         allGroups = Group.objects.order_by("name")

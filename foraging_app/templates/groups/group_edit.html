@@ -8,9 +8,10 @@
     <meta charset="UTF-8">
     <title>Group_Edit</title>
     <link rel="stylesheet" href="{%  static  'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/group_edit.css' %}">
 </head>
 <body>
+<div class="mainContainer">
 <h1>Make any changes for {{ thisGroup.name }}</h1>
 
 <form id="group_edit_form" action="{% url 'group_edit' thisGroup.id %}" method="POST" enctype="multipart/form-data" class="form-styling">
@@ -20,10 +21,10 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ thisGroup.name }}">
             </div>
             <div class="mb-3">
-                <input type="radio" class="form-control" id="choice1" name="isPrivate" value="Public" required>
+                <input type="radio" id="choice1" name="isPrivate" value="Public" required>
                 <label for="choice1" class="form-label">Public</label>
 
-                <input type="radio" class="form-control" id="choice2" name="isPrivate" value="Private">
+                <input type="radio" id="choice2" name="isPrivate" value="Private">
                 <label for="choice2" class="form-label">Private</label>
             </div>
             <div class="mb-3">
@@ -36,6 +37,7 @@
                 <button type="submit" class="btn btn-primary rounded-pill">Save Changes</button>
             </div>
         </form>
+    </div>
 
 
 </body>

@@ -1,17 +1,32 @@
+body {
+    overflow-y: hidden;
+}
+
+.arrow-up, .arrow-down {
+    display: none;
+}
+
 .friendsLink {
     background-color: #3c9e51;
 }
 
+#usersContainer, #requestsContainer, #friendsContainer {
+    overflow-y: scroll;
+    height: calc(100% - 80px);
+    padding-right: 10px;
+}
+
 .main-container {
-    display: flex;            
-    justify-content: space-between; 
-    height: 100vh;            
+    height: calc(100vh - 54px);
+    display: flex;
+    justify-content: flex-start;
+    overflow-y: hidden;
 }
 
 .sections {
     width: 33%;              
-    padding: 20px;            
-    overflow-y: auto;        
+    padding: 20px;     
+    overflow-y: hidden;        
 }
 
 .image-container {
@@ -42,4 +57,58 @@ button {
 button:hover {
     background-color: darkgreen; 
     transform: scale(1.05);       
+}
+
+
+@media only screen and (max-width: 640px) {
+
+    .main-container {
+        height: calc(100vh - 54px);
+        overflow-y: auto;
+    }
+
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sections {
+        width: 100%;
+        overflow-y: visible;
+    }
+
+    #usersContainer, #requestsContainer, #friendsContainer {
+        overflow-y: visible;
+        padding-right: 0px;
+    }
+
+    .sectionHeader {
+        justify-content: space-between;
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .arrow-up::hover, .arrow-down::hover {
+        cursor: pointer;
+    }
+
+    .arrow-up {
+        display: flex;
+        width: 0; 
+        height: 0; 
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid black;
+    }
+
+    .arrow-down{
+        display: flex;
+        width: 0; 
+        height: 0; 
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid black;
+        transform: rotate(180deg);
+    }
 }

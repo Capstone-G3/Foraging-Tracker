@@ -2,7 +2,7 @@ from PIL import Image
 from os import listdir
 from os.path import join as path_join
 from numpy import ndarray 
-from detect.predict import NsfwDectector, DectectorStatus
+from forage.detect.predict import NsfwDectector, DectectorStatus
 from unittest import TestCase
 
 class TestDectector(TestCase):

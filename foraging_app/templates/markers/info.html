@@ -1,37 +1,53 @@
-{% extends 'base.html' %}
-{%load static%}
+{% extends 'index.html' %}
+{% load static %}
+
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{%  static  'css/create.css'  %}">
     <link rel="stylesheet" href="{%static 'css/info_marker.css'%}">
     <title>{{marker.title}}</title>
 </head>
 <body>
-    <div class="pane-display info-pane-container">
-        {%for key,value in marker%}
-            {%if key != 'image'%}
-                <p><strong>{{key|upper}}</strong> : {{value}}</p>
-            {%else%}
-                <img src="{{value}}" height="100", width="100">
-            {%endif%}
-        {%endfor%}
-        <p>Total Likes : {{total_likes}}</p>
-        
-        {%if request.user%}
-            {%if request.user.id == owner.id%}
-                <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button>Edit</button></a>
-                
-                <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
-                    {%csrf_token%}
-                    <input type="submit" value="Delete">
-                </form>
-            {%endif%}
-        {%endif%}
-    </div>
-    <div class="pane-display map-pane-container">
-        {{map | safe}}
+    <style>
+        .addLink {
+            background-color: #6FC081;
+        }
+    </style>
+    <div class="creationContainer">
+        <div class="createMarker">
+            <div class="title">View Marker</div>
+            <div class="dataContainer">
+                <div class="data">
+                    {%for key,value in marker%}
+                        {%if key != 'image'%}
+                            <p><strong>{{key|upper}}</strong> : {{value}}</p>
+                        {%else%}
+                            <img src="{{value}}" height="100", width="100">
+                        {%endif%}
+                    {%endfor%}
+                    <p>Total Likes : {{total_likes}}</p>
+                    {%if request.user%}
+                        {%if request.user.id == owner.id%}
+                            <a href="{% url 'edit_marker' marker_id=url_resolve%}"><button class="editButton">Edit</button></a>
+
+                            <form method="post", action="{% url 'delete_marker' marker_id=url_resolve%}">
+                                {%csrf_token%}
+                                <input type="submit" value="Delete">
+                            </form>
+                        {%endif%}
+                    {%endif%}
+                </div>                 
+                <div class="minimap">
+                    {{minimap | safe}}
+                </div>        
+            </div>
+        </div>
+        <div class="map">
+            {{map | safe}}
+        </div>
     </div>
 </body>
 </html>

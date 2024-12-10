@@ -1,22 +1,43 @@
+{% extends 'base.html' %}
 {% load static %}
+
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Private Group Join</title>
-{#    TODO: Style it!#}
+    <link rel="stylesheet" href="{%  static  'css/private_group_join.css' %}">
 </head>
 <body>
+<div class="accept desktop">
 
     {% if thisGroup.user_admin.id == request.user.id %}
 
-    <form action="{% url 'request_private_group_join_response' thisGroup.id newMember.id %}" method="post">
+    <form class="accept" action="{% url 'request_private_group_join_response' thisGroup.id newMember.id %}" method="post">
         {%csrf_token%}
-        <input type="submit" value="Accept {{ newMember.username }} into {{ thisGroup.name }}" />
+        <input type="submit" class="bigButton" value="Accept {{ newMember.username }} into {{ thisGroup.name }}" />
     </form>
     {% else %}
         <p>You must be signed in as the group admin to accept members into your group.</p>
     {% endif %}
+</div>
+
+<div class="accept mobile">
+
+    {% if thisGroup.user_admin.id == request.user.id %}
+
+    <form class="accept" action="{% url 'request_private_group_join_response' thisGroup.id newMember.id %}" method="post">
+        {%csrf_token%}
+        <input type="submit" class="bigButton" value="Accept {{ newMember.username }} into {{ thisGroup.name }}" />
+    </form>
+    {% else %}
+        <p>You must be signed in as the group admin to accept members into your group.</p>
+    {% endif %}
+</div>
 
 </body>
 </html>
+
+{% endblock %}
