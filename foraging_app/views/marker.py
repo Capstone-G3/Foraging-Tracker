@@ -73,29 +73,7 @@ class Marker_Create_View(LoginRequiredMixin, View):
     def post(self,request):
         marker_form = MarkerCreateForm(request.POST, request.FILES, prefix="marker")
         species_form = SpeciesCreateForm(request.POST, prefix="species")
-<<<<<<< HEAD
         if not marker_form.is_valid():
-=======
-        status = 400
-
-        if marker_form.is_valid():
-            data = marker_form.cleaned_data
-            # TODO : Resize Image before save -> Save space. commented out because issues with creating a marker
-            #following error when creating a marker - MultiValueDictKeyError at /marker/create
-            # image = Image.open(request.FILES['image'])
-            if species_form.is_valid():
-                species_cleaned = species_form.cleaned_data
-                species = Species.objects.create(**species_cleaned)
-                data['species'] = species
-
-            # image = image.resize(size=(400,400))
-            # data['image'] = image
-            marker_create = Marker.objects.create(**data, owner=request.user)
-            if marker_create is not None:
-                messages.success(request,"Marker created complete.")
-                return redirect('/', permanent=True) # 301
-        else:
->>>>>>> origin/main
             messages.error(request, "Marker failed to create.")
             return redirect('/marker/create')
 
