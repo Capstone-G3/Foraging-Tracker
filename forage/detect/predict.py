@@ -20,7 +20,7 @@ class NsfwDectector:
         # Changed to make sure Django can recognize.
         model_path = path_join(settings.BASE_DIR,'forage','detect','model','nsfw_inception3.h5')
         self._model = keras.models.load_model(model_path, compile=False) # Using static model
-        self._img_size = (299,299) #Inception 3 use 299 and MobileNetV2 use 224
+        self._img_size = (224,224) #Inception 3 use 299 and MobileNetV2 use 224
 
     def __process_image__(self, image_obj):
         """
