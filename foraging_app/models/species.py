@@ -4,7 +4,7 @@ class Species(Model):
 
     id = AutoField(primary_key=True)
     type_animal = CharField(max_length=120, unique=True, null=False, verbose_name="type")
-    category = CharField(max_length=120, null=False)
+    category = CharField(max_length=120, null=True)
     breed = CharField(max_length=120, null=True)
     # scope = CharField(max_length=120, null=False)
     # description = CharField(max_length=512)
