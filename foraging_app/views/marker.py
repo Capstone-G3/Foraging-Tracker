@@ -175,7 +175,7 @@ class Marker_Delete_View(LoginRequiredMixin, View):
             return redirect('/') # 404
         query.delete()
         messages.success(request,'Marker removed complete.')
-        return redirect('home_marker')
+        return redirect('/')
 
 class Marker_Details_View(LoginRequiredMixin, View):
     def get(self,request,marker_id):
