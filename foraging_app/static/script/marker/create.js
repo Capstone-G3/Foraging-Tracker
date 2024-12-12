@@ -15,35 +15,159 @@ const FRUIT_CLASSIFICATION = {'African pear': 'Manilkara obovata', 'Almond-leave
 
 let typeSelection = document.getElementById('id_species-type_animal');
 const typeOptions = Array.from(typeSelection.options);
+
+
 let categorySelection = document.getElementById('id_species-category');
-let breedText = document.getElementById('id_species-breed');
+let categoryParent = categorySelection.parentElement;
+categorySelection.placeholder = 'Search'
 
-const category_instant = {
-    'active' : categorySelection.parentElement.innerHTML,
-    'inactive' : ''
+let breedSelection = document.getElementById('id_species-breed');
+let breedParent = breedSelection.parentElement; 
+breedParent.style.display = 'none';
+breedSelection.placeholder = 'Search'
+
+typeSelection.addEventListener('change', selectChoice);
+
+function removeAllListeners() {
+    const category_clone = categorySelection.cloneNode(true);
+    categoryParent.replaceChild(category_clone, categorySelection);
+    categorySelection = category_clone;
+
+    const breed_clone = breedSelection.cloneNode(true);
+    breedParent.replaceChild(breed_clone, breedSelection);
+    breedSelection = breed_clone;
 }
 
-const breed_instant = {
-    'active' : breedText.parentElement.innerHTML,
-    'inactive' : ''
+
+
+function choiceInit(category_label, breed_label){
+    categorySelection.labels[0].innerText = category_label;
+    breedSelection.labels[0].innerText = breed_label;
+    breedSelection.removeAttribute('readOnly');
+
+    breedParent.style.display = 'none';
+    if (breedSelection.hasAttribute('readOnly')){
+        breedSelection.removeAttribute('readOnly');
+    }
+    removeAllChildren(categorySelection);
+    removeAllChildren(breedSelection);
+    removeAllListeners();
+
 }
 
-categorySelection.parentElement.innerHTML = category_instant['inactive'];
-breedText.parentElement.innerHTML = breed_instant['inactive'];
-typeSelection.addEventListener('change', selectionChoice);
+function removeAllChildren(parent){
+    parent.innerHTML = '';
+    parent.value = '';
+}
 
-function selectionChoice(){
-    if(typeSelection.value === typeOptions[0].value){
-        
-    }
-    if(typeSelection.value === typeOptions[1].value){
+function selectChoice(){
+    if (typeSelection.value === typeOptions[0].value){
+        choiceInit('Category', 'Breed');
+        const category_list = document.createElement('datalist');
+        category_list.id = "category_list";
+        categorySelection.appendChild(category_list)
 
-    }
-    if(typeSelection.value === typeOptions[2].value){
+        Object.keys(ANIMAL_CLASSIFICATION).forEach(key =>{
+            const mainOption = document.createElement('option');
+            mainOption.textContent = key.toLowerCase(); 
+            mainOption.value = key;
+            category_list.appendChild(mainOption);
+        });
 
+        categorySelection.addEventListener('change', function(){
+            removeAllChildren(breedSelection);
+            if (categorySelection.value != ''){
+                breedParent.style.display = '';
+                categories_cached = categorySelection.value;
+                let breed_list = document.createElement('datalist');
+                breed_list.id = 'breed_list';
+                ANIMAL_CLASSIFICATION[categorySelection.value].forEach(value => {
+                    const subOption = document.createElement('option');
+                    subOption.textContent = value.toLowerCase(); 
+                    subOption.value = value;
+                    console.log(value);
+                    breed_list.appendChild(subOption);
+                });
+                breedSelection.appendChild(breed_list);
+            }
+        });
+        categorySelection.addEventListener('change', function(){
+            
+            removeAllChildren(breedSelection);
+            if (categorySelection.value != ''){
+                breedParent.style.display = '';
+                categories_cached = categorySelection.value;
+                let breed_list = document.createElement('datalist');
+                breed_list.id = 'breed_list';
+                ANIMAL_CLASSIFICATION[categorySelection.value].forEach(value => {
+                    const subOption = document.createElement('option');
+                    subOption.textContent = value.toLowerCase(); 
+                    subOption.value = value;
+                    console.log(value);
+                    breed_list.appendChild(subOption);
+                });
+                breedSelection.appendChild(breed_list);
+            }
+        });
+      
     }
-    if(typeSelection.value === typeOptions[3].value){
+    if (typeSelection.value === typeOptions[1].value){
+        choiceInit("Name", "Scientific");
+        const nameList = document.createElement('datalist');
+        nameList.id = 'category_list';
+        categorySelection.appendChild(nameList);
+
+        Object.keys(PLANT_CLASSIFICATION).forEach(key => {
+            const mainOption = document.createElement('option');
+            mainOption.value = key;
+            mainOption.textContent = key.toLowerCase();
+            nameList.appendChild(mainOption);
+        });
+        categorySelection.addEventListener('change', function(){
+            if (categorySelection.value != ''){
+                breedParent.style.display = '';
+            }else{
+                breedParent.style.display = 'none';
+            }
+            breedSelection.readOnly = true;
+            breedSelection.value = PLANT_CLASSIFICATION[categorySelection.value];
+        });
+    }
+    if (typeSelection.value === typeOptions[2].value){
+        choiceInit("Species","");
+        const category_list = document.createElement('datalist');
+        category_list.id = 'category_list';
+        categorySelection.appendChild(category_list);
+        TREE_CLASSIFICATION.forEach(key =>{
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = key.toLowerCase();
+            category_list.appendChild(option);
+        });
+    }
+    if (typeSelection.value === typeOptions[3].value){
+        choiceInit("Name", "Scientific");
+        const nameList = document.createElement('datalist');
+        nameList.id = 'category_list';
+        categorySelection.appendChild(nameList);
+
+        Object.keys(FRUIT_CLASSIFICATION).forEach(key => {
+            const mainOption = document.createElement('option');
+            mainOption.value = key;
+            mainOption.textContent = key.toLowerCase();
+            nameList.appendChild(mainOption);
+        });
+        categorySelection.addEventListener('change', function(){
+            if (categorySelection.value != ''){
+                breedParent.style.display = '';
+            }else{
+                breedParent.style.display = 'none';
+            }
+            breedSelection.readOnly = true;
+            breedSelection.value = FRUIT_CLASSIFICATION[categorySelection.value];
+        });
 
     }
 }
-selectionChoice()
+
+selectChoice();
