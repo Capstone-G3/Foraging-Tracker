@@ -19,7 +19,7 @@ class Species(Model):
         super().delete(**kwargs)
 
     def __str__(self):
-        return self.name
+        return self
 
     def getMarkers(self):
         from foraging_app.models.marker import Marker
