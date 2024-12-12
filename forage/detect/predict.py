@@ -1,3 +1,4 @@
+import os
 from os.path import join as path_join
 from PIL import Image
 from tensorflow import keras
@@ -18,7 +19,7 @@ class NsfwDectector:
     
     def __init__(self):
         # Changed to make sure Django can recognize.
-        model_path = path_join(settings.BASE_DIR,'forage','detect','model','nsfw_inception3.h5')
+        model_path = path_join(os.getcwd(),'model','nsfw_inception3.h5')
         self._model = keras.models.load_model(model_path, compile=False) # Using static model
         self._img_size = (224,224) #Inception 3 use 299 and MobileNetV2 use 224
 
