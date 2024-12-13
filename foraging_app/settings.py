@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_user_agents',
+    'storages',
+
+    # Internal 
     'foraging_app',
     'forage'
     ]
@@ -142,7 +145,7 @@ STATIC_URL = 'static/'
 # STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
 
 # Media images. Change when production.
-MEDIA_ROOT = os.path.join(BASE_DIR, 'foraging_app','static','media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'foraging_app.User'
@@ -153,8 +156,15 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'foraging.tracker@gmail.com'
-EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
+# Production
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# Development :
+# EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
 # Default primary key field type
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from .cdn.conf import *
