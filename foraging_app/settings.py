@@ -158,7 +158,7 @@ STATIC_URL = 'static/'
 # STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
 
 # Production :
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.nyc3.digitaloceanspaces.com/{AWS_LOCATION}/'
 
 # Development :
