@@ -135,6 +135,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+from .cdn.conf import *
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -144,9 +145,12 @@ STATIC_URL = 'static/'
 #by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
 # STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
 
-# Media images. Change when production.
+# Production :
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL}/media/'
+
+# Development :
+# MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'foraging_app.User'
 #SMTP Configuration     **sometimes the email will go to junk folder
@@ -166,5 +170,3 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-from .cdn.conf import *
