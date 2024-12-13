@@ -147,7 +147,7 @@ STATIC_URL = 'static/'
 
 # Production :
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL}/media/'
+MEDIA_URL = f'https://{AWS_LOCATION}/media/'
 
 # Development :
 # MEDIA_URL = '/media/'
