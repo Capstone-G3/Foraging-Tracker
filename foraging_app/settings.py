@@ -135,7 +135,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-from .cdn.conf import *
+# Bucket Configuration
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME='forage-bucket'
+AWS_S3_ENDPOINT_URL='https://nyc3.digitaloceanspaces.com'
+
+AWS_S3_OBJECT_PARAMETERS={
+    "CacheControl" : 'max-age=86400'
+}
+AWS_DEFAULT_ACL = 'public-read'
+AWS_LOCATION = 'media'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -147,7 +159,7 @@ STATIC_URL = 'static/'
 
 # Production :
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = f'https://{AWS_LOCATION}/media/'
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.nyc3.digitaloceanspaces.com/{AWS_LOCATION}/'
 
 # Development :
 # MEDIA_URL = '/media/'
