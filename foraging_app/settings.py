@@ -136,36 +136,52 @@ USE_I18N = True
 USE_TZ = True
 
 # Bucket Configuration
-AWS_S3_OBJECT_PARAMETERS={
-    "CacheControl" : 'max-age=86400'
-}
+# Django-Storages S3 (AWS) - DigitalOcean hosted.
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
-            "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
-            "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
-            "bucket_name": 'forage-bucket',
-            "endpoint_url": 'https://nyc3.digitaloceanspaces.com',
-            "location": 'media',
-            "custom_domain":'https://forage-bucket.nyc3.digitaloceanspaces.com/media/',
-        },
-    }
+            'access_key' : os.getenv("AWS_ACCESS_KEY_ID"),
+            'secret_key' : os.getenv("AWS_SECRET_ACCESS_KEY"),
+            'bucket_name' : "forage-bucket",
+            'object_parameters' : {
+                'CacheControl' : 'max-age=86400'
+            },
+            'default_acl' : 'public-read',
+            'file_overwrite' : False,
+            'location' : 'media',
+            'endpoint_url' : 'https://nyc3.digitaloceanspaces.com',
+            'region_name' : 'nyc3'
+        }
+    },
+    "staticfiles" :{
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS" : {
+            'access_key' : os.getenv("AWS_ACCESS_KEY_ID"),
+            'secret_key' : os.getenv("AWS_SECRET_ACCESS_KEY"),
+            'bucket_name' : "forage-bucket",
+            'object_parameters' : {
+                'CacheControl' : 'max-age=86400'
+            },
+            'default_acl' : 'private',
+            'file_overwrite' : False,
+            'location' : 'static',
+            'endpoint_url' : 'https://nyc3.digitaloceanspaces.com',
+        }
+    },
 }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+#by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
+
+# Production (refer to STORAGES for links):
 STATIC_ROOT = os.path.join(BASE_DIR,'foraging_app','static')
 STATIC_URL = 'static/'
-#by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
-# STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-# Production :
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Development :
-# MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'foraging_app.User'
 #SMTP Configuration     **sometimes the email will go to junk folder
