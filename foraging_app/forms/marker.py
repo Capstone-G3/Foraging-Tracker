@@ -4,7 +4,6 @@ from foraging_app.models.marker import Comment
 
 
 class MarkerCreateForm(ModelForm):
-    species = ModelChoiceField(queryset=Species.objects.all(), widget=Select, required=False, empty_label="New")
     class Meta:
         model = Marker
         fields = [
