@@ -166,8 +166,12 @@ class Group_Delete_View(LoginRequiredMixin,View):
     login_url = '/login/'
 
     def get(self, request, groupID):
-        thisGroup = Group.objects.get(id=groupID)
-        return render(request, "groups/group_delete_confirmation.html", {'thisGroup': thisGroup})
+        groupExists = Group.objects.filter(id=groupID).exists()
+        if groupExists:
+            thisGroup = Group.objects.get(id=groupID)
+            return render(request, "groups/group_delete_confirmation.html", {'thisGroup': thisGroup})
+        else:
+            return redirect('group_nav')
 
     def post(self, request, groupID):
         thisGroup = Group.objects.get(id=groupID)
