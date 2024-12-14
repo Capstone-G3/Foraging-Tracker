@@ -27,7 +27,7 @@
         }
     </style>
 </head>
-<body>
+<body data-info-marker-url="{% url 'info_marker' marker_id=0 %}">
     {% if messages %}
         <script>
             window.onload = function() {
@@ -37,6 +37,7 @@
             }
         </script>
     {% endif %}
+    
     <div class="wrapper">
         <div class="filterContainer">
             <div class="filterIcon">
@@ -280,7 +281,12 @@
                     document.getElementById('modalTitle').textContent = title;
                     document.getElementById('modalLatitude').textContent = 'Latitude: ' + latitude;
                     document.getElementById('modalLongitude').textContent = 'Longitude: ' + longitude;
-                    document.getElementById('viewOnMapBtn').href = `/map/marker/${markerId}/`;
+                   // Get the base URL from the data attribute
+                    const baseUrl = document.body.getAttribute('data-info-marker-url');
+                    // Replace the placeholder '0' with the actual markerId
+                    const fullUrl = baseUrl.replace('0', markerId);
+                
+                    document.getElementById('viewOnMapBtn').href = fullUrl;
                 }
 
                 function closeModal() {
