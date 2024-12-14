@@ -108,7 +108,17 @@ class UserLocate(LocateControl):
             {{this.get_name()}}.addTo({{this._parent.get_name()}});
             {% if this.auto_start %}
                 {{this.get_name()}}.start();
+
             {% endif %}
+
+            
+            // This only happens assumed that there is a form with the same ID.
+            const lat_auto = document.getElementById('id_marker-latitude');
+            const long_auto = document.getElementById('id_marker-longitude');
+            {{this._parent.get_name()}}.on('locationfound', function(e){
+                lat_auto.value = e.latitude;
+                long_auto.value = e.longitude;
+            });
 
         {% endmacro %}
         """)

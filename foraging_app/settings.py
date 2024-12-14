@@ -11,7 +11,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+
 import os
+import sys
+import dj_database_url
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l7qu6rus9h=2gq1glw!=*kynt_*csqkgjwl-9q++hknyr%fzu&'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = os.getenv("DEBUG", 'False') == 'True'
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", '127.0.0.1,localhost' ).split(',')
 
 
 # Application definition
@@ -39,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_user_agents',
+    'storages',
+
+    # Internal 
     'foraging_app',
     'forage'
     ]
@@ -73,22 +81,29 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foraging_app.wsgi.application'
-ASGI_APPLICATION = 'foraging_app.asgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'TEST':{
-            'NAME' : BASE_DIR / 'test_db.sqlite3'
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE",'False') == 'True'
+
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'TEST':{
+                'NAME' : BASE_DIR / 'test_db.sqlite3'
+            }
         }
     }
-}
-
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable is not defined")
+    DATABASES = {
+        'default' : dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -120,17 +135,53 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Bucket Configuration
+# Django-Storages S3 (AWS) - DigitalOcean hosted.
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            'access_key' : os.getenv("AWS_ACCESS_KEY_ID"),
+            'secret_key' : os.getenv("AWS_SECRET_ACCESS_KEY"),
+            'bucket_name' : "forage-bucket",
+            'object_parameters' : {
+                'CacheControl' : 'max-age=86400'
+            },
+            'default_acl' : 'public-read',
+            'file_overwrite' : False,
+            'location' : 'media',
+            'endpoint_url' : 'https://nyc3.digitaloceanspaces.com',
+            'region_name' : 'nyc3'
+        }
+    },
+    "staticfiles" :{
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS" : {
+            'access_key' : os.getenv("AWS_ACCESS_KEY_ID"),
+            'secret_key' : os.getenv("AWS_SECRET_ACCESS_KEY"),
+            'bucket_name' : "forage-bucket",
+            'object_parameters' : {
+                'CacheControl' : 'max-age=86400'
+            },
+            'default_acl' : 'private',
+            'file_overwrite' : False,
+            'location' : 'static',
+            'endpoint_url' : 'https://nyc3.digitaloceanspaces.com',
+        }
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
 #by having the following var created a warning "STATICFILES_DIRS setting does not exist. - caused when BASE_DIR is off-by-one. (fixed)"
-STATICFILES_DIRS = [BASE_DIR / "foraging_app" / "static"]
 
-# Media images. Change when production.
-MEDIA_ROOT = os.path.join(BASE_DIR, 'foraging_app','static','media')
+# Production (refer to STORAGES for links):
+STATIC_ROOT = os.path.join(BASE_DIR,'foraging_app','static')
+STATIC_URL = 'static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
 
 AUTH_USER_MODEL = 'foraging_app.User'
 #SMTP Configuration     **sometimes the email will go to junk folder
@@ -140,12 +191,13 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'foraging.tracker@gmail.com'
-EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
+# Production
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# Development :
+# EMAIL_HOST_PASSWORD = 'qnfr yfcl hggz ivin'
 # Default primary key field type
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-

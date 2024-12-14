@@ -1,8 +1,11 @@
+import os
 from os.path import join as path_join
 from PIL import Image
 from tensorflow import keras
 import numpy as np
 from enum import Enum
+
+from django.conf import settings
 
 class DectectorStatus(Enum):
     """
@@ -15,9 +18,15 @@ class NsfwDectector:
     __categories = ['drawing', 'hentai', 'neutral', 'porn', 'sexy']
     
     def __init__(self):
-        model_path = path_join('detect', 'model', 'nsfw_inception3.h5')
+        # Changed to make sure Django can recognize.
+        
+        # Production
+        model_path = path_join(os.getcwd(),'forage','detect','model','nsfw_mobilenetv2.h5')
+
+        # Development
+        # model_path = path_join(settings.BASE_DIR,'forage','detect','model','nsfw_mobilenetv2.h5')
         self._model = keras.models.load_model(model_path, compile=False) # Using static model
-        self._img_size = (299,299) #Inception 3 use 299 and MobileNetV2 use 224
+        self._img_size = (224,224) #Inception 3 use 299 and MobileNetV2 use 224
 
     def __process_image__(self, image_obj):
         """
