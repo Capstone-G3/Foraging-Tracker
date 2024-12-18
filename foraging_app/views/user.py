@@ -44,7 +44,11 @@ class User_View(View):
             friend_count = friends.count()
         except Friend.DoesNotExist:
             friend_count = None
-        this_user = request.user
+        # this_user = request.user
+        try:
+            this_user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            this_user = None
         # query user to add
         try:
             user_to_add = User.objects.get(id=userId)
