@@ -14,7 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('../img/animated_forest.jpg');
+    background: url('static/img/animated_forest.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
