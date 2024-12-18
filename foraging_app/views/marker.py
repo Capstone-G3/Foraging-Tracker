@@ -178,6 +178,9 @@ class Marker_Delete_View(LoginRequiredMixin, View):
         return redirect('/')
 
 class Marker_Details_View(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'login'
+    
     def get(self,request,marker_id):
         marker = get_object_or_404(Marker, id=marker_id)
         likes = Like_Marker.objects.filter(marker_id=marker_id)
