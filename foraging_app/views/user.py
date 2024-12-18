@@ -54,9 +54,10 @@ class User_View(View):
             user_to_add = User.objects.get(id=userId)
         except User.DoesNotExist:
             user_to_add = None
-
-        is_friend = Friend.is_friend(this_user, user_to_add)
-
+        try:
+            is_friend = Friend.is_friend(this_user, user_to_add)
+        except Friend.DoesNotExist:
+            is_friend = None
         # query list of user's who user has sent friend request
         try:
             sent_friend_request = Friend_Request.objects.filter(uid_sender=this_user, status=1)
