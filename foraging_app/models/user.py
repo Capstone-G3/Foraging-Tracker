@@ -15,7 +15,6 @@ class User(AbstractUser):
         "Silver": 100,
         "Bronze": 10
     }
-    is_active=BooleanField(default=True)
     id = AutoField(primary_key=True, editable=False)
     rating = IntegerField(default=0)
     profile_image = ImageField(upload_to='user_profile/', null=False)
