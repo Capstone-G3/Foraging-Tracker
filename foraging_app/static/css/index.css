@@ -157,7 +157,7 @@
 }
 
 .map.styling {    
-    height: calc(100vh - 74px) !important;
+    height: calc(100dvh - 74px) !important;
 }
 
 @media only screen and (max-width: 640px) {
