@@ -106,7 +106,6 @@ input[type="number"], input[type="text"], select {
     }    
 
     .minimap {
-        display: none;
         width: 300px;
         display: flex;
         height: 300px;

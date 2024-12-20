@@ -10,6 +10,7 @@
 
 /* Card Styling */
 .card {
+    margin: 20px;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 12px;
@@ -41,7 +42,7 @@
 
 /* Button Styling */
 .card input[type="submit"] {
-    background-color: #007bff;
+    background-color: #3c9e51;
     color: #ffffff;
     padding: 10px;
     border: none;

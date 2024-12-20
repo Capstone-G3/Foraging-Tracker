@@ -318,6 +318,14 @@
     cursor: pointer;
 }
 
+.desktopComment {
+    display: flex;
+}
+
+.mobileComment {
+    display: none;
+}
+
 @media only screen and (max-width: 640px) {
     #filtersContainer {
         display: none;
@@ -344,7 +352,7 @@
     }
     
     .wrapper {
-        height: calc(100vh - 107px) !important;
+        height: calc(100dvh - 107px) !important;
         flex-direction: column;
     }
 
@@ -362,5 +370,15 @@
 
     .container {
         padding-top: 0px !important;
+    }
+
+    .desktopComment {
+        display: none;
+    }
+
+    .mobileComment {
+        display: block;
+        word-wrap: break-word;
+        margin: 10px;
     }
 }

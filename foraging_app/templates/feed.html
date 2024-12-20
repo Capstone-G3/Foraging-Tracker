@@ -160,13 +160,15 @@
                                         {% else %}
                                             <img src="{% static 'css/images/user_logo.png' %}" alt="Default Profile Image" class="profile-image" style="background-color: black !important;">
                                         {% endif %}
-                                        <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                        <strong>{{ comment.user.username }}</strong>: <div class="desktopComment">{{ comment.text }}</div>
                                         <div class="created-date">{{ comment.created_date|date:"F d, Y" }}</div>
                                     {% if comment.user == request.user %}
                                         <form action="{% url 'delete_comment' comment.id %}" method="post" class="delete-comment-form">
                                             {% csrf_token %}
-                                            <button type="submit">Delete</button>
+                                            <button style="align-items: center; display: flex;" type="submit">Delete</button>
                                         </form>
+                                        
+                                    <div class="mobileComment">{{ comment.text }}</div>
                                     {% endif %}
                                     </div>
                                     <div class="dropdown-divider"></div>
