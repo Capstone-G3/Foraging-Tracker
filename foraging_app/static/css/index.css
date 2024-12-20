@@ -175,7 +175,7 @@
     }
 
     .map.styling {
-        height: calc(100vh - 107px) !important;
+        height: calc(100dvh - 107px) !important;
     }
 
     .desktop .groupedPageLinks {
