@@ -82,7 +82,7 @@
     margin: 10px;
 }
 
-.desktop {
+.desktopForUser {
     display: flex;
 }
 
@@ -108,7 +108,7 @@
 @media only screen and (max-width: 640px) {
 
     .pageContainer {
-        height: calc(100vh - 54px);
+        height: calc(100dvh - 107px);
         top: 54px;
     }
 
@@ -138,7 +138,7 @@
         font-size: 20px;
     }
 
-    .desktop {
+    .desktopForUser {
         display: none;
     }
 
