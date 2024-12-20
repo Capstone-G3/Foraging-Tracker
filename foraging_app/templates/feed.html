@@ -166,11 +166,10 @@
                                         <form action="{% url 'delete_comment' comment.id %}" method="post" class="delete-comment-form">
                                             {% csrf_token %}
                                             <button style="align-items: center; display: flex;" type="submit">Delete</button>
-                                        </form>
-                                        
-                                    <div class="mobileComment">{{ comment.text }}</div>
+                                        </form>                                        
                                     {% endif %}
                                     </div>
+                                    <div class="mobileComment">{{ comment.text }}</div>
                                     <div class="dropdown-divider"></div>
                                 {% endfor %}
                             </div>
