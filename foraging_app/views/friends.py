@@ -52,6 +52,7 @@ class FriendsView(LoginRequiredMixin, View):
 
 
 class AcceptFriendRequestView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user = request.user
         user_to_add = User.objects.get(id=user_id)
@@ -64,6 +65,7 @@ class AcceptFriendRequestView(LoginRequiredMixin, View):
 
 
 class RejectFriendRequestView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user = request.user
         user_to_reject = User.objects.get(id=user_id)
@@ -72,6 +74,7 @@ class RejectFriendRequestView(LoginRequiredMixin, View):
 
 
 class RemoveFriendView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user = request.user
         user_to_remove = User.objects.get(id=user_id)
@@ -96,6 +99,7 @@ class RemoveFriendView(LoginRequiredMixin, View):
 
 
 class CancelFriendRequestView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         sender = request.user
         receiver = User.objects.get(id=user_id)
