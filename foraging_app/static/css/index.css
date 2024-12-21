@@ -9,6 +9,10 @@
     position: relative; /* Positioning context for dropdown */
 }
 
+.ftLogo {
+    flex: 1;
+}
+
 .groupedPageLinks {
     justify-content: center;
     display: flex;
@@ -78,6 +82,8 @@
     align-items: center;
     width: 150px;
     justify-content: end;
+    flex-flow: wrap;
+    text-overflow: ellipsis;
 }
 
 .dropdown-toggle::after {
@@ -161,6 +167,10 @@
 }
 
 @media only screen and (max-width: 640px) {
+    .ftLogo {
+        flex: 0;
+    }
+
     .appbar, .groupedPageLinks {
         height: 54px;
     }

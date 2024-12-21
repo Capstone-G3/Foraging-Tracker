@@ -42,7 +42,7 @@
 <body class="{% block body_class %}{% endblock %}">
     <div class="mapContainer">
         <div class="appbar desktop">
-            <div style="flex: 1;">
+            <div class="ftLogo">
                 <img src="{% static 'css/images/FT_logo.png' %}" height="48" alt="Foraging Tracker Logo">
             </div>
             <div class="groupedPageLinks">
@@ -58,11 +58,14 @@
             <div class="userLink ml-auto">
                 
                 <div class="dropdown">
-                    {% if not user.is_authenticated %}
-                        <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
-                    {% else %}
-                        <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
-                    {% endif %}
+                    <div style="overflow: hidden; text-overflow: ellipsis; flex: 1;">
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'login' %}" style="color: white !important;">Log In</a>
+                        {% else %}
+                            <a href="{% url 'user' request.user.id %}"><span class="username-text">{{ user.username }}</span></a>
+                        {% endif %}
+                    </div>
+                    <div style="flex-direction: row; display: flex; align-items: center;">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: 
                             transparent; border: transparent;">
@@ -105,6 +108,7 @@
                         {% endif %}
                             
                         </ul>
+                    </div>
                     </div>
                 </div>
             </div>
