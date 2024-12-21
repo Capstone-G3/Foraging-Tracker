@@ -80,7 +80,6 @@
     height: 74px;
     display: flex;
     align-items: center;
-    width: 150px;
     justify-content: end;
     flex-flow: wrap;
     text-overflow: ellipsis;
