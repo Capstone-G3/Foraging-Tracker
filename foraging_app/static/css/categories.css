@@ -1,5 +1,5 @@
-.categoriesLink {
-    background-color: #3c9e51;
+.categories-container {
+    height: calc(100dvh - 54px);
 }
 
 .categoriesLink {

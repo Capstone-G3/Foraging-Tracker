@@ -12,44 +12,46 @@
     <link rel="stylesheet" href="{% static 'css/categories.css' %}">
 </head>
 <body>
-    <h1>Species Categories</h1>
-    
-    <div class="search-container">
-        <form method="GET" action="{% url 'categories' %}">
-            <input type="text" name="q" placeholder="Search categories..." value="{{ request.GET.q|default_if_none:'' }}">
-            <button type="submit">Search</button>
-            <button type="button" onclick="clearSearch()">Clear</button>
-        </form>
-    </div>
-    
-    <div class="categories-container">
-        <div class="categories-wrapper">
-            {% for category in categories %}
-                <div class="category-box">
-                    <a href="{% url 'category_detail' category.category %}">
-                        <div class="image-container">
-                            <img src="{{ category.first_species.image.url }}" alt="{{ category.first_species.name }}" class="category-image">
-                        </div>
-                        <div class="category-info">
-                            <h2>{{ category.category }}</h2>
-                            
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
+    <div class="categoriesContainer"
+        <h1>Species Categories</h1>
+        
+        <div class="search-container">
+            <form method="GET" action="{% url 'categories' %}">
+                <input type="text" name="q" placeholder="Search categories..." value="{{ request.GET.q|default_if_none:'' }}">
+                <button type="submit">Search</button>
+                <button type="button" onclick="clearSearch()">Clear</button>
+            </form>
         </div>
-        {% if not categories %}
-            <div class="no-categories-message">
-                <p>No categories found matching "{{ query }}".</p>
+        
+        <div class="categories-container">
+            <div class="categories-wrapper">
+                {% for category in categories %}
+                    <div class="category-box">
+                        <a href="{% url 'category_detail' category.category %}">
+                            <div class="image-container">
+                                <img src="{{ category.first_species.image.url }}" alt="{{ category.first_species.name }}" class="category-image">
+                            </div>
+                            <div class="category-info">
+                                <h2>{{ category.category }}</h2>
+                                
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
-        {% endif %}
-    </div>
+            {% if not categories %}
+                <div class="no-categories-message">
+                    <p>No categories found matching "{{ query }}".</p>
+                </div>
+            {% endif %}
+        </div>
 
-    <script>
-        function clearSearch() {
-            window.location.href = "{% url 'categories' %}";
-        }
-    </script>
+        <script>
+            function clearSearch() {
+                window.location.href = "{% url 'categories' %}";
+            }
+        </script>
+    </div>
 </body>
 </html>
 

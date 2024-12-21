@@ -108,7 +108,7 @@
 @media only screen and (max-width: 640px) {
 
     .pageContainer {
-        height: calc(100dvh - 107px);
+        height: calc(100dvh - 54px);
         top: 54px;
     }
 
