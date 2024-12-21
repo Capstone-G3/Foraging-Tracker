@@ -10,14 +10,14 @@ body {
     background-color: #3c9e51;
 }
 
-#usersContainer, #requestsContainer, #friendsContainer {
+#sentRequestsContainer, #requestsContainer, #friendsContainer {
     overflow-y: scroll;
     height: calc(100% - 80px);
     padding-right: 10px;
 }
 
 .main-container {
-    height: calc(100dvh - 54px);
+    height: calc(100dvh - 74px);
     display: flex;
     justify-content: flex-start;
     overflow-y: hidden;
@@ -76,7 +76,7 @@ button:hover {
         overflow-y: visible;
     }
 
-    #usersContainer, #requestsContainer, #friendsContainer {
+    #sentRequestsContainer, #requestsContainer, #friendsContainer {
         overflow-y: visible;
         padding-right: 0px;
     }
